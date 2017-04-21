@@ -1383,6 +1383,18 @@ jQuery(document).ready(function($){
 						UIkit.modal("#modal_overflow").hide();
 					}
 					showPreloader();
+					if($(".ym-book[data-id='"+id+"']").length>0){
+						$(".ym-book[data-id='"+id+"'] select.selectstate").data('kendoDropDownList').value(6);
+						$(".ym-book[data-id='"+id+"'] select.selectstate").data('kendoDropDownList').trigger("change");
+					}
+					/*
+					var stateHtml='<select class="uk-form-width-medium selectstate">';
+					var allstates=$("#allstates").html();
+					allstates=allstates.replace('value="'+book.stateid+'"','value="'+book.stateid+'" selected');
+					stateHtml+=allstates;
+					stateHtml+='</select>';
+					'<span class="book-orderstate uk-hidden">'+book.orderstate+'</span><span class="uk-hidden ym-searchable-val">#'+book.statename+'#</span>'+stateHtml
+					 */
 					bookchangestate(data.bookid,6);
 
 					dragBook();
@@ -2371,8 +2383,6 @@ jQuery(document).ready(function($){
 				var bookid=$this.parents("tr").attr("data-id");
 				var date=$("#date-books").val();
 			}
-			console.log(bookid);
-			console.log(date);
 			if(selectedtabls!=""){
 				verifyTablsBook(bookid,date,selectedtabls,idvirtual);
 			}
