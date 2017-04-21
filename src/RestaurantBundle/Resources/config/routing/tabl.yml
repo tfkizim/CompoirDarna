@@ -1,0 +1,51 @@
+tabl_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:Tabl:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+tabl_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Tabl:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+tabl_edit_drag_xhr:
+    path: /edit_drag_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Tabl:editDragXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+tabl_select_xhr:
+    path: /select_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Tabl:selectXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+tabl_edit_xhr:
+    path: /edit_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Tabl:editXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+tabl_edit_rotation_xhr:
+    path: /edit_rotation_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Tabl:editRotationXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+

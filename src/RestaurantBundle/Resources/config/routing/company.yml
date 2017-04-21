@@ -1,0 +1,44 @@
+company_index:
+    path: /
+    defaults: { _controller: RestaurantBundle:Company:index }
+
+company_edit:
+    path: /edit/{id}
+    defaults: { _controller: RestaurantBundle:Company:edit }
+    requirements:
+        id: \d+
+
+company_add:
+    path: /add
+    defaults: { _controller: RestaurantBundle:Company:add }
+
+company_new:
+    path: /new
+    defaults: { _controller: RestaurantBundle:Company:new }
+    methods:  [POST]
+    options:
+        expose: true
+
+company_save:
+    path: /saveedit/{id}
+    defaults: { _controller: RestaurantBundle:Company:save }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+company_delete:
+    path: /delete/{id}
+    defaults: { _controller: RestaurantBundle:Company:delete }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+company_json:
+    path: /all.json
+    defaults: { _controller: RestaurantBundle:Company:json }
+    options:
+        expose: true

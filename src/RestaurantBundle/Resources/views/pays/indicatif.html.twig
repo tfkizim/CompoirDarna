@@ -1,0 +1,14 @@
+[
+{
+"CountryID": "",
+"CountryName": "",
+"CountryIndicatif": ""
+}
+{% for country in countries %}
+    ,{
+    "CountryID": {{country.id}},
+    "CountryName": "{{ country.name~' '~country.indicatif }}",
+    "CountryIndicatif": "{{ country.indicatif }}"
+    }
+{% endfor %}
+]

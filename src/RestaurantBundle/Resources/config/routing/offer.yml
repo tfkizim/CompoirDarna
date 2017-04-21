@@ -1,0 +1,24 @@
+offer_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:Offer:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+offer_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Offer:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+offer_edit_xhr:
+    path: /edit_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Offer:editXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+

@@ -1,0 +1,138 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	{% block barre %}{{ parent() }}{% endblock %}
+	{% block menu %}{{ parent() }}{% endblock %}
+	<div id="page_content">
+        <div id="page_content_inner">
+            <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-large-1-1">
+                        <div class="md-card">
+                            <div class="uk-breadcrumb-wrapper">
+                                <ul class="uk-breadcrumb">
+                                    <li><a href="{{ path('restaurant_restaurant') }}"><i class="material-icons">home</i></a></li>
+                                    <li><a href="#">Liste des Entreprises</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <h3 class="heading_b uk-margin-bottom">Liste des Entreprises</h3>
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="uk-vertical-align">
+                                <div class="uk-vertical-align-middle">
+                                    <ul id="contact_list_filter" class="uk-subnav uk-subnav-pill uk-margin-remove">
+                                        <li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+                                        {% for typecompany in typecompanies %}
+                                        <li data-uk-filter="{{ typecompany.name }}"><a href="#">{{ typecompany.name }}</a></li>
+                                    	{% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <label for="contact_list_search">Chercher une entreprise</label>
+                            <input class="md-input" type="text" id="contact_list_search"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-5 hierarchical_show" id="contact_list">
+				{% for company in companies %}
+                <div data-uk-filter="{{company.typeCompanyId.name}},{{company.name}}" class="company" data-id="{{ company.id }}">
+                    <div class="md-card md-card-hover">
+                        <div class="md-card-head">
+                            <div class="md-card-head-menu" data-uk-dropdown>
+                                <i class="md-icon material-icons">&#xE5D4;</i>
+                                <div class="uk-dropdown uk-dropdown-small uk-dropdown-flip">
+                                    <ul class="uk-nav">
+                                        <li><a href="{{ path('company_edit',{id:company.id}) }}">Edit</a></li>
+                                        <li><a href="#" class="company_delete" data-id="{{ company.id }}">Supprimer</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="uk-text-center">
+                            	<div class="item-avatar-wrapper">
+                            		<span class="item-avatar uk-text-contrast md-bg-{{company.typeCompanyId.color}}">{{company.typeCompanyId.abbr}}</span>
+                            	</div>
+                            </div>
+                            <h3 class="md-card-head-text uk-text-center">
+                                {{company.name}}
+                                <span class="uk-text-truncate">{{company.typeCompanyId.name}}</span>
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                            <ul class="md-list">
+                            	{% if company.description != "" %}
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Info</span>
+                                        <span class="uk-text-small uk-text-muted">{{company.description}}</span>
+                                    </div>
+                                </li>
+                                {% endif %}
+                                {% if company.email != "" %}
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Email</span>
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate">{{company.email}}</span>
+                                    </div>
+                                </li>
+                                {% endif %}
+                                <li>
+                                    <div class="md-list-content">
+                                    	{% if company.phone != "" %}
+                                        <span class="md-list-heading">Phone</span>
+                                        <span class="uk-text-small uk-text-muted">{{company.phone}}</span>
+                                    	{% endif %}
+                                    	{% if company.fixe != "" %}
+                                        <span class="md-list-heading">Fixe</span>
+                                        <span class="uk-text-small uk-text-muted">{{company.fixe}}</span>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="inline-list">
+                            	{% if company.facebook != "" and company.facebook != "#" %}
+                                <li>
+                                    <div>
+                                    	<a href="{{company.facebook}}" target="_blank">
+                                        	<i class="md-list-addon-icon uk-icon-facebook-official"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            	{% endif %}
+                            	{% if company.twitter != "" and company.twitter != "#" %}
+                                <li>
+                                    <div>
+                                    	<a href="{{company.twitter}}" target="_blank">
+                                        	<i class="md-list-addon-icon uk-icon-twitter"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                                {% endif %}
+                            	{% if company.googleplus != "" and company.googleplus != "#" %}
+                                <li>
+                                    <div>
+                                    	<a href="{{company.googleplus}}" target="_blank">
+                                        	<i class="md-list-addon-icon uk-icon-google-plus"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            	{% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        	</div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent" href="{{ path('company_add') }}" title="Ajouter Entreprise" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'top'}">
+            <i class="material-icons"></i>
+        </a>
+    </div>
+{% endblock %}

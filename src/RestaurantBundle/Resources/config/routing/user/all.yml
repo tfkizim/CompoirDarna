@@ -1,0 +1,18 @@
+user_security:
+    resource: "@RestaurantBundle/Resources/config/routing/user/security.yml"
+
+user_profile:
+    resource: "@RestaurantBundle/Resources/config/routing/user/profile.yml"
+    prefix:   /profile
+
+user_register:
+    resource: "@RestaurantBundle/Resources/config/routing/user/registration.yml"
+    prefix:   /register
+
+user_resetting:
+    resource: "@RestaurantBundle/Resources/config/routing/user/resetting.yml"
+    prefix:   /resetting
+
+user_change_password:
+    resource: "@RestaurantBundle/Resources/config/routing/user/change_password.yml"
+    prefix:   /profile

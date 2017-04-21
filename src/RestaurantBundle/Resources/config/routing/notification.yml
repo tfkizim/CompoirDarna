@@ -1,0 +1,13 @@
+
+restaurant_notifications:
+    path: /all
+    defaults: { _controller: RestaurantBundle:Notification:index }
+
+notification_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Notification:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+

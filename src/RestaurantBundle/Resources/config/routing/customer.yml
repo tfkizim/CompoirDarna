@@ -1,0 +1,44 @@
+customer_index:
+    path: /
+    defaults: { _controller: RestaurantBundle:Customer:index }
+
+customer_edit:
+    path: /edit/{id}
+    defaults: { _controller: RestaurantBundle:Customer:edit }
+    requirements:
+        id: \d+
+
+customer_add:
+    path: /add
+    defaults: { _controller: RestaurantBundle:Customer:add }
+
+customer_new:
+    path: /new
+    defaults: { _controller: RestaurantBundle:Customer:new }
+    methods:  [POST]
+    options:
+        expose: true
+
+customer_save:
+    path: /saveedit/{id}
+    defaults: { _controller: RestaurantBundle:Customer:save }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+customer_delete:
+    path: /delete/{id}
+    defaults: { _controller: RestaurantBundle:Customer:delete }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+customer_json:
+    path: /all.json
+    defaults: { _controller: RestaurantBundle:Customer:json }
+    options:
+        expose: true

@@ -1,0 +1,19 @@
+[
+{% for customer in customers %}
+	{
+	"CustomerID": {{customer.id}},
+	"ContactName": "{{ customer.firstName~' '~customer.lastName~' '~customer.mobileNumber }}{% if customer.companyId and customer.companyId.typeCompanyId %}{{ customer.companyId.typeCompanyId.name }}{% endif %}",
+	"ContactSexe": "{{ customer.sexe }}",
+	"ContactFirstName": "{{ customer.firstName }}",
+	"ContactLastName": "{{ customer.lastName }}",
+	"ContactEmail": "{{ customer.email }}",
+	"ContactTel": "{{ customer.mobileNumber }}",
+	"ContactIndicatifTel": "{{ customer.indicatifMobileNumber }}",
+	"ContactDateBirthday": "{{ customer.dateBirthday|date("d-m-Y") }}",
+	"ContactLangue": "{{ customer.langue }}",
+	"ContactVip": "{{ customer.vip }}",
+	"CompanyName": "{% if customer.companyId and customer.companyId.typeCompanyId %}{{ customer.companyId.typeCompanyId.name }}{% endif %}"
+	}
+	{% if not loop.last %},{% endif %}
+{% endfor %}
+]

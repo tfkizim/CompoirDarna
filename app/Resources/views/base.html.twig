@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <title>{% block title %}Comptoir Darna{% endblock %}</title>
+    {% block stylesheets %}
+        {% stylesheets output="main.css" filter="cssrewrite"
+            'bower_components/weather-icons/css/weather-icons.min.css'
+            'bower_components/metrics-graphics/dist/metricsgraphics.css'
+            'bower_components/chartist/dist/chartist.min.css'
+            'bower_components/fullcalendar/dist/fullcalendar.min.css'
+            'bower_components/uikit/css/uikit.almost-flat.min.css'
+            'bower_components/kendo-ui/styles/kendo.common-material.min.css'
+            'bower_components/kendo-ui/styles/kendo.material.min.css'
+            'assets/icons/flags/flags.min.css'
+            'assets/css/main.min.css'
+            'assets/css/custom.css'
+            'assets/css/jquery.ui.rotatable.css'
+            %}
+            <link rel="stylesheet" type="text/css" href="{{ asset_url }}">
+        {% endstylesheets %}
+    {% endblock %}
+    <!--[if lte IE 9]>
+        <script type="text/javascript" src="{{ asset('bower_components/matchMedia/matchMedia.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bower_components/matchMedia/matchMedia.addListener.js') }}"></script>
+    <![endif]-->
+</head>
+<body class="sidebar_main_swipe app_theme_g" {% if not is_granted('ROLE_SUPER_ADMIN') %}id="normaluser"{%endif%}>
+    <input type="hidden" id="path" value="/restaurant/web/">
+    <input type="hidden" id="date_today" value="{{ "now"|date("d-m-Y") }}">
+    {% block body %}
+        {% block barre %}
+            <header id="header_main">
+                <div class="header_main_content">
+                    <nav class="uk-navbar">
+                        <!-- main sidebar switch -->
+                        <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
+                            <span class="sSwitchIcon"></span>
+                        </a>
+                        <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+                            <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+                                <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
+                                <div class="uk-dropdown uk-dropdown-width-2">
+                                    <div class="uk-grid uk-dropdown-grid" data-uk-grid-margin>
+                                        <div class="uk-width-1-1">
+                                            <div class="uk-grid uk-grid-width-medium-1-3 uk-margin-top uk-margin-bottom uk-text-center" data-uk-grid-margin>
+                                                <a href="{{ path('restaurant_calendar') }}">
+                                                    <i class="material-icons md-36">insert_invitation</i>
+                                                    <span class="uk-text-muted uk-display-block">Calendrier</span>
+                                                </a>
+                                                <a href="{{ path('restaurant_chat') }}">
+                                                    <i class="material-icons md-36 md-color-red-600">&#xE0B9;</i>
+                                                    <span class="uk-text-muted uk-display-block">Chat</span>
+                                                </a>
+                                                <a href="{{ path('restaurant_note') }}">
+                                                    <i class="material-icons md-36">note_add</i>
+                                                    <span class="uk-text-muted uk-display-block">Notes</span>
+                                                </a>
+                                                <a href="{{ path('restaurant_task') }}">
+                                                    <i class="material-icons md-36">&#xE85C;</i>
+                                                    <span class="uk-text-muted uk-display-block">Tâches</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{ path('restaurant_restaurant') }}" class="logo uk-float-left">
+                            {% if globalconfig.SITELOGO %}
+                            <img src="{{ asset(globalconfig.SITELOGO) }}" alt="Comptoir" width="120" height="45">
+                            {% endif %}
+                        </a>
+                        <!-- secondary sidebar switch -->
+                        <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
+                            <span class="sSwitchIcon"></span>
+                        </a>
+                        {% set notificationsnotviewed=0 %}
+                        {% for notification in notifications %}
+                            {% if notification.viewed == 0 %}
+                                {% set notificationsnotviewed=notificationsnotviewed+1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if notificationsnotviewed == 0 %}
+                            {% set notificationsnotviewed="" %}
+                        {% endif %}
+                        <div class="uk-navbar-flip">
+                            <ul class="uk-navbar-nav user_actions">
+                                <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">&#xE5D0;</i></a></li>
+                                <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li>
+                                <li data-uk-dropdown="{mode:'click'}">
+                                    <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">{{ notificationsnotviewed }}</span></a>
+                                    <div class="uk-dropdown uk-dropdown-xlarge uk-dropdown-flip">
+                                        <div class="md-card-content">
+                                            <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                                <li class="uk-width-1-1"><a href="#" class="js-uk-prevent uk-text-small">Notifications</a></li>
+                                            </ul>
+                                            <ul id="header_alerts" class="uk-switcher uk-margin">
+                                                <li>
+                                                    <ul class="md-list md-list-addon">
+                                                        {% for notification in notifications %}
+                                                            {% set icon="" %}
+                                                            {% set iconcolor="" %}
+                                                            {% set viewedclass="" %}
+                                                            {% if notification.typeNotif == "info" %}
+                                                                {% set icon="info" %}
+                                                                {% set iconcolor="uk-text-primary" %}
+                                                            {% elseif notification.typeNotif == "success" %}
+                                                                {% set icon="done" %}
+                                                                {% set iconcolor="uk-text-success" %}
+                                                            {% elseif notification.typeNotif == "danger" %}
+                                                                {% set icon="report_problem" %}
+                                                                {% set iconcolor="uk-text-danger" %}
+                                                            {% elseif notification.typeNotif == "warning" %}
+                                                                {% set icon="report_problem" %}
+                                                                {% set iconcolor="uk-text-warning" %}
+                                                            {% endif %}
+                                                            {% if notification.viewed == 0 %}
+                                                                {% set viewedclass="notviewed" %}
+                                                            {% endif %}
+                                                        <li class="{{ viewedclass }}">
+                                                            <a href="{{ notification.guid }}">
+                                                                <div class="md-list-addon-element">
+                                                                    <i class="md-list-addon-icon material-icons {{ iconcolor }}">{{ icon }}</i>
+                                                                </div>
+                                                                <div class="md-list-content">
+                                                                    <span class="uk-text-small uk-text-muted">{{ notification.message }}</span>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                    <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
+                                                        <a href="{{ path("restaurant_notifications") }}" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Voir tous</a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li data-uk-dropdown="{mode:'click'}">
+                                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                        <a href="#" class="user_action_image"><img class="md-user-image" src="{{ asset('assets/img/avatars/avatar_11_tn.png') }}" alt=""/></a>
+                                        <div class="uk-dropdown uk-dropdown-small uk-dropdown-flip">
+                                            <ul class="uk-nav js-uk-prevent">
+                                                <li><a href="page_user_profile.html">My profile</a></li>
+                                                <li><a href="page_settings.html">Settings</a></li>
+                                                <li><a href="{{ path("fos_user_security_logout") }}">Déconnexion</a></li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="uk-float-left" id="clock" data-timestamp="{{ datenow|totimestamp }}" ><i class="material-icons uk-text-contrast">access_time</i><span>{{ datenow|date("H:i") }}</span></div>
+                    </nav>
+                </div>
+                <div class="header_main_search_form">
+                    <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
+                    <form class="uk-form">
+                        <input type="text" class="header_main_search_input" />
+                        <button class="header_main_search_btn uk-button-link"><i class="md-icon material-icons">&#xE8B6;</i></button>
+                    </form>
+                </div>
+            </header>
+        {% endblock %}
+        {% block menu %}
+            <aside id="sidebar_main">
+
+                <div class="sidebar__bloc profile" id="profileinfo">
+                    <div class="profile__picture">
+                        <img src="{{ asset('assets/img/avatars/avatar_11_tn.png') }}" alt="">
+                    </div>
+                    <div class="profile__name">
+                        {% if connecteduser %}<h3 class="mb5">{{ connecteduser.lastName~' '~connecteduser.firstName }}</h3>{% endif %}
+                    </div>
+                    <div class="profile__description">
+                        <strong>{% if globalconfig.SITENAME %}{{ globalconfig.SITENAME }}{% endif %}</strong>
+                    </div>
+                </div>
+                
+                <div class="menu_section">
+                    <ul>
+                        <li title="Accueil">
+                            <a href="{{ path('restaurant_restaurant') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                                <span class="menu_title">Accueil</span>
+                            </a>
+                        </li>
+                        <!--
+                        <li title="User Profile">
+                            <a href="#">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Profil</span>
+                            </a>
+                            <ul>
+                                <li><a href="myprofile.php">Voir</a></li>
+                                <li><a href="updateprofile.php">Mettre-à-jour</a></li>
+                            </ul>
+                        </li>-->
+                        <li title="User Profile">
+                            <a href="{{ path('customer_index') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Clients</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('restaurant_calendar') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE8F1;</i></span>
+                                <span class="menu_title">Calendrier</span>
+                            </a>
+                        </li>
+                        <li title="User Profile">
+                            <a href="{{ path('floor_index') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Plan de table</span>
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <!-- NEW -->
+                        <li title="User Profile">
+                            <a href="#"><!-- {{ path('restaurant_state') }} -->
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Statistique</span>
+                            </a>
+                        </li>
+
+                        <!-- NEW -->
+                        <li title="User Profile">
+                            <a href="{{ path('company_index') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Entreprises</span>
+                            </a>
+                        </li>
+
+                        <!-- NEW -->
+                        <!--<li title="User Profile">
+                            <a href="users.php">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Utilisateurs</span>
+                            </a>
+                        </li>-->
+                        <!-- NEW -->
+                        <li title="User Profile">
+                            <a href="{{ path('restaurant_config') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Réglages</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </aside>
+            <select class="uk-hidden" id="allstates">
+                {% for state in states %}
+                    <option value="{{ state.id }}" data-color="{{ state.color }}"  data-flashed="{{ state.flashed }}">{{ state.name }}</option>
+                {% endfor %}
+            </select>
+        {% endblock %}
+        
+        {% block modals %}
+            <div class="md-fab-wrapper md-fab-in-card md-fab-speed-dial">
+                <a class="md-fab md-fab-primary"><i class="material-icons"></i></a>
+                <div class="md-fab-wrapper-small">
+                    <a class="md-fab md-fab-small md-fab-success" href="#" id="btn-add-resa" data-uk-tooltip="{pos:'left'}" title="Ajouter Réservation"><i class="material-icons">face</i></a>
+                    <a class="md-fab md-fab-small md-fab-danger" href="#" id="btn-add-passage" data-uk-tooltip="{pos:'left'}" title="Passage"><i class="material-icons">person</i></a>
+                </div>
+            </div>
+            <div id="modal_overflow" class="uk-modal passage">
+                <div class="uk-modal-dialog uk-modal-dialog-large">
+                    <button type="button" class="uk-modal-close uk-close"></button>
+                    <div class="uk-grid" data-uk-grid-margin="">
+                        <div class="uk-width-medium-1-2">
+                            <h2 class="heading_a">Ajouter Réservation</h2>
+                            <button type="button" class="md-btn md-btn-primary uk-float-right" style="padding: 2px 5px;margin-left: 8px;" id="book-normal">Réserver</button> <button type="button" class="md-btn md-btn-success uk-float-right" id="book-saveandemail" style="padding: 2px 5px;">R. &amp; Email</button> <button type="button" class="md-btn md-btn-warning uk-float-right" id="book-savesms" style="padding: 2px 5px;">R. &amp; SMS</button> <button type="button" class="md-btn md-bg-yellow-A700 uk-float-right" id="book-saveattente" style="padding: 2px 5px;">R. attente</button>
+                            <div class="clearfix"></div>
+                            <form id="form-book" class="uk-form-stacked ym-padding-form" method="post" action="#">
+                                <input type="hidden" name="book[typebook]" id="book_typebook" value="passage">
+                                <div class="uk-grid hidden-passage">
+                                    <div class="uk-width-medium-2-3">
+                                        <div class="parsley-row">
+                                            <input type="hidden" id="book_id" name="book[id]" value="">
+                                            <label for="book_date" class="uk-required">Date<span class="req">*</span></label><br>
+                                            <input type="text" name="book[date]" id="book_date" data-parsley-trigger="blur change" required pattern="[\d]{2}-[\d]{2}-[\d]{4}" />
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-1-3">
+                                        <div class="parsley-row">
+                                            <label for="book_hour" class="uk-required">Heure<span class="req">*</span></label><br>
+                                            <select name="book[hour]" id="book_hour" class="select-ym" required>
+                                                {% for service in services %}
+                                                    {% set servicevaleur=service.valeur|json_decode() %}
+                                                    {% set openhour=servicevaleur.Lundi.OPENHOUR %}
+                                                    {% set closehour=servicevaleur.Lundi.CLOSEHOUR %}
+                                                    {% set interval=servicevaleur.Lundi.INTERVAL %}
+                                                    {% set openhourtimestamp=(("1970-01-01 "~openhour)|date("U")) %}
+                                                    {% set closehourtimestamp=(("1970-01-01 "~closehour)|date("U")) %}
+                                                    {% for hour in range(low=openhourtimestamp, high=closehourtimestamp, step=interval) %}
+                                                        <option value="{{ service.id }}|{{ hour|date("H\:i") }}">{{ hour|date("H\:i") }}</option>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-grid">
+                                    <div class="uk-width-medium-2-2">
+                                        <div class="parsley-row">
+                                            <label for="book_pax" class="uk-required">Pax<span class="req">*</span></label><br>
+                                            <button data-val="1" class="btn btn-primary btn-ym btn-pax" type="button">1</button>
+                                            <button data-val="2" class="btn btn-primary btn-ym btn-pax active" type="button">2</button>
+                                            <button data-val="3" class="btn btn-primary btn-ym btn-pax" type="button">3</button>
+                                            <button data-val="4" class="btn btn-primary btn-ym btn-pax" type="button">4</button>
+                                            <input type="number" data-parsley-type="integer" name="book[pax]" data-parsley-trigger="change blur keyup" id="book_pax" value="2" min="1" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-grid">
+                                    <div class="uk-width-medium-1-3">
+                                        <div class="parsley-row">
+                                            <label for="book_floor" class="uk-required">Étage souhaité</label>
+                                            <select id="book_floor" name="book[floor]" class="custom-select">
+                                                <option value="">Select...</option>
+                                                {% for floor in floors %}
+                                                <option value="{{ floor.id }}">{{ floor.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-2-3">
+                                        <div class="parsley-row">
+                                            <label for="" class="uk-required">Sélectionner tables</label>
+                                            <label for="book_blocked" class="inline-label uk-float-right"><input type="checkbox" id="book_blocked" name="book[blocked]" value="1" /> OK</label><br>
+                                            <div class="uk-input-group">
+                                                <span class="uk-input-group-addon">
+                                                    <a href="#" class="md-btn md-btn-small md-btn-success select-modal-plan" data-id="2"><i class="material-icons uk-text-contrast">add</i></a>
+                                                </span>
+                                                <div class="md-input-wrapper"><input type="text" class="k-textbox input-selected-tables" name="book[tables_name]" data-parsley-trigger="keyup" pattern="(([ ]+)?)((\d+)(([ ]+)?)((\+)?)(([ ]+)?))+" data-id="2"><input type="hidden" class="selected-tables-id" name="book[tables_id]" data-id="2" value=""><span class="md-input-bar"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-grid hidden-passage">
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="parsley-row">
+                                            <label for="company_json" class="uk-form-label">Établissement</label>
+                                            <input class="uk-width-1-1" id="company_json" name="book[company]" type="text" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="parsley-row">
+                                            <label for="book_state" class="uk-form-label">Statut</label>
+                                            <select id="book_state" name="book[state]" class="custom-select">
+                                                {% set i=0 %}
+                                                {% for state in states %}
+                                                    <option value="{{ state.id }}" {% if i==0 %}selected{% endif %}>{{ state.name }}</option>
+                                                    {% set i=i+1 %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-grid hidden-passage">
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="parsley-row">
+                                            <label for="book_offer" class="uk-form-label">Offert</label>
+                                            <select id="book_offer" name="book[offer]" class="custom-select">
+                                                <option value="">Aucun</option>
+                                                {% for offer in offers %}
+                                                    <option value="{{ offer.id }}">{{ offer.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-1-2">
+                                        <div class="parsley-row">
+                                            <label for="book_occasion" class="uk-form-label">Occasion</label>
+                                            <select id="book_occasion" name="book[occasion]" class="custom-select">
+                                                <option value="">Aucun</option>
+                                                {% for occasion in occasions %}
+                                                    <option value="{{ occasion.id }}">{{ occasion.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-grid">
+                                    <div class="uk-width-1-1">
+                                        <div class="parsley-row">
+                                            <label for="message">Note</label>
+                                            <textarea id="book_noteadmin" class="k-textbox" name="book[noteadmin]" cols="10" rows="4"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <p><label class="uk-required"><span class="req">*</span></label> Champs obligatoires</p>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <h3>Client formulaire</h3>
+                            <form action="#" method="post" id="form-customer">
+                                <div class="uk-grid">
+                                    <div class="uk-width-medium-1-1">
+                                        <div class="uk-display-inline">
+                                            <input type="checkbox" data-switchery id="customer_none" name="customer[none]" value="1" />
+                                            <label for="customer_none" class="inline-label">Aucune informations</label>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-medium-1-1">
+                                        <div class="uk-grid have-infos">
+                                            <div class="uk-width-medium-1-3 mt30">
+                                                <div class="uk-display-inline">
+                                                    <input type="hidden" name="customer[id]" id="customer_id" value="">
+                                                    <input type="checkbox" data-switchery id="customer_vip" name="customer[vip]" value="1" />
+                                                    <label for="customer_vip" class="inline-label">VIP</label>
+                                                </div>
+                                            </div>
+                                            <div class="uk-width-medium-2-3">
+                                                <label for="customer_sexe" class="uk-form-label">Civilité</label>
+                                                <button data-val="Mr." class="btn btn-primary btn-ym btn-sexe active" type="button">Mr.</button>
+                                                <button data-val="Mme." class="btn btn-primary btn-ym btn-sexe" type="button">Mme.</button>
+                                                <button data-val="Mlle." class="btn btn-primary btn-ym btn-sexe" type="button">Mlle.</button>
+                                                <input type="hidden" name="customer[sexe]" id="customer_sexe" value="Mr.">
+                                                <!--<select id="customer_sexe" name="customer[sexe]" class="custom-select">
+                                                    <option value="">Aucun</option>
+                                                    <option value="Mr.">Mr.</option>
+                                                    <option value="Mme.">Mme.</option>
+                                                    <option value="Mlle.">Mlle.</option>
+                                                </select>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="have-infos">
+                                    <div class="uk-grid">
+                                        <div class="uk-width-medium-1-1">
+                                            <label for="customer_lastname" class="uk-form-label uk-required">Nom<span class="req">*</span></label>
+                                            <input class="customer_lastname" id="customer_lastname" name="customer[lastname]" data-parsley-trigger="blur change" required />
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid uk-hidden">
+                                        <div class="uk-width-medium-1-1">
+                                            <label for="customer_firstname" class="uk-form-label">Prenom</label>
+                                            <input class="customer_firstname" id="customer_firstname" name="customer[firstname]" />
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid">
+                                        <div class="uk-width-medium-1-1">
+                                            <label for="customer_email" class="uk-form-label">Email</label>
+                                            <input class="customer_email" id="customer_email" name="customer[email]" data-parsley-trigger="blur change" data-parsley-type="email" />
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid">
+                                        <div class="uk-width-medium-1-3">
+                                            <label for="country_json" class="uk-form-label">Indicatif</label>
+                                            <input class="uk-width-1-1" id="country_json" name="customer[indicatif_mobile_number]" type="text" value="" />
+
+                                        </div>
+                                        <div class="uk-width-medium-2-3">
+                                            <label for="customer_mobilenumber" class="uk-form-label">Téléphone</label>
+                                            <input class="customer_mobilenumber" id="customer_mobilenumber" data-parsley-trigger="blur change" data-parsley-pattern="^[\d\+\-\.\(\)\/\s]*$" name="customer[mobile_number]" />
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid">
+                                        <div class="uk-width-medium-1-1">
+                                            <label for="customer_langue" class="uk-form-label">Langue</label>
+                                            <select id="customer_langue" name="customer[langue]" class="custom-select">
+                                                <option value="">Aucun</option>
+                                                <option value="francais">Français</option>
+                                                <option value="anglais">Anglais</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="uk-grid">
+                                        <div class="uk-width-medium-2-2">
+                                            <div class="parsley-row">
+                                                <label for="customer_datebirthday">Date de naissance</label><br>
+                                                <input type="text" name="customer[datebirthday]" data-value="01-01-1990" id="customer_datebirthday" class="kendodatepicker" /><!-- customer_datebirthday  -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!--<div class="uk-grid">
+                        <div class="uk-width-1-1">
+                            <button type="button" class="md-btn md-btn-primary" id="book-normal">Réserver</button>
+                            <button type="button" class="md-btn md-btn-success" id="book-sms">R./envoyer sms</button>
+                            <button type="button" class="md-btn md-btn-success" id="book-whatsapp">R./envoyer whatsapp</button>
+                            <button type="button" class="md-btn md-btn-success" id="book-email">R./envoyer email</button>
+                            <button type="button" class="md-btn md-btn-warning" id="book-waintinglist">Liste d'attente</button>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <div id="book-update-hour" class="uk-modal">
+                <div class="uk-modal-dialog">
+                    <button type="button" class="uk-modal-close uk-close"></button>
+                    <form action="" method="post">
+                        <div class="uk-grid" data-uk-grid-margin="">
+                            <div class="uk-width-medium-1-1">
+                                <div class="parsley-row">
+                                    <label for="bookupdate_hour" class="uk-required">Heure<span class="req">*</span></label><br>
+                                    <input type="hidden" name="bookupdate[id]" id="bookupdate_id">
+                                    <select id="bookupdate_hour" name="bookupdate[hour]" class="select-ym" required>
+                                        {% for service in services %}
+                                            {% set servicevaleur=service.valeur|json_decode() %}
+                                            {% set openhour=servicevaleur.Lundi.OPENHOUR %}
+                                            {% set closehour=servicevaleur.Lundi.CLOSEHOUR %}
+                                            {% set interval=servicevaleur.Lundi.INTERVAL %}
+                                            {% set openhourtimestamp=(("1970-01-01 "~openhour)|date("U")) %}
+                                            {% set closehourtimestamp=(("1970-01-01 "~closehour)|date("U")) %}
+                                            {% for hour in range(low=openhourtimestamp, high=closehourtimestamp, step=interval) %}
+                                                <option value="{{ service.id }}|{{ hour|date("H\:i") }}">{{ hour|date("H\:i") }}</option>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="uk-width-medium-1-1 uk-text-center">
+                                <br><br>
+                                <button type="button" class="uk-button uk-button-success uk-button-large" id="bookupdatehour" data-id="">Modifier</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="modal-plan-container" class="uk-modal">
+                <div class="uk-modal-dialog uk-modal-dialog-large">
+                    <button type="button" class="uk-modal-close uk-close"></button>
+                    <div class="uk-grid" data-uk-grid-margin="">
+                        <div class="uk-width-medium-1-1 uk-text-center">
+                            <button class="uk-button uk-button-success uk-button-large" id="select-tables" data-id="">Seléctionner</button>
+                        </div>
+                        <div class="uk-width-medium-1-1">
+                            <ul class="uk-tab" data-uk-tab="{connect:'#plans-tables'}" id="plans_table_1">
+                                {% for floor in floors %}
+                                <li><a href="#" class="trigfloortab" data-floor="{{ floor.id }}">{{ floor.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            <ul id="plans-tables" class="uk-switcher uk-margin">
+                                {% for floor in floors %}
+                                    <li>
+                                        <div class="modal-plan">
+                                            {# set sfloor="" %}
+                                            {% for floor in floors %}
+                                                {% if selectedfloor is defined and floor.id == selectedfloor.id %}
+                                                    {% set sfloor=floor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if sfloor is empty %}
+                                                {% set sfloor=floors|first %}
+                                            {% endif #}
+
+                                            {# for grouptabl in sfloor.grouptabls %}
+                                            <label for="group_{{ grouptabl.id }}">
+                                                <div class="modal-grouptable table group-table uk-button-dropdown group-{{grouptabl.orientation}}" style="left: {{grouptabl.leftp}}%;top: {{grouptabl.topp}}%;" data-id="{{grouptabl.id}}" data-uk-dropdown="{mode:'click'}">
+                                                    {% set namegroup="" %}
+                                                    {% set nbrcovert=0 %}
+                                                    {% for tabl in grouptabl.tabls %}
+                                                        {% set namegroup=namegroup~"+"~tabl.name %}
+                                                        {% set nbrcovert=nbrcovert+tabl.nbrChaire %}
+                                                    {% endfor %}
+                                                    <span class="title">{{ namegroup[1:] }}</span>
+                                                    <span class="uk-badge uk-badge-notification nbr-covert">{{nbrcovert}}</span>
+                                                    {% for tabl in grouptabl.tabls %}
+                                                        {% set classe="" %}
+                                                        {% set classeid="" %}
+                                                        {% for typetabl in tabl.tabltypetabls %}
+                                                            {% set classe=classe~" "~typetabl.typeTablId.class %}
+                                                            {% set classeid=classeid~","~typetabl.typetablid.id %}
+                                                        {% endfor %}
+                                                        {% if classe is empty %}
+                                                            {% set classe=" square" %}
+                                                        {% endif %}
+                                                        <div class="sub-table{{ classe }}" data-id="{{ tabl.id }}" data-name="{{ tabl.name }}"></div>
+                                                    {% endfor %}
+                                                    <input type="checkbox" name="checkbox_demo" class="table-checkbox-id" id="group_{{ grouptabl.id }}" data-md-icheck />
+                                                </div>
+                                            </label>
+                                            {% endfor #}
+                                            {% for tabl in floor.tabls %}
+                                                {% if tabl.grouptablId is null %}
+                                                    {% set classe="" %}
+                                                    {% set classeid="" %}
+                                                    {% for typetabl in tabl.tabltypetabls %}
+                                                        {% set classe=classe~" "~typetabl.typetablid.class %}
+                                                        {% set classeid=classeid~","~typetabl.typetablid.id %}
+                                                    {% endfor %}
+                                                    {% set status="" %}
+
+                                                    {% if booktables[tabl.id] is defined %}
+                                                        {% set i=0 %}
+                                                        {% for book in booktables[tabl.id] %}
+                                                            {% if i == 0 %}
+                                                                {% set timestamp='data-timestamp="'~book.dateBook|date("U")~'"' %}
+                                                                {% if book.stateId %}
+                                                                    {% set status='md-bg-'~book.stateId.color %}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                            {% set i=i+1 %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    <label for="tabl_{{ tabl.id }}">
+                                                        <div class="modal-table table{{classe}}" data-id="{{ tabl.id }}" data-name="{{ tabl.name }}" style="left: {{ tabl.leftp }}%;top: {{ tabl.topp }}%;">
+                                                            <span class="title">{{ tabl.name }}</span>
+                                                            <span class="uk-badge uk-badge-notification nbr-covert">{{ tabl.nbrChaire }}</span>
+                                                            <input type="checkbox" name="checkbox_demo" class="table-checkbox-id" id="tabl_{{ tabl.id }}" data-md-icheck />
+                                                            <div class="hidden info_table"
+                                                                 data-name="{{tabl.name}}"
+                                                                 data-nbrChaire="{{tabl.nbrChaire}}"
+                                                                 data-typeTablId="{{classeid}}"
+                                                                 data-leftp="{{tabl.leftp}}"
+                                                                 data-topp="{{tabl.topp}}"
+                                                                 data-rotation="{{tabl.rotation}}"
+                                                            ></div>
+                                                        </div>
+                                                    </label>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <!-- Grids -->
+                                            <div class="grid grid1"></div>
+                                            <div class="grid grid2"></div>
+                                            <div class="grid grid3"></div>
+                                            <div class="grid grid4"></div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    {% endblock %}
+    <!-- google web fonts -->
+    {% block javascripts %}
+        {% javascripts output="core.js"
+            'assets/js/common.min.js'
+            'assets/js/uikit_custom.min.js'
+            'assets/js/altair_admin_common.min.js'
+            'assets/js/jquery-ui.min.js'
+            'bower_components/moment/global.min.js'
+            'bower_components/handlebars/handlebars.min.js'
+            'assets/js/custom/handlebars_helpers.min.js'
+            'bower_components/clndr/src/clndr.js'
+            'bower_components/datatables/media/js/jquery.dataTables.min.js'
+            'bower_components/datatables-colvis/js/dataTables.colVis.js'
+            'bower_components/datatables-tabletools/js/dataTables.tableTools.js'
+            'assets/js/custom/datatables_uikit.min.js'
+            'bower_components/fullcalendar/dist/fullcalendar.min.js'
+            'assets/js/kendoui_custom.min.js'
+            'bower_components/dragula.js/dist/dragula.min.js'
+            'bower_components/magnific-popup/dist/jquery.magnific-popup.min.js'
+            'assets/js/pages/plugins_datatables.js'
+            'assets/js/pages/plugins_fullcalendar.js'
+            'assets/js/pages/page_contact_list.js'
+            'assets/js/pages/page_mailbox.min.js'
+            'assets/js/pages/page_invoices.min.js'
+            'assets/js/pages/page_chat.min.js'
+            'assets/js/pages/page_scrum_board.min.js'
+            'assets/js/pages/page_notes.min.js'
+            'assets/js/jquery.tinysort.min.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}" charset="utf-8"></script>
+        {% endjavascripts %}
+        <script>
+        altair_forms.parsley_validation_config();
+        </script>
+        <script src="{{ asset('bower_components/parsleyjs/dist/parsley.min.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/plugins_charts.min.js') }}"></script>
+        <script src="{{ asset('assets/js/custom/uikit_fileinput.min.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/page_user_edit.min.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/page_user_profile.min.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/page_settings.min.js') }}"></script>
+        <script src="{{ asset('assets/js/custom.js') }}"></script>
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        <script>
+            $(function() {
+                // enable hires images
+                altair_helpers.retina_images();
+                // fastClick (touch devices)
+                if(Modernizr.touch) {
+                    FastClick.attach(document.body);
+                }
+            });
+        </script>
+    {% endblock %}
+        <script>
+            WebFontConfig = {
+                google: {
+                    families: [
+                        'Source+Code+Pro:400,700:latin',
+                        'Roboto:400,300,500,700,400italic:latin'
+                    ]
+                }
+            };
+            (function() {
+                var wf = document.createElement('script');
+                wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                wf.type = 'text/javascript';
+                wf.async = 'true';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(wf, s);
+            })();
+        </script>
+    </body>
+</html>

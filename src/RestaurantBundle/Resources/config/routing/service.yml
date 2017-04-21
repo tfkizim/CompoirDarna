@@ -1,0 +1,15 @@
+service_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:Service:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+service_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Service:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+

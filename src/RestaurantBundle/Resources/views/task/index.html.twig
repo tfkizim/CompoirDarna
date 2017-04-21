@@ -1,0 +1,138 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    {% block barre %}{{ parent() }}{% endblock %}
+    {% block menu %}{{ parent() }}{% endblock %}
+    <div id="page_content" class="uk-height-1-1">
+        <div class="scrum_board_overflow">
+            <div id="scrum_board" class="uk-clearfix">
+                <div>
+                    <div class="scrum_column_heading">To Do</div>
+                    <div class="scrum_column">
+                        <div id="scrum_column_todo">
+                            <div>
+                                <div class="scrum_task minor">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-66</a></h3>
+                                    <p class="scrum_task_description">Autem facere minus delectus id dolor ut quis.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Hilbert Huel</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task blocker">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-54</a></h3>
+                                    <p class="scrum_task_description">Voluptatem et expedita sunt ratione sed impedit.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Winnifred Larkin</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task blocker">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-48</a></h3>
+                                    <p class="scrum_task_description">Quia facere voluptatem doloribus saepe qui quos odio voluptatem rerum sint.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Garrison Effertz</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="scrum_column_heading">In analysis</div>
+                    <div class="scrum_column">
+                        <div id="scrum_column_inAnalysis">
+                            <div>
+                                <div class="scrum_task critical">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-146</a></h3>
+                                    <p class="scrum_task_description">Quos possimus laborum autem voluptatem aut hic autem officia qui.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Wyman Turcotte</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task minor">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-145</a></h3>
+                                    <p class="scrum_task_description">Et quos provident labore eius sunt ex porro aut.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Raina Howell</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task critical">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-122</a></h3>
+                                    <p class="scrum_task_description">Non illum sunt harum corrupti architecto omnis nesciunt.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Rosa Treutel</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task minor">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-91</a></h3>
+                                    <p class="scrum_task_description">Corporis eum voluptate fuga praesentium quaerat asperiores quidem odio.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Bianka Flatley</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task critical">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-137</a></h3>
+                                    <p class="scrum_task_description">Laboriosam dolor et dolor ducimus consequatur vero.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Layne Hermiston</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="scrum_column_heading">In progress</div>
+                    <div class="scrum_column">
+                        <div id="scrum_column_inProgress">
+                            <div>
+                                <div class="scrum_task blocker">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-224</a></h3>
+                                    <p class="scrum_task_description">Ad dolore voluptatem qui exercitationem.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Casey Zieme</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task blocker">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-209</a></h3>
+                                    <p class="scrum_task_description">Blanditiis accusamus ex aliquam rem qui.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Linwood Barrows</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="scrum_column_heading">Done</div>
+                    <div class="scrum_column">
+                        <div id="scrum_column_done">
+                            <div>
+                                <div class="scrum_task critical">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-361</a></h3>
+                                    <p class="scrum_task_description">Culpa enim neque eius porro est laboriosam est tempora dolorem mollitia.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Leola Kutch</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task blocker">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-364</a></h3>
+                                    <p class="scrum_task_description">Delectus placeat dolores ad deleniti sint dicta provident exercitationem vel sapiente.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Isac Lind</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task blocker">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-348</a></h3>
+                                    <p class="scrum_task_description">Velit esse debitis fugiat cupiditate consequatur explicabo ratione qui.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Catalina Hartmann</a></p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scrum_task critical">
+                                    <h3 class="scrum_task_title"><a href="#task_info" data-uk-modal="{ center:true }">Altair-371</a></h3>
+                                    <p class="scrum_task_description">Rerum dolor aspernatur fuga quas et est voluptas.</p>
+                                    <p class="scrum_task_info"><span class="uk-text-muted">Assignee:</span> <a href="#">Velda O'Connell</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

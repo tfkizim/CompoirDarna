@@ -1,0 +1,52 @@
+[
+    {
+        "CustomerID": "01",
+        "ContactName": "Maknaoui Yassine",
+        "CompanyName": "Ereka Agency"
+    },
+    {
+        "CustomerID": "02",
+        "ContactName": "Ismail ElHadioui",
+        "CompanyName": "Eureka Création"
+    },
+    {
+        "CustomerID": "03",
+        "ContactName": "Maknaoui Mohamed",
+        "CompanyName": "Eureka Création"
+    },
+    {
+        "CustomerID": "04",
+        "ContactName": "Yassine Maknaoui",
+        "CompanyName": "Eureka Création"
+    },
+    {
+        "CustomerID": "05",
+        "ContactName": "Anas Bensidi",
+        "CompanyName": "Eureka Création"
+    },
+    {
+        "CustomerID": "06",
+        "ContactName": "Asma Dahchem",
+        "CompanyName": "Eureka Création"
+    },
+    {
+        "CustomerID": "07",
+        "ContactName": "Aziz Abdellaoui",
+        "CompanyName": "Eureka Création"
+    },
+    {
+        "CustomerID": "08",
+        "ContactName": "Frederic Pantel",
+        "CompanyName": "Comptoir Darna"
+    },
+    {
+        "CustomerID": "09",
+        "ContactName": "Delilah Littel",
+        "CompanyName": "Sporer-Abbott"
+    },
+    {
+        "CustomerID": "10",
+        "ContactName": "Mrs. Sabina Maggio",
+        "CompanyName": "Stokes Ltd"
+    }
+]

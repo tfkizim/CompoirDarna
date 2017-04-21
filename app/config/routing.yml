@@ -1,0 +1,29 @@
+restaurant_redirect_login:
+    path: /
+    defaults: { _controller: RestaurantBundle:Restaurant:redirectToLogin }
+
+restaurant_type_company:
+    resource: "@RestaurantBundle/Controller/TypeCompanyController.php"
+    type:     annotation
+
+restaurant_company:
+    resource: "@RestaurantBundle/Controller/CompanyController.php"
+    type:     annotation
+
+restaurant_config:
+    resource: "@RestaurantBundle/Controller/ConfigController.php"
+    type:     annotation
+
+restaurant:
+    resource: "@RestaurantBundle/Resources/config/routing.yml"
+    prefix:   /admin/
+
+restaurant_what:
+    resource: "@WhatsappBundle/Resources/config/routing.yml"
+    prefix:   /whatsapp/
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+fos_user:
+    resource: "@RestaurantBundle/Resources/config/routing/user/all.yml"

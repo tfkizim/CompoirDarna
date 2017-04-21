@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>TypeCompany list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Abbr</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for typeCompany in typeCompanies %}
+            <tr>
+                <td><a href="{{ path('typecompany_show', { 'id': typeCompany.id }) }}">{{ typeCompany.id }}</a></td>
+                <td>{{ typeCompany.name }}</td>
+                <td>{{ typeCompany.color }}</td>
+                <td>{{ typeCompany.abbr }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('typecompany_show', { 'id': typeCompany.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('typecompany_edit', { 'id': typeCompany.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('typecompany_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

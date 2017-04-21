@@ -1,0 +1,414 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    {% block barre %}{{ parent() }}{% endblock %}
+    {% block menu %}{{ parent() }}{% endblock %}
+    <div id="page_content">
+        <div id="page-with-datatable"></div>
+        <div id="page_heading">
+            <h1>{% if book.customerId %}{{ book.customerId.sexe~' '~book.customerId.lastName~' '~book.customerId.firstName }}{% endif %}<small> - Le {{ book.dateBook|datef("fr_FR","EEEE d MMMM Y") }} à {{ book.dateBook|date("H\:i") }}</small></h1>
+            <span class="uk-text-muted uk-text-upper uk-text-small">{% if book.companyId %}{% if book.companyId.typeCompanyId %}{{ book.companyId.typeCompanyId.name }} : {% endif %} {{ book.companyId.name }}{% endif %}</span>
+        </div>
+        <div id="page_content_inner">
+            <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                <div class="uk-width-xLarge-2-10 uk-width-large-3-10">
+                    <div class="bookds">
+                        <div class="bookds-time">
+                            {{ book.dateBook|date("H")~' H '~book.dateBook|date("i") }}
+                        </div>
+                        <div class="bookds-date">
+                            {{ book.dateBook|datef("fr_FR","EEEE dd") }}
+                        </div>
+                        {% if book.stateId %}
+                        <div class="bookds-status md-bg-{{ book.stateId.color }} uk-text-contrast" data-class="md-bg-{{ book.stateId.color }}">
+                            {{ book.stateId.name }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <a href="{{ path("book_edit",{id:book.id}) }}" class="md-btn md-bg-green-A700 uk-text-contrast md-btn-large md-btn-block mb10"><i class="uk-icon-pencil uk-text-contrast"></i> Modifier</a>
+
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Statut
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                            <div class="uk-grid uk-grid-medium">
+                                {% for state in states %}
+                                <div class="uk-width-large-1-2 mb10">
+                                    <a href="#" data-state="{{ state.id }}" data-id="{{ book.id }}" class="bookchangestate md-btn md-bg-{{ state.color }} uk-text-contrast md-btn-block {% if book.stateId %}{% if book.stateId.function == state.function %}ym-active{% else %}ym-inactive{% endif %}{% endif %}">{{ state.name }}</a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                                <!--<li>
+                                    <a href="#" id="book_confirm_email" data-id="{{ book.id }}" class="md-btn md-btn-success md-btn-large md-btn-block {% if book.stateId %}{% if book.stateId.function == "reserved" %}ym-active{% else %}ym-inactive{% endif %}{% endif %}"><i class="uk-icon-check uk-text-contrast"></i> Confirmé</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="book_cancel_email" data-id="{{ book.id }}" class="md-btn md-btn-danger md-btn-large md-btn-block {% if book.stateId %}{% if book.stateId.function == "cancelled" %}ym-active{% else %}ym-inactive{% endif %}{% endif %}"><i class="uk-icon-close uk-text-contrast"></i> Annulé</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="book_pending_email" data-id="{{ book.id }}" class="md-btn md-btn-warning md-btn-large md-btn-block {% if book.stateId %}{% if book.stateId.function == "pending" %}ym-active{% else %}ym-inactive{% endif %}{% endif %}"><i class="uk-icon-clock-o uk-text-contrast"></i> En attente</a>
+                                </li>-->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Whatsapp
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                            <ul class="md-list">
+                                <li>
+                                    <a href="#" id="book_confirm_whatsapp" data-id="{{ book.id }}" class="md-btn md-btn-success md-btn-block"><i class="uk-icon-whatsapp uk-text-contrast"></i> Confirmation réservation</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="book_whatsapp_after_pending" data-id="{{ book.id }}" class="md-btn md-btn-warning md-btn-block"><i class="uk-icon-whatsapp uk-text-contrast"></i> Table ready</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="book_whatsapp_cancel" data-id="{{ book.id }}" class="md-btn md-btn-danger md-btn-block"><i class="uk-icon-whatsapp uk-text-contrast"></i> Annulation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-xLarge-8-10  uk-width-large-7-10">
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Détails de la Réservation
+                            </h3>
+                        </div>
+                        <div class="md-card-content large-padding">
+                            <div class="uk-grid uk-grid-divider uk-grid-medium">
+                                <div class="uk-width-large-1-2">
+                                    <div class="uk-grid uk-grid-small">
+                                        <div class="uk-width-large-1-3">
+                                            <span class="uk-text-muted uk-text-small">Réservation ID #</span>
+                                        </div>
+                                        <div class="uk-width-large-2-3">
+                                            <span class="uk-text-large uk-text-middle">{{ book.id }}</span>
+                                        </div>
+                                    </div>
+                                    <hr class="uk-grid-divider">
+                                    <div class="uk-grid uk-grid-small">
+                                        <div class="uk-width-large-1-3">
+                                            <span class="uk-text-muted uk-text-small">Dernière modification</span>
+                                        </div>
+                                        <div class="uk-width-large-2-3">
+                                            <span class="uk-text-large uk-text-middle"><a href="#">{{ book.dateSys|date("Y-m-d H:i") }}</a></span>
+                                        </div>
+                                    </div>
+                                    {% if book.customerId %}
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Nom et prénom</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                {{ book.customerId.sexe~' '~book.customerId.lastName~' '~book.customerId.firstName }}
+                                                {% if book.customerId.vip %}
+                                                    <i class="md-color-yellow-700">VIP</i>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if book.customerId %}
+                                        {% if book.customerId.mobileNumber is not empty %}
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Téléphone</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                {{ book.customerId.mobileNumber }}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if book.customerId %}
+                                        {% if book.customerId.email is not empty %}
+                                            <hr class="uk-grid-divider">
+                                            <div class="uk-grid uk-grid-small">
+                                                <div class="uk-width-large-1-3">
+                                                    <span class="uk-text-muted uk-text-small">E-mail</span>
+                                                </div>
+                                                <div class="uk-width-large-2-3">
+                                                    {{ book.customerId.email }}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if book.customerId %}
+                                        {% if book.customerId.dateBirthday %}
+                                            <hr class="uk-grid-divider">
+                                            <div class="uk-grid uk-grid-small">
+                                                <div class="uk-width-large-1-3">
+                                                    <span class="uk-text-muted uk-text-small">Date de naissance</span>
+                                                </div>
+                                                <div class="uk-width-large-2-3">
+                                                    {{ book.customerId.dateBirthday|date("d-m-Y") }}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if book.pax > 0 %}
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Nombre de Clients</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                {{ book.pax }} personnes
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if book.customerId %}
+                                        {% if book.customerId.langue is not empty %}
+                                        <hr class="uk-grid-divider">
+                                        <div class="uk-grid uk-grid-small">
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-muted uk-text-small">Langue choisie</span>
+                                            </div>
+                                            <div class="uk-width-large-2-3">
+                                                {{ book.customerId.langue }}
+                                            </div>
+                                        </div>
+                                        <hr class="uk-grid-divider uk-hidden-large">
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    {% set alltables="" %}
+                                    {% if book.booktabls %}
+                                        {% for bookedtabls in book.booktabls %}
+                                            {% if alltables is empty %}
+                                                {% set alltables=bookedtabls.tablId.name %}
+                                            {% else %}
+                                                {% set alltables=alltables~"+"~bookedtabls.tablId.name %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if book.companyId %}
+                                        <p>
+                                            <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Établissement</span>
+                                            <strong>{% if book.companyId.typeCompanyId %}{{ book.companyId.typeCompanyId.name }} : {% endif %} {{ book.companyId.name }}</strong>
+                                        </p>
+                                        <hr class="uk-grid-divider">
+                                    {% endif %}
+                                    <p>
+                                        <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Tables</span>
+                                        <strong>{{ alltables }}</strong>
+                                    </p>
+                                    <hr class="uk-grid-divider">
+                                    {% if book.occasionId %}
+                                        <p>
+                                            <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Occasion</span>
+                                            <strong>{{ book.occasionId.name }}</strong>
+                                        </p>
+                                        <hr class="uk-grid-divider">
+                                    {% endif %}
+                                    {% if book.offerId %}
+                                        <p>
+                                            <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Offert</span>
+                                            <strong>{{ book.offerId.name }}</strong>
+                                        </p>
+                                        <hr class="uk-grid-divider">
+                                    {% endif %}
+                                    {% if book.noteCustomer is not empty %}
+                                    <p>
+                                        <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Note client</span>
+                                        {{ book.noteCustomer }}
+                                    </p>
+                                    <hr class="uk-grid-divider">
+                                    {% endif %}
+                                    {% if book.noteAdmin is not empty %}
+                                    <p>
+                                        <span class="uk-text-muted uk-text-small uk-display-block uk-margin-small-bottom">Note administrateur</span>
+                                        {{ book.noteAdmin }}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Email
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                            <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                                <div class="uk-width-large-1-3">
+                                    <a href="#" id="book_confirm_email" data-id="{{ book.id }}" class="md-btn md-btn-success md-btn-block"><i class="uk-icon-envelope uk-text-contrast"></i> Confirmation réservation</a>
+                                </div>
+                                <div class="uk-width-large-1-3">
+                                    <a href="#" id="book_email_after_pending" data-id="{{ book.id }}" class="md-btn md-btn-warning md-btn-block"><i class="uk-icon-envelope uk-text-contrast"></i> Table ready</a>
+                                </div>
+                                <div class="uk-width-large-1-3">
+                                    <a href="#" id="book_email_cancel" data-id="{{ book.id }}" class="md-btn md-btn-danger md-btn-block"><i class="uk-icon-envelope uk-text-contrast"></i> Annulation</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-xLarge-1-1  uk-width-large-1-1">
+                    <div class="md-card">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Toutes Les Réservations de la journée
+                            </h3>
+                        </div>
+                        <div class="md-card-content large-padding">
+                            <div class="uk-grid">
+                                <div class="uk-width-medium-10-10 uk-text-center">
+                                    <div class="uk-button-group">
+                                        <a href="" class="md-btn uk-button md-btn-primary ym-filter" data-function="all">Tous</a>
+                                        {% for state in states %}
+                                            <a href="" class="md-btn uk-button md-btn-primary ym-filter" data-target="etat" data-function="{{ state.name }}">{{ state.name }}</a>
+                                        {% endfor %}
+                                        <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                            <button class="md-btn uk-button md-btn-primary"><i class="material-icons">&#xE313;</i></button>
+                                            <div class="uk-dropdown uk-dropdown-width-{{ services|length }}">
+                                                <div class="uk-grid uk-dropdown-grid">
+                                                    {% for service in services %}
+                                                        {% set servicevaleur=service.valeur|json_decode() %}
+                                                        {% set openhour=servicevaleur.Lundi.OPENHOUR %}
+                                                        {% set closehour=servicevaleur.Lundi.CLOSEHOUR %}
+                                                        {% set interval=servicevaleur.Lundi.INTERVAL %}
+                                                        {% set openhourtimestamp=(("1970-01-01 "~openhour)|date("U")) %}
+                                                        {% set closehourtimestamp=(("1970-01-01 "~closehour)|date("U")) %}
+                                                        {% set widthdefault="uk-width-2-6" %}
+                                                        {% if services|length == 1 %}
+                                                            {% set widthdefault="uk-width-1-1" %}
+                                                        {% elseif  services|length == 2  %}
+                                                            {% set widthdefault="uk-width-1-2" %}
+                                                        {% elseif  services|length == 3  %}
+                                                            {% set widthdefault="uk-width-1-3" %}
+                                                        {% elseif  services|length == 4  %}
+                                                            {% set widthdefault="uk-width-1-4" %}
+                                                        {% elseif  services|length == 5  %}
+                                                            {% set widthdefault="uk-width-1-5" %}
+                                                        {% elseif  services|length >= 6  %}
+                                                            {% set widthdefault="uk-width-1-6" %}
+                                                        {% endif %}
+                                                        <div class="{{ widthdefault }}">
+                                                            <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                                                {% for hour in range(low=openhourtimestamp, high=closehourtimestamp, step=interval) %}
+                                                                    <li><a href="#" class="ym-filter" data-target="hour" data-function="{{ hour|date("H\:i") }}">{{ hour|date("H\:i") }}</a></li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="dt_individual_search" class="uk-table" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>Heure</th>
+                                    <th>Nom</th>
+                                    <th>Table</th>
+                                    <th>Pax</th>
+                                    <th>Etat</th>
+                                    <th>Établissement</th>
+                                    <th>Icone</th>
+                                </tr>
+                                </thead>
+
+                                <tfoot>
+                                <tr>
+                                    <th data-index="hour">Heure</th>
+                                    <th data-index="nom">Nom</th>
+                                    <th data-index="table">Table</th>
+                                    <th data-index="pax">Pax</th>
+                                    <th data-index="etat">Etat</th>
+                                    <th data-index="hotel">Établissement</th>
+                                    <th data-index="icone">Icone</th>
+                                </tr>
+                                </tfoot>
+
+                                <tbody>
+                                {% for bookDay in booksOfTheDay %}
+                                    <tr data-id="{{ bookDay.id }}">
+                                        <td>
+                                            <span class="uk-hidden ym-searchable-hour ym-searchable-val">#{{ bookDay.dateBook|date("H:i") }}#</span>
+                                            <strong>{{ bookDay.dateBook|date("H:i") }}</strong>
+                                        </td>
+                                        <td>
+                                            {% if bookDay.customerId %}<span class="uk-hidden ym-searchable-val">#{{ bookDay.customerId.sexe~' '~bookDay.customerId.firstName~' '~bookDay.customerId.lastName }}#</span>{{ bookDay.customerId.sexe~' '~bookDay.customerId.firstName~' '~bookDay.customerId.lastName }}{% endif %}
+                                        </td>
+                                        <td>
+                                            {% set alltables="" %}
+                                            {% if bookDay.booktabls %}
+                                                {% for bookedtabls in book.booktabls %}
+                                                    {% if alltables is empty %}
+                                                        {% set alltables=bookedtabls.tablId.name %}
+                                                    {% else %}
+                                                        {% set alltables=alltables~"+"~bookedtabls.tablId.name %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <span class="uk-hidden ym-searchable-alltables ym-searchable-val">#{{ alltables }}#</span>
+                                            {{ alltables }}
+                                        </td>
+                                        <td><span class="uk-hidden ym-searchable-pax ym-searchable-val">#{{bookDay.pax}}pax#</span>{{bookDay.pax}} pax</td>
+                                        <td {% if bookDay.stateId %} class="md-bg-{{ bookDay.stateId.color }} uk-text-contrast {% if bookDay.stateId.flashed %}blink{% endif %}" {% endif %}>
+                                            {% if bookDay.stateId %}<span class="uk-hidden ym-searchable-val">#{{ bookDay.stateId.name }}#</span>{% endif %}
+                                            {{ bookDay.stateId.name }}
+                                        </td>
+                                        <td>{% if bookDay.companyId %}<span class="uk-hidden ym-searchable-val">#{{ bookDay.companyId.name }}#</span>{{ bookDay.companyId.name }}{% else %}-{% endif %}</td>
+                                        <td>
+
+                                            {% if bookDay.occasionId %}
+                                                <i class="{{ bookDay.occasionId.icon }} uk-icon-small {{ bookDay.occasionId.color }}" data-uk-tooltip="{pos:'bottom'}" title="{{ bookDay.occasionId.name }}"></i>
+                                            {% endif %}
+                                            {% if bookDay.customerId.vip %}
+                                                <i class="md-color-yellow-700">VIP</i>
+                                            {% endif %}
+                                            <a href="{{ path("book_detail",{id:bookDay.id}) }}" class="md-btn md-btn-success"><i class="uk-icon-external-link uk-text-contrast"></i> Voir</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <select class="uk-hidden" id="allstates">
+                                {% for state in states %}
+                                    <option value="{{ state.id }}" data-color="{{ state.color }}"  data-flashed="{{ state.flashed }}">{{ state.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block modals %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}

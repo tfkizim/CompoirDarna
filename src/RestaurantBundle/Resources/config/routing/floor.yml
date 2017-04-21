@@ -1,0 +1,54 @@
+floor_index:
+    path: /
+    defaults: { _controller: RestaurantBundle:Floor:index }
+
+floor_id:
+    path: /{id}/
+    defaults: { _controller: RestaurantBundle:Floor:index }
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+floor_date_id:
+    path: /{id}/{date}/
+    defaults: { _controller: RestaurantBundle:Floor:index }
+    options:
+        expose: true
+    requirements:
+        date: \d{2}\-\d{2}\-\d{4}
+        id: \d+
+
+floor_getbooks_date:
+    path: /getbooks/{date}/
+    defaults: { _controller: RestaurantBundle:Floor:plansBooks }
+    options:
+        expose: true
+    requirements:
+        date: \d{2}\-\d{2}\-\d{4}
+
+floor_date_id_service:
+    path: /{id}/{date}/{service}/
+    defaults: { _controller: RestaurantBundle:Floor:index }
+    options:
+        expose: true
+    requirements:
+        date: \d{2}\-\d{2}\-\d{4}
+        id: \d+
+        service: \d+
+
+floor_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:Floor:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+floor_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Floor:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+

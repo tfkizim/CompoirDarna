@@ -1,0 +1,276 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	{% block barre %}{{ parent() }}{% endblock %}
+	{% block menu %}{{ parent() }}{% endblock %}
+		<div id="i-am-user-edit-page"></div>
+		<div id="page_content">
+	        <div id="page_content_inner">
+	        	<div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-large-1-1">
+                        <div class="md-card">
+				        	<div class="uk-breadcrumb-wrapper">
+					        	<ul class="uk-breadcrumb">
+					        		<li><a href="{{ path('restaurant_restaurant') }}"><i class="material-icons">home</i></a></li>
+					        		<li><a href="{{ path('company_index') }}">Liste des Entreprises</a></li>
+					        		<li><a href="#">Modifier : {{ company.name }}</a></li>
+					        	</ul>
+					        </div>
+					    </div>
+					</div>
+				</div>
+	            <form action="{{ path('company_save',{id:company.id}) }}" class="uk-form-stacked" method="post" id="user_edit_form">
+	                <div class="uk-grid" data-uk-grid-margin>
+	                    <div class="uk-width-large-1-1">
+	                        <div class="md-card">
+	                            <div class="user_heading" data-uk-sticky="{ top: 48, media: 960 }">
+	                                <div class="user_heading_avatar fileinput fileinput-new" data-provides="fileinput">
+	                                    <div class="fileinput-new thumbnail">
+	                                        <div class="item-avatar-wrapper">
+	                            				<span class="item-avatar uk-text-contrast md-bg-{{company.typeCompanyId.color}}">{{company.typeCompanyId.abbr}}</span>
+	                            			</div>
+	                                    </div>
+	                                </div>
+	                                <div class="user_heading_content">
+	                                    <h2 class="heading_b"><span class="uk-text-truncate" id="user_edit_uname">{{ company.name }}</span><span class="sub-heading" id="user_edit_position">{{ company.typeCompanyId.name }}</span></h2>
+	                                </div>
+	                                <div class="md-fab-wrapper">
+	                                    <button type="submit" id="user_edit_save" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" class="md-fab md-fab-small md-fab-success" title="Save"><i class="material-icons md-color-white">&#xE161;</i></button>
+	                                </div>
+	                            </div>
+	                            <div class="user_content">
+	                                <ul id="user_edit_tabs" class="uk-tab" data-uk-tab="{connect:'#user_edit_tabs_content'}">
+	                                    <li class="uk-active"><a href="#">À propos</a></li>
+	                                    <li><a href="#">Personnel</a></li>
+	                                </ul>
+	                                <ul id="user_edit_tabs_content" class="uk-switcher uk-margin">
+	                                    <li>
+	                                        <div class="uk-margin-top">
+	                                            <h3 class="full_width_in_card heading_c">
+	                                                Information générale
+	                                            </h3>
+	                                            <div class="uk-grid" data-uk-grid-margin>
+	                                                <div class="uk-width-medium-1-2">
+	                                                    <label for="name_control">Nom d'entreprise</label>
+	                                                    <input class="md-input" type="text" id="name_control" name="company[name]" value="{{ company.name }}" />
+	                                                </div>
+	                                                <div class="uk-width-medium-1-2">
+	                                                    <label for="company_typecompany">Type d'entreprise</label>
+	                                                    <select name="company[typecompany_id]" id="company_typecompany" class="md-input">
+	                                                    	{% for typecompany in typecompanies %}
+	                                                    		<option value="{{ typecompany.id }}" {% if typecompany.id == company.typeCompanyId.id %}selected{% endif %}>{{ typecompany.name }}</option>
+	                                                    	{% endfor %}
+	                                                    </select>
+	                                                </div>
+	                                            </div>
+	                                            <div class="uk-grid" data-uk-grid-margin>
+	                                                <div class="uk-width-medium-1-2">
+	                                                    <label for="company_address">Adresse</label>
+	                                                    <input class="md-input" type="text" id="company_address" name="company[address]" value="{{ company.address }}" />
+	                                                </div>
+	                                                <div class="uk-width-medium-1-2">
+	                                                    <label for="company_director">Nom du directeur</label>
+	                                                    <input class="md-input" type="text" id="company_director" name="company[director]" value="{{ company.director }}" />
+	                                                </div>
+	                                            </div>
+	                                            <div class="uk-grid">
+	                                                <div class="uk-width-1-1">
+	                                                    <label for="user_edit_personal_info_control">Description</label>
+	                                                    <textarea class="md-input" name="company[description]" id="user_edit_personal_info_control" cols="30" rows="4">{{ company.description }}</textarea>
+	                                                </div>
+	                                            </div>
+	                                            <h3 class="full_width_in_card heading_c">
+	                                                Information
+	                                            </h3>
+	                                            <div class="uk-grid">
+	                                                <div class="uk-width-1-1">
+	                                                    <div class="uk-grid uk-grid-width-1-1 uk-grid-width-large-1-2" data-uk-grid-margin>
+	                                                        <div>
+	                                                            <div class="uk-input-group">
+	                                                                <span class="uk-input-group-addon">
+	                                                                    <i class="md-list-addon-icon material-icons">&#xE158;</i>
+	                                                                </span>
+	                                                                <label>Email</label>
+	                                                                <input type="text" class="md-input" name="company[email]" value="{{ company.email }}" />
+	                                                            </div>
+	                                                        </div>
+	                                                        <div>
+	                                                            <div class="uk-input-group">
+	                                                                <span class="uk-input-group-addon">
+	                                                                    <i class="md-list-addon-icon uk-icon-google-plus"></i>
+	                                                                </span>
+	                                                                <label>Google+</label>
+	                                                                <input type="text" class="md-input" name="company[googleplus]" value="{{ company.googleplus }}" />
+	                                                            </div>
+	                                                        </div>
+	                                                        <div>
+	                                                            <div class="uk-input-group">
+	                                                                <span class="uk-input-group-addon">
+	                                                                    <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+	                                                                </span>
+	                                                                <label>Fixe</label>
+	                                                                <input type="text" class="md-input" name="company[fixe]" value="{{ company.fixe }}" />
+	                                                            </div>
+	                                                        </div>
+	                                                        <div>
+	                                                            <div class="uk-input-group">
+	                                                                <span class="uk-input-group-addon">
+	                                                                    <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+	                                                                </span>
+	                                                                <label>Téléphone</label>
+	                                                                <input type="text" class="md-input" name="company[phone]" value="{{ company.phone }}" />
+	                                                            </div>
+	                                                        </div>
+	                                                        <div>
+	                                                            <div class="uk-input-group">
+	                                                                <span class="uk-input-group-addon">
+	                                                                    <i class="md-list-addon-icon uk-icon-facebook-official"></i>
+	                                                                </span>
+	                                                                <label>Facebook</label>
+	                                                                <input type="text" class="md-input" name="company[facebook]" value="{{ company.facebook }}" />
+	                                                            </div>
+	                                                        </div>
+	                                                        <div>
+	                                                            <div class="uk-input-group">
+	                                                                <span class="uk-input-group-addon">
+	                                                                    <i class="md-list-addon-icon uk-icon-twitter"></i>
+	                                                                </span>
+	                                                                <label>Twitter</label>
+	                                                                <input type="text" class="md-input" name="company[twitter]" value="{{ company.twitter }}" />
+	                                                            </div>
+	                                                        </div>
+	                                                    </div>
+	                                                </div>
+	                                            </div>
+	                                        </div>
+	                                    </li>
+    									<li>
+						                    <div class="md-card">
+						                        <div class="md-card-content">
+						                            <div class="uk-overflow-container">
+						                                <table class="uk-table uk-table-hover uk-table-nowrap" id="concierge_list">
+						                                    <tbody>
+						                                    	{% for concierge in concierges %}
+						                                        <tr class="concierge" data-id="{{ concierge.id }}">
+					                                            	<td>
+						                                                <div class="uk-grid pos-relative" data-uk-grid-margin>
+						                                                    <div class="uk-width-1-5 uk-width-small-1-5 uk-text-center">
+						                                                    	{% if concierge.sexe == "Femme" %}
+						                                                        <img class="md-user-image-large concierge_image" src="{{ asset('images/female.png') }}" alt="Femme"/>
+						                                                    	{% else %}
+						                                                        <img class="md-user-image-large concierge_image" src="{{ asset('images/male.png') }}" alt="Homme"/>
+						                                                    	{% endif %}
+						                                                    </div>
+						                                                    <div class="uk-width-4-5 uk-width-small-4-5">
+						                                                    	<div class="uk-grid" data-uk-grid-margin>
+								                                                    <div class="uk-width-medium-1-2 uk-width-small-1-1">
+								                                                        <h4 class="heading_a uk-margin-small-bottom"><a href="#" title="Modifier {{ concierge.firstName~' '~concierge.lastName }}" class="concierge_edit" data-id="{{ concierge.id }}" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}"><span class="concierge_firstLastName">{{ concierge.firstName~' '~concierge.lastName }}</span><i class="material-icons md-color-deep-purple-A400">border_color</i></a></h4>
+								                                                        <p class="uk-margin-remove"><span class="uk-text-muted">Sexe:</span> <span class="concierge_sexe">{{ concierge.sexe }}</span></p>
+								                                                        <p class="uk-margin-remove"><span class="uk-text-muted">Job:</span> <span class="concierge_job">{{ concierge.job }}</span></p>
+								                                                    </div>
+								                                                    <div class="uk-width-medium-1-2 uk-width-small-1-1">
+								                                                        <p class="uk-margin-remove"><span class="uk-text-muted">Email:</span> <span class="concierge_email">{{ concierge.email }}</span></p>
+								                                                    	<p class="uk-margin-remove"><span class="uk-text-muted">Phone:</span> <span class="concierge_mobileNumber">{{ concierge.mobileNumber }}</span></p>
+								                                                        <p class="uk-margin-remove"><span class="uk-text-muted">Fixe:</span> <span class="concierge_fixeNumber">{{ concierge.fixeNumber }}</span></p>
+								                                                    </div>
+								                                                </div>
+						                                                    </div>
+								                                            <div class="concierge_delete_wrapper"><a href="#" class="concierge_delete" data-id="{{ concierge.id }}"><i class="material-icons md-color-red-900 md-24">clear</i></a></div>
+						                                                </div>
+						                                                <div class="concierge_info hidden"
+						                                                data-firstName="{{ concierge.firstName }}"
+						                                                data-lastName="{{ concierge.lastName }}"
+						                                                data-mobileNumber="{{ concierge.mobileNumber }}"
+						                                                data-email="{{ concierge.email }}"
+						                                                data-job="{{ concierge.job }}"
+						                                                data-fixeNumber="{{ concierge.fixeNumber }}"
+						                                                data-sexe="{{ concierge.sexe }}"
+						                                                ></div>
+						                                            </td>
+						                                        </tr>
+																{% endfor %}
+						                                    </tbody>
+															<tfoot>
+																<tr>
+																	<td>
+																		<a href="#" data-uk-modal="{target:'#concierge_add'}">
+																			<div class="md-bg-grey-50 concierge_add uk-text-center">
+																				<i class="material-icons md-color-blue-900 md-24">add_circle_outline</i> Ajouter
+																			</div>
+																		</a>
+																	</td>
+																</tr>
+															</tfoot>
+						                                </table>
+						                            </div>
+						                        </div>
+						                    </div>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+
+	            </form>
+
+	        </div>
+	    </div>
+	{% block modals %}
+		{{ parent() }}
+		<div class="uk-modal" id="concierge_add">
+		    <div class="uk-modal-dialog">
+		        <div class="uk-modal-header">
+		        	<button type="button" class="uk-modal-close uk-close uk-float-right"></button>
+		            <h3 class="uk-modal-title"><span>Ajouter</span> Personne</h3>
+		        </div>
+		        <form class="uk-form-stacked" id="concierge_new" action="{{ path('concierge_new') }}" method="post">
+		            <div class="uk-grid">
+		            	<div class="uk-width-medium-1-2">
+	                        <label for="concierge-sexe" class="uk-form-label">Sexe</label>
+	                        <select id="concierge-sexe" name="concierge[sexe]" required data-md-selectize>
+	                            <option value="">Choisir..</option>
+	                            <option value="Homme">Homme</option>
+	                            <option value="Femme">Femme</option>
+	                        </select>
+	                    </div>
+	                    <div class="uk-width-medium-1-2">
+                            <label for="concierge-job" class="uk-form-label">Job</label>
+                            <input class="customer-name" id="concierge-job" name="concierge[job]" />
+                        </div>
+                    </div>
+		            <div class="uk-grid">
+                        <div class="uk-width-medium-1-2">
+                            <label for="concierge-firstName" class="uk-form-label">Prénom<span class="req">*</span></label>
+                            <input class="customer-name" id="concierge-firstName" name="concierge[first_name]" required="" />
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <label for="concierge-lastName" class="uk-form-label">Nom</label>
+                            <input class="customer-name" id="concierge-lastName" name="concierge[last_name]" />
+                        </div>
+                    </div>
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-2">
+                            <label for="concierge-mobileNumber" class="uk-form-label">Téléphone</label>
+                            <input class="customer-name" id="concierge-mobileNumber" name="concierge[mobile_number]" />
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <label for="concierge-fixeNumber" class="uk-form-label">Fixe</label>
+                            <input class="customer-name" id="concierge-fixeNumber" name="concierge[fixe_number]" value="" />
+                        </div>
+                    </div>
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            <label for="concierge-email" class="uk-form-label">Email</label>
+                            <input class="customer-name" id="concierge-email" name="concierge[email]" value="" />
+                        </div>
+                    </div>
+		            <div class="uk-modal-footer uk-text-right">
+		            	<input type="hidden" name="concierge[company_id]" value="{{ company.id }}">
+		            	<input type="hidden" id="concierge-id" value="" >
+		                <button type="submit" class="md-btn md-btn-flat">Enregistrer</button>
+		            </div>
+		        </form>
+		    </div>
+		</div>
+	{% endblock %}
+{% endblock %}

@@ -1,0 +1,18 @@
+[
+	{
+	"CompanyID": "",
+	"CompanyName": "",
+	"CompanyAbbr": "",
+	"CompanyColor": "",
+	"CompanyTypeName": ""
+	}
+{% for company in companies %}
+	,{
+	"CompanyID": {{company.id}},
+	"CompanyName": "{{ company.name|raw }}",
+	"CompanyAbbr": "{{ company.typeCompanyId.abbr }}",
+	"CompanyColor": "{{ company.typeCompanyId.color }}",
+	"CompanyTypeName": "{{ company.typeCompanyId.name }}"
+	}
+{% endfor %}
+]

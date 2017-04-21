@@ -1,0 +1,235 @@
+book_index:
+    path: /
+    defaults: { _controller: RestaurantBundle:Book:index }
+
+book_get_xhr:
+    path: /get/{id}
+    defaults: { _controller: RestaurantBundle:Book:getBookXhr }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+book_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:Book:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+book_new:
+    path: /new
+    defaults: { _controller: RestaurantBundle:Book:new }
+    methods:  [POST]
+    options:
+        expose: true
+
+book_save:
+    path: /saveedit/{id}
+    defaults: { _controller: RestaurantBundle:Book:save }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_delete:
+    path: /delete/{id}
+    defaults: { _controller: RestaurantBundle:Book:delete }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_changestate:
+    path: /changestate/book-{book}-state-{state}/
+    defaults: { _controller: RestaurantBundle:Book:changeState }
+    methods:  [GET]
+    options:
+        expose: true
+    requirements:
+        book: \d+
+        state: \d+
+
+book_booklate:
+    path: /booklate/
+    defaults: { _controller: RestaurantBundle:Book:bookLate }
+    methods:  [POST]
+    options:
+        expose: true
+
+book_booknoshow:
+    path: /booknoshow/
+    defaults: { _controller: RestaurantBundle:Book:bookNoShow }
+    methods:  [POST]
+    options:
+        expose: true
+
+book_bookfreetabls:
+    path: /bookfreetabls/
+    defaults: { _controller: RestaurantBundle:Book:bookFreeTabls }
+    methods:  [POST]
+    options:
+        expose: true
+
+book_bookliberatetabl:
+    path: /bookliberatetabl/
+    defaults: { _controller: RestaurantBundle:Book:bookLiberateTabl }
+    methods:  [POST]
+    options:
+        expose: true
+
+book_calendar:
+    path: /calendar.json
+    defaults: { _controller: RestaurantBundle:Book:calendar }
+    methods: [GET]
+    options:
+        expose: true
+
+book_detail:
+    path: /detail/{id}
+    defaults: { _controller: RestaurantBundle:Book:detail }
+    methods: [GET]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_update_hour_xhr:
+    path: /updatehour/{id}
+    defaults: { _controller: RestaurantBundle:Book:updateHourXHR }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_update_tables_xhr:
+    path: /updatetables/{id}
+    defaults: { _controller: RestaurantBundle:Book:updateTablesXHR }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_verify_tables_xhr:
+    path: /verifytablesifexist/
+    defaults: { _controller: RestaurantBundle:Book:verifyTablesXHR }
+    methods: [POST]
+    options:
+        expose: true
+
+book_verify_free_tables_xhr:
+    path: /verifyfreetables/{date}/
+    defaults: { _controller: RestaurantBundle:Book:verifyFreeTablesXHR }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        date: \d{2}\-\d{2}\-\d{4}
+
+book_change_tables_xhr:
+    path: /changebooktables/
+    defaults: { _controller: RestaurantBundle:Book:changeBookTablesXHR }
+    methods: [POST]
+    options:
+        expose: true
+
+book_switch_tables_xhr:
+    path: /switchbooktables/
+    defaults: { _controller: RestaurantBundle:Book:switchBookTablesXHR }
+    methods: [POST]
+    options:
+        expose: true
+
+
+book_update_pax_xhr:
+    path: /updatepax/{id}
+    defaults: { _controller: RestaurantBundle:Book:updatePaxXHR }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_confirm_whatsapp:
+    path: /confirm_whatsapp/{id}
+    defaults: { _controller: RestaurantBundle:Book:confirmBookWhatsapp }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_after_pending:
+    path: /afterpending_whatsapp/{id}
+    defaults: { _controller: RestaurantBundle:Book:afterPendingBookWhatsapp }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_whatsapp_cancel:
+    path: /cancel_whatsapp/{id}
+    defaults: { _controller: RestaurantBundle:Book:cancelBookWhatsapp }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_get_messages:
+    path: /getmessageswhatsapp
+    defaults: { _controller: RestaurantBundle:Book:getMessagesBookWhatsapp }
+    methods: [POST]
+    options:
+        expose: true
+
+book_confirm_email:
+    path: /confirm_email/{id}
+    defaults: { _controller: RestaurantBundle:Book:confirmBookEmail }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_cancel_email:
+    path: /cancel_email/{id}
+    defaults: { _controller: RestaurantBundle:Book:cancelBookEmail }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_pending_email:
+    path: /pending_email/{id}
+    defaults: { _controller: RestaurantBundle:Book:pendingBookEmail }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+book_affect_table:
+    path: /affect_tabl/{id}-{tablid}
+    defaults: { _controller: RestaurantBundle:Book:affectTable }
+    methods: [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+        tablid: \d+
+
+book_edit:
+    path: /edit/{id}
+    defaults: { _controller: RestaurantBundle:Book:edit }
+    methods: [GET]
+    options:
+        expose: true
+    requirements:
+        id: \d+

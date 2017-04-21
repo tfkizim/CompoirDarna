@@ -1,0 +1,42 @@
+grouptabl_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:GroupTabl:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+grouptabl_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:GroupTabl:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+grouptabl_edit_drag_xhr:
+    path: /edit_drag_xhr/{id}
+    defaults: { _controller: RestaurantBundle:GroupTabl:editDragXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+grouptabl_edit_xhr:
+    path: /edit_xhr/{id}
+    defaults: { _controller: RestaurantBundle:GroupTabl:editXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+grouptabl_edit_rotation_xhr:
+    path: /edit_rotation_xhr/{id}
+    defaults: { _controller: RestaurantBundle:GroupTabl:editRotationXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+

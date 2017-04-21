@@ -1,0 +1,44 @@
+user_index:
+    path: /
+    defaults: { _controller: RestaurantBundle:User:index }
+
+user_edit:
+    path: /edit/{id}
+    defaults: { _controller: RestaurantBundle:User:edit }
+    requirements:
+        id: \d+
+
+user_add:
+    path: /add
+    defaults: { _controller: RestaurantBundle:User:add }
+
+user_new:
+    path: /new
+    defaults: { _controller: RestaurantBundle:User:new }
+    methods:  [POST]
+    options:
+        expose: true
+
+user_save:
+    path: /saveedit/{id}
+    defaults: { _controller: RestaurantBundle:User:save }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+user_delete:
+    path: /delete/{id}
+    defaults: { _controller: RestaurantBundle:User:delete }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+user_json:
+    path: /all.json
+    defaults: { _controller: RestaurantBundle:User:json }
+    options:
+        expose: true

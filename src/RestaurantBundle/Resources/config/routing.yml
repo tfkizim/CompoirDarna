@@ -1,0 +1,112 @@
+restaurant_restaurant:
+    path: /
+    defaults: { _controller: RestaurantBundle:Restaurant:index }
+
+restaurant_date:
+    path: /{date}/
+    defaults: { _controller: RestaurantBundle:Restaurant:index }
+    options:
+        expose: true
+    requirements:
+        date: \d{2}\-\d{2}\-\d{4}
+
+restaurant_date_service:
+    path: /{date}/{service}/
+    defaults: { _controller: RestaurantBundle:Restaurant:index }
+    options:
+        expose: true
+    requirements:
+        date: \d{2}\-\d{2}\-\d{4}
+        service: \d+
+
+restaurant_calendar:
+    path: /calendar
+    defaults: { _controller: RestaurantBundle:Calendar:index }
+
+restaurant_invoice:
+    path: /invoice
+    defaults: { _controller: RestaurantBundle:Invoice:index }
+
+restaurant_chat:
+    path: /chat
+    defaults: { _controller: RestaurantBundle:Chat:index }
+
+restaurant_note:
+    path: /note
+    defaults: { _controller: RestaurantBundle:Note:index }
+
+restaurant_task:
+    path: /task
+    defaults: { _controller: RestaurantBundle:Task:index }
+
+restaurant_config:
+    path: /config
+    defaults: { _controller: RestaurantBundle:Config:index }
+
+restaurant_config_save:
+    path: /saveconfig
+    defaults: { _controller: RestaurantBundle:Config:save }
+
+restaurant_state:
+    path: /state
+    defaults: { _controller: RestaurantBundle:State:index }
+
+restaurant_configuration:
+    resource: "@RestaurantBundle/Resources/config/routing/configuration.yml"
+    prefix:   /configuration
+
+restaurant_service:
+    resource: "@RestaurantBundle/Resources/config/routing/service.yml"
+    prefix:   /service
+
+restaurant_floor:
+    resource: "@RestaurantBundle/Resources/config/routing/floor.yml"
+    prefix:   /floor
+
+restaurant_company:
+    resource: "@RestaurantBundle/Resources/config/routing/company.yml"
+    prefix:   /company
+
+restaurant_concierge:
+    resource: "@RestaurantBundle/Resources/config/routing/concierge.yml"
+    prefix:   /concierge
+
+restaurant_customer:
+    resource: "@RestaurantBundle/Resources/config/routing/customer.yml"
+    prefix:   /customer
+
+restaurant_user:
+    resource: "@RestaurantBundle/Resources/config/routing/user.yml"
+    prefix:   /user
+
+restaurant_typetabl:
+    resource: "@RestaurantBundle/Resources/config/routing/typetabl.yml"
+    prefix:   /typetable
+
+restaurant_tabl:
+    resource: "@RestaurantBundle/Resources/config/routing/tabl.yml"
+    prefix:   /table
+
+restaurant_grouptabl:
+    resource: "@RestaurantBundle/Resources/config/routing/grouptabl.yml"
+    prefix:   /grouptable
+
+restaurant_occasion:
+    resource: "@RestaurantBundle/Resources/config/routing/occasion.yml"
+    prefix:   /occasion
+
+restaurant_states:
+    resource: "@RestaurantBundle/Resources/config/routing/state.yml"
+    prefix:   /state
+
+restaurant_offer:
+    resource: "@RestaurantBundle/Resources/config/routing/offer.yml"
+    prefix:   /offer
+
+restaurant_book:
+    resource: "@RestaurantBundle/Resources/config/routing/book.yml"
+    prefix:   /book
+
+restaurant_notification:
+    resource: "@RestaurantBundle/Resources/config/routing/notification.yml"
+    prefix:   /notifications

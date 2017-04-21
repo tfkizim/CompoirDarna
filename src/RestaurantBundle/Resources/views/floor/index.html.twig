@@ -1,0 +1,446 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	{% block barre %}{{ parent() }}{% endblock %}
+	{% block menu %}{{ parent() }}{% endblock %}
+		<div id="page_content">
+        <div id="page_content_inner">
+            <div class="uk-grid">
+                <div class="uk-width-medium-2-10" id="book-sidebar">
+                    <div class="md-card uk-width-medium-2-10 uk-margin-medium-bottom uk-overflow-container" id="fixed-sidebar">
+                        <div class="md-card-content">
+                            <div class="search">
+                                <div class="uk-input-group">
+                                    <label>Recherche</label>
+                                    <input type="text" class="md-input" id="filtersearch" />
+                                    <span class="uk-input-group-addon">
+                                        <a href="#"><i class="material-icons">search</i></a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="">
+                                <ul class="filterbook uk-button-group">
+                                    <li class="uk-active"><a href="#" class="uk-button" data-filter="all">Tout</a></li>
+                                    <li><a href="#" class="uk-button" data-filter="attr">Attr.</a></li>
+                                    <li><a href="#" class="uk-button" data-filter="no-attr">Non Attr.</a></li>
+                                    <li>
+                                        <div class="uk-button-dropdown uk-button-dropdown-right" data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                            <button class="uk-button"><i class="material-icons">&#xE313;</i></button>
+                                            <div class="uk-dropdown">
+                                                <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                                    {% for state in states %}
+                                                        <li><a href="#" class="states" data-filter="{{ state.function }}">{{ state.name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <!--<ul class="filterbook uk-button-group">
+                                    <li class="uk-active"><a href="#" class="uk-button">Tout</a></li>
+                                    <li><a href="#" class="uk-button">En cours</a></li>
+                                    <li><a href="#" class="uk-button">En attente</a></li>
+                                </ul>-->
+                            </div>
+                            <ul class="md-list md-list-addon ym-book-list">
+                                {% for book in books %}
+                                    {% set name="" %}
+                                    {% set filter=" no-attr" %}
+                                    {% set status="" %}
+                                    {% set statusclass="" %}
+                                    {% set datastatus="" %}
+                                    {% if book.stateId %}
+                                        {% set status=' md-bg-'~book.stateId.color~' '~(book.stateId.function) %}
+                                        {% set statusclass='data-class="md-bg-'~book.stateId.color %}
+                                        {% set datastatus='data-state="'~book.stateId.function~'"' %}
+                                        {% if book.stateId.flashed %}
+                                            {% set status=status~' blink' %}
+                                            {% set statusclass=statusclass~' blink' %}
+                                        {% endif %}
+                                        {% set statusclass=statusclass~'"' %}
+                                    {% endif %}
+                                    {% for bt in book.booktabls %}
+                                        {% if name is empty %}
+                                            {% set name='<span data-book-tablid="'~bt.tablId.id~'" class="booktablid">'~bt.tablId.name~'</span>' %}
+                                        {% else %}
+                                            {% set name=name~' + <span data-book-tablid="'~bt.tablId.id~'" class="booktablid">'~bt.tablId.name~'</span>' %}
+                                        {% endif %}
+                                        {% set filter=" attr" %}
+                                    {% endfor %}
+                                <li class="book-line{{ status }}{{ filter }}" {{ statusclass|raw }}  {{ datastatus|raw }} data-timestamp="{{ book.dateBook|totimestamp }}" data-id="{{ book.id }}">
+                                    <div class="md-list-content">
+                                        <div class="uk-grid" data-uk-grid-margin="">
+                                            <div class="uk-width-medium-2-2">
+                                                <a href="#" class="book-edit edit-resa" data-id="{{ book.id }}"><i class="material-icons md-color-purple-900">edit</i></a>
+                                                {% if book.customerId %}<strong data-uk-tooltip="{pos:'bottom'}" title="{{ book.customerId.sexe }} {{ book.customerId.firstName~' '~book.customerId.lastName }}"><span class="book-civility">{{ book.customerId.sexe }}</span> <span class="book-name">{{ book.customerId.firstName~' '~book.customerId.lastName }}</span></strong><br>{% endif %}
+                                                <span class="book-tables"><i class="fa fa-circle"></i>{{ name|raw }}</span>
+                                                {% if book.occasionId %}<span class="book-birthday" data-uk-tooltip="{pos:'bottom'}" title="{{ book.occasionId.name }}"><i class="{{ book.occasionId.icon }} {{ book.occasionId.color }}"></i></span>{% endif %}
+                                                {% if book.offerId %}<span class="book-offer" data-uk-tooltip="{pos:'bottom'}" title="{{ book.offerId.name }}"><i class="{{ book.offerId.icon }}"></i></span>{% endif %}
+                                                {% if book.customerId and book.customerId.vip %}
+                                                    <span class="book-vip" data-uk-tooltip="{pos:'bottom'}" title="VIP"><i class="md-color-yellow-700">VIP</i></span>
+                                                {% endif %}
+                                                {% if book.companyId %}
+                                                    <span class="uk-hidden">{{ book.companyId.name }}</span>
+                                                {% endif %}
+                                                <br><span data-uk-tooltip="{pos:'bottom'}" title="{{ book.pax }} personnes"><i class="material-icons md-color-purple-900">person</i> <span class="book-pax">{{ book.pax }}</span></span>
+                                                {% if book.stateId.function == "noshow" %}<span data-uk-tooltip="{pos:'bottom'}" class="icon-no-show" title="0 No Show"><i class="material-icons md-color-red-A700">visibility_off</i></span>{% endif %}
+                                                <span data-uk-tooltip="{pos:'bottom'}" title="{{ book.dateBook|date("H:i") }}" class="uk-float-right">
+                                                    <span class="just-in-pending">
+                                                        {% if book.stateId %}
+                                                            {% if book.stateId.function == "pending" and book.beginingWaitingTime %}
+                                                                <i class="uk-icon-refresh uk-icon-spin md-color-deep-orange-900"></i>
+                                                                <span class="book-beginingwaiting md-color-deep-orange-900" data-time="{{ book.beginingWaitingTime|date("Y-m-d H:i:s") }}"></span>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </span>
+                                                    <i class="material-icons md-color-deep-orange-900">schedule</i>
+                                                    <span class="book-hour">{{ book.dateBook|date("H:i") }}</span>
+                                                    <span class="book-stateid uk-hidden">{{ book.stateId.id }}</span>
+                                                    <span class="book-orderstate uk-hidden">{{ book.stateId.orderInFilter }}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-8-10" id="book-content">
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <div class="md-card uk-margin-medium-bottom">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Modifier le Plan
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                            <form action="" class="uk-form-stacked">
+                                <div class="uk-grid">
+                                    <div class="uk-width-medium-8-10">
+                                        <div class="uk-display-inline">
+                                            <input type="checkbox" name="mode-edit" data-switchery id="mode-edit" />
+                                            <label for="service1" class="inline-label">Mode édition</label>
+                                        </div>
+                                        <div class="uk-display-inline">
+                                            <input type="checkbox" name="mode-rotate" data-switchery id="mode-rotate" />
+                                            <label for="service1" class="inline-label">Mode rotation</label>
+                                        </div>
+                                    </div>
+                                    {#<div class="uk-width-medium-2-10 uk-text-right">
+                                        <button type="button" class="md-btn md-btn-danger" id="btn-add-groupetable">
+                                            <i class="material-icons uk-text-contrast"></i> Ajouter Groupe
+                                        </button>
+                                    </div>#}
+                                    <div class="uk-width-medium-2-10 uk-text-right">
+                                        <button type="button" class="md-btn md-btn-success" id="btn-add-table">
+                                            <i class="material-icons uk-text-contrast"></i> Ajouter Table
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="md-card uk-margin-medium-bottom">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-toggle">&#xE316;</i>
+                                <i class="md-icon material-icons md-card-close">&#xE14C;</i>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                                Changer la date/le service
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                            <form action="" class="uk-form-stacked">
+                                <div class="uk-grid">
+                                    <div class="uk-width-small-1-10">
+                                        <a href="{{ path('floor_date_id_service',{id:selectedfloor.id,service:selectedservice.id,date:datetime|date_modify("-1 day")|date("d-m-Y")}) }}"><i class="material-icons md-48">navigate_before</i></a>
+                                    </div>
+                                    <div class="uk-width-medium-2-10">
+                                        <div class="parsley-row">
+                                            <select id="floor_select" data-md-selectize>
+                                                <option value="">Etage...</option>
+                                                {% for floor in floors %}
+                                                <option value="{{ floor.id }}" {% if floor.id == selectedfloor.id %}selected{% endif %}>{{ floor.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-small-3-10">
+                                        <input class="kendodatepicker" id="date_select" value="{{ datetime|date("d-m-Y") }}" />
+                                    </div>
+                                    <div class="uk-width-small-3-10">
+                                        <select id="service_select" data-md-selectize>
+                                            <option value="">Service...</option>
+                                            {% for service in services %}
+                                            <option value="{{ service.id }}" {% if selectedservice.id == service.id %}selected{% endif %}>{{ service.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="uk-width-small-1-10">
+                                        <a href="{{ path('floor_date_id_service',{id:selectedfloor.id,service:selectedservice.id,date:datetime|date_modify("+1 day")|date("d-m-Y")}) }}"><i class="material-icons md-48">navigate_next</i></a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="md-card uk-margin-medium-bottom">
+                        <div class="md-card-content">
+                            <div id="plan">
+                                {% for tabl in tabls %}
+                                    {% if tabl.grouptablId is null %}
+                                        {% set classe="" %}
+                                        {% set classeid="" %}
+                                        {% for typetabl in tabl.tabltypetabls %}
+                                            {% set classe=classe~" "~typetabl.typeTablId.class %}
+                                            {% set classeid=classeid~","~typetabl.typeTablId.id %}
+                                        {% endfor %}
+                                        {% set timestamp="" %}
+                                        {% set status="" %}
+                                        {% set statusname="" %}
+                                        {% set datastatus="" %}
+                                        {% set bookhour="" %}
+                                        {% if booktables[tabl.id] is defined %}
+                                            {% set i=0 %}
+                                            {% for book in booktables[tabl.id] %}
+                                                {% if i == 0 %}
+                                                    {% set timestamp='data-timestamp="'~book.dateBook|totimestamp~'"' %}
+                                                    {% set bookhour=book.dateBook|date("H:i") %}
+                                                    {% if book.stateId %}
+                                                        {% set status='md-bg-'~book.stateId.color %}{#name|slugify#}
+                                                        {% set statusname=' '~book.stateId.function %}
+                                                        {% set datastatus='data-state="'~book.stateId.function~'"' %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% set i=i+1 %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <div class="table{{classe}} uk-button-dropdown {{ status }}{{ statusname }} {% if status is not empty %}with-status{% endif %}" data-class="{{ status }}" {{ datastatus|raw }} {{ timestamp|raw }} data-id="{{tabl.id}}" style="left: {{tabl.leftp}}%;top: {{tabl.topp}}%;    transform: rotate({{tabl.rotation}}deg);" data-uk-dropdown="{mode:'click'}">
+                                            <span class="title">{{tabl.name}}</span>
+                                            {% if status is not empty %}
+                                                {% set j=0 %}
+                                                {% for bt in booktables[tabl.id] %}
+                                                    {% if j==0 %}
+                                                        <span class="uk-badge uk-badge-notification nbr-covert">{{ bt.pax }}</span>
+                                                        {% set j=j+1 %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <div class="uk-progress uk-progress-small book-late uk-hidden">
+                                                <div class="uk-progress-bar" style="width: 0%;"></div>
+                                            </div>
+                                            <div class="uk-progress uk-progress-danger uk-progress-small book-noshow uk-hidden">
+                                                <div class="uk-progress-bar" style="width: 0%;"></div>
+                                            </div>
+
+
+                                            <div class="uk-dropdown {% if status is not empty %}uk-dropdown-width-2{% endif %}" style="transform: rotate({{tabl.rotation*-1}}deg);">
+                                                <div class="uk-grid uk-dropdown-grid">
+                                                    <div class="{% if status is empty %}uk-width-2-2{% else %}uk-width-1-2{% endif %}">
+                                                        <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                                            <li><a href="#" class="add-passage"><i class="material-icons">add</i> Ajouter passage</a></li>
+                                                            <li><a href="#" class="add-resa"><i class="material-icons">add</i> Ajouter résa</a></li>
+                                                            {#<li><a href="#" class="concatenate-table"><i class="material-icons">add</i> Concatener</a></li>#}
+                                                            <li><a href="#" class="update-table"><i class="material-icons">create</i> Modifier</a></li>
+                                                            <li><a href="#" class="delete-table"><i class="material-icons">close</i> Supprimer</a></li>
+                                                        </ul>
+                                                        {% if status is not empty %}
+                                                            {% for bt in booktables[tabl.id]  %}
+                                                                <span class="table-booked hidden" data-id="{{ bt.id }}"></span>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if status is not empty %}
+                                                        {% set j=0 %}
+                                                        {% for bt in booktables[tabl.id] %}
+                                                            {% if j==0 %}
+                                                                <div class="uk-width-1-2 booking-container" data-id="{{ bt.id }}">
+                                                                    <span class="name"><span class="table-civility">{{ bt.customerId.sexe }}</span> <span class="tale-name">{{ bt.customerId.firstName~" "~bt.customerId.lastName }}</span></span><br>
+                                                                    <span class="pax"><strong class="table-pax">{{ bt.pax }}</strong> Personne(s)</span><br>
+                                                                    {% if bt.occasionId %}
+                                                                        <i class="{{ bt.occasionId.icon }} uk-icon-small {{ bt.occasionId.color }}" data-uk-tooltip="{pos:'bottom'}" title="{{ bt.occasionId.name }}"></i>
+                                                                    {% endif %}
+                                                                    {% if bt.offerId %}
+                                                                        <i class="{{ bt.offerId.icon }} uk-icon-small" data-uk-tooltip="{pos:'bottom'}" title="{{ bt.offerId.name }}"></i>
+                                                                    {% endif %}
+                                                                    {% if bt.customerId.vip %}
+                                                                        <i class="uk-icon-user-secret uk-icon-small md-color-yellow-700" data-uk-tooltip="{pos:'bottom'}" title="Vip"></i>
+                                                                    {% endif %}
+                                                                    <span class="table-bookhour">{{ bookhour }}</span>
+                                                                    <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                                                        <li><a href="#" class="liberatetable" data-id="{{ bt.id }}"><i class="uk-icon-minus-circle"></i> Libérer</a></li>
+                                                                        <li><a href="#" class="book-edit edit-resa" data-id="{{ bt.id }}"><i class="material-icons">create</i> Modifier</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                                {% set j=j+1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="hidden info_table"
+                                            data-name="{{tabl.name}}"
+                                            data-nbrChaire="{{tabl.nbrChaire}}"
+                                            data-typeTablId="{{classeid}}"
+                                            data-leftp="{{tabl.leftp}}"
+                                            data-topp="{{tabl.topp}}"
+                                            data-rotation="{{tabl.rotation}}"
+                                            ></div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+								
+								{# for grouptabl in grouptabls %}
+								<div class="table group-table uk-button-dropdown group-{{grouptabl.orientation}}" style="left: {{grouptabl.leftp}}%;top: {{grouptabl.topp}}%;" data-id="{{grouptabl.id}}" data-uk-dropdown="{mode:'click'}">
+                                    {% set namegroup="" %}
+                                    {% set nbrcovert=0 %}
+                                    {% for tabl in grouptabl.tabls %}
+                                        {% set namegroup=namegroup~"+"~tabl.name %}
+                                        {% set nbrcovert=nbrcovert+tabl.nbrChaire %}
+                                    {% endfor %}
+                                    <span class="title">{{ namegroup[1:] }}</span>
+                                    <span class="uk-badge uk-badge-notification nbr-covert">{{nbrcovert}}</span>
+                                    {% for tabl in grouptabl.tabls %}
+                                        {% set classe="" %}
+                                        {% set classeid="" %}
+                                        {% for typetabl in tabl.tabltypetabls %}
+                                            {% set classe=classe~" "~typetabl.typeTablId.class %}
+                                            {% set classeid=classeid~","~typetabl.typeTablId.id %}
+                                        {% endfor %}
+                                        {% if classe is empty %}
+                                            {% set classe=" square" %}
+                                        {% endif %}
+                                    	<div class="sub-table{{ classe }}" data-id="{{ tabl.id }}" data-name="{{ tabl.name }}"></div>
+                                    {% endfor %}
+                                    <div class="uk-dropdown uk-dropdown-width-2">
+                                        <div class="uk-grid uk-dropdown-grid">
+                                            <div class="uk-width-1-2">
+                                                <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                                    <li><a href="#" class="add-resa"><i class="material-icons">add</i> Ajouter résa</a></li>
+                                                    <li><a href="#" class="separate-groupe"><i class="material-icons">fullscreen</i> Séparer</a></li>
+                                                    <li><a href="#" class="update-table"><i class="material-icons">create</i> Modifier</a></li>
+                                                    <li><a href="#" class="delete-table"><i class="material-icons">close</i> Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="uk-width-1-2">
+                                                <span class="name">Mr. Maknaoui Yassine</span><br>
+                                                <span class="pax"><strong class="number">5</strong> Personne(s)</span><br>
+                                                <i class="material-icons">call</i>
+                                                <i class="material-icons">favorite</i>
+                                                <i class="material-icons">grade</i>
+                                                <span><i class="material-icons">visibility_off</i><span class="uk-badge uk-badge-notification">20</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hidden info_grouptable"
+                                    data-name="{{grouptabl.name}}"
+                                    data-leftp="{{grouptabl.leftp}}"
+                                    data-topp="{{grouptabl.topp}}"
+                                    data-orientation="{{grouptabl.orientation}}"
+                                    ></div>
+                                </div>
+                            	{% endfor #}
+                                <div class="grid grid1"></div>
+                                <div class="grid grid2"></div>
+                                <div class="grid grid3"></div>
+                                <div class="grid grid4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block modals %}
+        {{ parent() }}
+        <div class="uk-modal" id="add-update-table">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header">
+                    <h3 class="uk-modal-title"><i class="add-update-text">Ajouter</i> table</h3>
+                </div>
+                <form id="form-addtable">
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            <input type="hidden" id="table-id" value="">
+                            <label for="" class="uk-form-label">Nom</label>
+                            <input class="md-input" id="table-nom" name="name" type="text" />
+                        </div>
+                    </div>
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            <label for="table-nbr-chaire" class="uk-form-label">Nombre de couvert</label>
+                            <input class="md-input" id="table-nbr-chaire" name="nbr_chaire" type="text" value="2" />
+                        </div>
+                    </div>
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            {% for typetabl in typetabls %}
+                            <div class="uk-display-inline">
+                                <input type="checkbox" name="typetabl_id[]" data-switchery id="table-{{typetabl.class}}" value="{{typetabl.id}}" class="table_typetable" />
+                                <label for="table-{{typetabl.class}}" class="inline-label">{{typetabl.name}}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="uk-grid" id="table-bloc-duplicate">
+                        <div class="uk-width-medium-1-4">
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">x</span>
+                                <div class="md-input-wrapper"><input type="text" class="md-input" name="duplicate" value="1"><span class="md-input-bar"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Annuler</button><button type="button" class="md-btn md-btn-flat md-btn-flat-primary uk-modal-close" id="addtable">Ajouter</button>
+                </div>
+            </div>
+        </div>
+
+        {#<div class="uk-modal" id="add-update-grouptable">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header">
+                    <h3 class="uk-modal-title"><i class="add-update-text">Ajouter</i> Groupe table</h3>
+                </div>
+                <form id="form-addgrouptable">
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            <input type="hidden" id="grouptable-id" value="">
+                            <label for="" class="uk-form-label">Nom</label>
+                            <input class="md-input" id="grouptable-nom" name="name" type="text" />
+                        </div>
+                    </div>
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            <label for="" class="uk-form-label">Orientation</label>
+                            <select id="orientation" name="orientation" data-md-selectize>
+                                <option value="horizantale">Horizantale</option>
+                                <option value="verticale">Verticale</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-1-1">
+                            <label for="">Sélectionner tables</label><br>
+                            <div class="uk-input-group">
+                                <span class="uk-input-group-addon">
+                                    <a href="#" class="md-btn md-btn-small md-btn-success select-modal-plan" data-id="5"><i class="material-icons uk-text-contrast">add</i></a>
+                                </span>
+                                <div class="md-input-wrapper"><input type="text" id="selected-group-tabls" class="k-textbox input-selected-tables" name="selected_nametabls" data-id="5"><input type="hidden" id="selected-group-ids" class="selected-tables-id" name="selected_tables_id" data-id="5" value=""><span class="md-input-bar"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Annuler</button><button type="button" class="md-btn md-btn-flat md-btn-flat-primary uk-modal-close" id="addgrouptable">Ajouter</button>
+                </div>
+            </div>
+        </div>#}
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,11 @@
+pays_json:
+    path: /pays.json
+    defaults: { _controller: RestaurantBundle:Config:paysJson }
+    options:
+        expose: true
+
+indicatif_json:
+    path: /indicatif.json
+    defaults: { _controller: RestaurantBundle:Config:indicatifJson }
+    options:
+        expose: true

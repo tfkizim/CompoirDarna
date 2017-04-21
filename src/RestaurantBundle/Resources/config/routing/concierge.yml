@@ -1,0 +1,24 @@
+concierge_new:
+    path: /new
+    defaults: { _controller: RestaurantBundle:Concierge:new }
+    methods:  [POST]
+    options:
+        expose: true
+
+concierge_save:
+    path: /saveedit/{id}
+    defaults: { _controller: RestaurantBundle:Concierge:save }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+concierge_delete:
+    path: /delete/{id}
+    defaults: { _controller: RestaurantBundle:Concierge:delete }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+

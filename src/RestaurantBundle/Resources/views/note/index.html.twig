@@ -1,0 +1,208 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    {% block barre %}{{ parent() }}{% endblock %}
+    {% block menu %}{{ parent() }}{% endblock %}
+	<div id="i-am-a-single-page"></div>
+    <div id="page_content">
+        <div id="page_content_inner">
+            <div class="uk-width-medium-8-10 uk-container-center reset-print">
+                <div class="uk-grid uk-grid-collapse" data-uk-grid-margin>
+                    <div class="uk-width-large-3-10 hidden-print uk-visible-large">
+                        <div class="md-list-outside-wrapper">
+                            <ul class="md-list md-list-outside notes_list" id="notes_list">
+            
+                                <li class="heading_list uk-text-danger">Important Notes</li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="1">
+                                        <span class="md-list-heading uk-text-truncate">Itaque tenetur vel in distinctio.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="2">
+                                        <span class="md-list-heading uk-text-truncate">Eum architecto non et.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="3">
+                                        <span class="md-list-heading uk-text-truncate">Ipsa aut aut ipsam.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="4">
+                                        <span class="md-list-heading uk-text-truncate">Ratione omnis distinctio tempore.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="5">
+                                        <span class="md-list-heading uk-text-truncate">In accusamus nihil tenetur.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="6">
+                                        <span class="md-list-heading uk-text-truncate">Eius amet consequatur blanditiis.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="7">
+                                        <span class="md-list-heading uk-text-truncate">Rerum rerum aut aut non nulla.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="8">
+                                        <span class="md-list-heading uk-text-truncate">Repudiandae quo dolorum expedita possimus quam.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="9">
+                                        <span class="md-list-heading uk-text-truncate">Non voluptatem ad illo.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="10">
+                                        <span class="md-list-heading uk-text-truncate">Quia eligendi atque totam.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                        
+                                <li class="heading_list">Other Notes</li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="11">
+                                        <span class="md-list-heading uk-text-truncate">Quas et commodi.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="12">
+                                        <span class="md-list-heading uk-text-truncate">Minima repudiandae quam voluptatum voluptatem enim.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="13">
+                                        <span class="md-list-heading uk-text-truncate">Aliquam provident est.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="14">
+                                        <span class="md-list-heading uk-text-truncate">Nulla tempora possimus veniam.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="15">
+                                        <span class="md-list-heading uk-text-truncate">Fuga voluptatibus facere natus voluptatem ut.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="16">
+                                        <span class="md-list-heading uk-text-truncate">Officiis in sit omnis.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="17">
+                                        <span class="md-list-heading uk-text-truncate">Iure ducimus officiis a ut quisquam.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="18">
+                                        <span class="md-list-heading uk-text-truncate">Vel molestias ut eum quasi.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="19">
+                                        <span class="md-list-heading uk-text-truncate">Rerum sit id suscipit vel.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="20">
+                                        <span class="md-list-heading uk-text-truncate">Velit molestiae porro dolore et commodi.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="21">
+                                        <span class="md-list-heading uk-text-truncate">Et ut ut molestias.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="22">
+                                        <span class="md-list-heading uk-text-truncate">Sequi sunt quia assumenda.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="23">
+                                        <span class="md-list-heading uk-text-truncate">Et quis ad non.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="24">
+                                        <span class="md-list-heading uk-text-truncate">Quaerat unde rerum eum autem aliquam.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="25">
+                                        <span class="md-list-heading uk-text-truncate">Culpa optio similique praesentium perferendis accusamus.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="md-list-content note_link" data-note-id="26">
+                                        <span class="md-list-heading uk-text-truncate">Perferendis nihil eveniet.</span>
+                                        <span class="uk-text-small uk-text-muted">21 Oct 2015</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="uk-width-large-7-10">
+                        <div class="md-card md-card-single">
+                            <form action="">
+                                <div class="md-card-toolbar hidden-print">
+                                    <div class="md-card-toolbar-actions">
+                                        <i class="md-icon material-icons">&#xE161;</i>
+                                        <div class="md-card-dropdown" data-uk-dropdown>
+                                            <i class="md-icon material-icons">&#xE5D4;</i>
+                                            <div class="uk-dropdown uk-dropdown-flip uk-dropdown-small">
+                                                <ul class="uk-nav">
+                                                    <li><a href="#"><i class="material-icons uk-margin-small-right">&#xE80D;</i> Share</a></li>
+                                                    <li><a href="#"><i class="material-icons uk-margin-small-right">&#xE149;</i> Archive</a></li>
+                                                    <li><a href="#"><i class="material-icons uk-margin-small-right">&#xE872;</i> Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input name="note_title" id="note_title" class="md-card-toolbar-input" type="text" value="" placeholder="Add title" />
+                                </div>
+                                <div class="md-card-content">
+                                    <textarea name="note_content" id="note_content" class="textarea_autosize md-input" cols="30" rows="12" placeholder="Add content"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="sidebar_secondary">
+        <div class="sidebar_secondary_wrapper uk-margin-remove"></div>
+    </div>
+{% endblock %}

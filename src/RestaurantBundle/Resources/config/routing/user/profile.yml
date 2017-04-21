@@ -1,0 +1,9 @@
+fos_user_profile_show:
+    path: /
+    defaults: { _controller: RestaurantBundle:Profile:show }
+    methods:  [GET]
+
+fos_user_profile_edit:
+    path: /edit
+    defaults: { _controller: RestaurantBundle:Profile:edit }
+    methods:  [GET, POST]

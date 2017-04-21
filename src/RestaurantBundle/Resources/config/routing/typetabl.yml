@@ -1,0 +1,15 @@
+typetabl_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:TypeTabl:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+typetabl_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:TypeTabl:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+

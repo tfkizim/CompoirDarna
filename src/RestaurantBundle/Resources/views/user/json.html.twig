@@ -1,0 +1,10 @@
+[
+{% for customer in customers %}
+	{
+	"CustomerID": {{customer.id}},
+	"ContactName": "{{ customer.firstName~' '~customer.lastName }}",
+	"CompanyName": "{{ customer.companyId.typeCompanyId.name }}"
+	}
+	{% if not loop.last %},{% endif %}
+{% endfor %}
+]

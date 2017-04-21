@@ -1,0 +1,11 @@
+restaurant_whatsapp:
+    path: /test
+    defaults: { _controller: WhatsappBundle:Default:sendHello }
+
+whatsapp_registration:
+    path: /registration/{username}
+    defaults: { _controller: WhatsappBundle:Default:registration }
+
+whatsapp_code:
+    path: /code/{username}/{code}
+    defaults: { _controller: WhatsappBundle:Default:code }

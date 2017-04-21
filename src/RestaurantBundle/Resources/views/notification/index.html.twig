@@ -1,0 +1,200 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	{% block barre %}{{ parent() }}{% endblock %}
+	{% block menu %}{{ parent() }}{% endblock %}
+    <div id="page_content">
+        <div id="page_content_inner">
+
+            <div class="md-card-list-wrapper" id="mailbox">
+                <div class="uk-width-large-8-10 uk-container-center">
+                    <div class="md-card-list">
+                        <div class="md-card-list-header heading_list">Aujourd'hui</div>
+                        <div class="md-card-list-header md-card-list-header-combined heading_list" style="display: none">Tous les Notifications</div>
+                        <ul class="hierarchical_slide">
+                            {% for notification in notiftoday %}
+                                {% set icon="" %}
+                                {% set iconcolor="" %}
+                                {% set viewedclass="" %}
+                                {% if notification.typeNotif == "info" %}
+                                    {% set icon="info" %}
+                                    {% set iconcolor="uk-text-primary" %}
+                                {% elseif notification.typeNotif == "success" %}
+                                    {% set icon="done" %}
+                                    {% set iconcolor="uk-text-success" %}
+                                {% elseif notification.typeNotif == "danger" %}
+                                    {% set icon="report_problem" %}
+                                    {% set iconcolor="uk-text-danger" %}
+                                {% elseif notification.typeNotif == "warning" %}
+                                    {% set icon="report_problem" %}
+                                    {% set iconcolor="uk-text-warning" %}
+                                {% endif %}
+                                {% if notification.viewed == 0 %}
+                                    {% set viewedclass="notviewed" %}
+                                {% endif %}
+                                {% set guid="#" %}
+                                {% if notification.guid %}
+                                    {% set guid=notification.guid %}
+                                {% endif %}
+                                <li class="notification" data-id="{{ notification.id }}">
+                                    <div class="md-card-list-item-menu" data-uk-dropdown="{mode:'click'}">
+                                        <a href="#" class="md-icon material-icons">&#xE5D4;</a>
+                                        <div class="uk-dropdown uk-dropdown-flip uk-dropdown-small">
+                                            <ul class="uk-nav">
+                                                <li><a href="{{ guid }}"><i class="material-icons">launch</i> Voir</a></li>
+                                                <li><a href="#" class="notification_delete"><i class="material-icons">&#xE872;</i> Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <span class="md-card-list-item-date">{{ notification.createdAt|date("d M") }}</span>
+                                    <div class="md-card-list-item-avatar-wrapper">
+                                        <i class="md-list-addon-icon material-icons {{ iconcolor }}">{{ icon }}</i>
+                                    </div>
+                                    <div class="md-card-list-item-sender">
+                                        {% if notification.userId %}
+                                            <span><strong>{{ notification.userId.lastName~' '~notification.userId.firstName }}</strong></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="md-card-list-item-subject">
+                                        <div class="md-card-list-item-sender-small">
+                                            <span>{{ notification.userId.lastName~' '~notification.userId.firstName }}</span>
+                                        </div>
+                                        <span>{{ notification.message }}</span>
+                                    </div>
+                                    <div class="md-card-list-item-content-wrapper">
+                                        <div class="md-card-list-item-content">
+                                            {{ notification.message }}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="md-card-list">
+                        <div class="md-card-list-header heading_list">Hier</div>
+                        <ul class="hierarchical_slide">
+                            {% for notification in notifyesterday %}
+                                {% set icon="" %}
+                                {% set iconcolor="" %}
+                                {% set viewedclass="" %}
+                                {% if notification.typeNotif == "info" %}
+                                    {% set icon="info" %}
+                                    {% set iconcolor="uk-text-primary" %}
+                                {% elseif notification.typeNotif == "success" %}
+                                    {% set icon="done" %}
+                                    {% set iconcolor="uk-text-success" %}
+                                {% elseif notification.typeNotif == "danger" %}
+                                    {% set icon="report_problem" %}
+                                    {% set iconcolor="uk-text-danger" %}
+                                {% elseif notification.typeNotif == "warning" %}
+                                    {% set icon="report_problem" %}
+                                    {% set iconcolor="uk-text-warning" %}
+                                {% endif %}
+                                {% if notification.viewed == 0 %}
+                                    {% set viewedclass="notviewed" %}
+                                {% endif %}
+                                {% set guid="#" %}
+                                {% if notification.guid %}
+                                    {% set guid=notification.guid %}
+                                {% endif %}
+                                <li class="notification" data-id="{{ notification.id }}">
+                                    <div class="md-card-list-item-menu" data-uk-dropdown="{mode:'click'}">
+                                        <a href="#" class="md-icon material-icons">&#xE5D4;</a>
+                                        <div class="uk-dropdown uk-dropdown-flip uk-dropdown-small">
+                                            <ul class="uk-nav">
+                                                <li><a href="{{ guid }}"><i class="material-icons">launch</i> Voir</a></li>
+                                                <li><a href="#" class="notification_delete"><i class="material-icons">&#xE872;</i> Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <span class="md-card-list-item-date">{{ notification.createdAt|date("d M") }}</span>
+                                    <div class="md-card-list-item-avatar-wrapper">
+                                        <i class="md-list-addon-icon material-icons {{ iconcolor }}">{{ icon }}</i>
+                                    </div>
+                                    <div class="md-card-list-item-sender">
+                                        {% if notification.userId %}
+                                            <span><strong>{{ notification.userId.lastName~' '~notification.userId.firstName }}</strong></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="md-card-list-item-subject">
+                                        <div class="md-card-list-item-sender-small">
+                                            <span>{{ notification.userId.lastName~' '~notification.userId.firstName }}</span>
+                                        </div>
+                                        <span>{{ notification.message }}</span>
+                                    </div>
+                                    <div class="md-card-list-item-content-wrapper">
+                                        <div class="md-card-list-item-content">
+                                            {{ notification.message }}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="md-card-list">
+                        <div class="md-card-list-header heading_list">Ce mois</div>
+                        <ul class="hierarchical_slide">
+                            {% for notification in notifthismonth %}
+                                {% set icon="" %}
+                                {% set iconcolor="" %}
+                                {% set viewedclass="" %}
+                                {% if notification.typeNotif == "info" %}
+                                    {% set icon="info" %}
+                                    {% set iconcolor="uk-text-primary" %}
+                                {% elseif notification.typeNotif == "success" %}
+                                    {% set icon="done" %}
+                                    {% set iconcolor="uk-text-success" %}
+                                {% elseif notification.typeNotif == "danger" %}
+                                    {% set icon="report_problem" %}
+                                    {% set iconcolor="uk-text-danger" %}
+                                {% elseif notification.typeNotif == "warning" %}
+                                    {% set icon="report_problem" %}
+                                    {% set iconcolor="uk-text-warning" %}
+                                {% endif %}
+                                {% if notification.viewed == 0 %}
+                                    {% set viewedclass="notviewed" %}
+                                {% endif %}
+                                {% set guid="#" %}
+                                {% if notification.guid %}
+                                    {% set guid=notification.guid %}
+                                {% endif %}
+                                <li class="notification" data-id="{{ notification.id }}">
+                                    <div class="md-card-list-item-menu" data-uk-dropdown="{mode:'click'}">
+                                        <a href="#" class="md-icon material-icons">&#xE5D4;</a>
+                                        <div class="uk-dropdown uk-dropdown-flip uk-dropdown-small">
+                                            <ul class="uk-nav">
+                                                <li><a href="{{ guid }}"><i class="material-icons">launch</i> Voir</a></li>
+                                                <li><a href="#" class="notification_delete"><i class="material-icons">&#xE872;</i> Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <span class="md-card-list-item-date">{{ notification.createdAt|date("d M") }}</span>
+                                    <div class="md-card-list-item-avatar-wrapper">
+                                        <i class="md-list-addon-icon material-icons {{ iconcolor }}">{{ icon }}</i>
+                                    </div>
+                                    <div class="md-card-list-item-sender">
+                                        {% if notification.userId %}
+                                            <span><strong>{{ notification.userId.lastName~' '~notification.userId.firstName }}</strong></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="md-card-list-item-subject">
+                                        <div class="md-card-list-item-sender-small">
+                                            <span>{{ notification.userId.lastName~' '~notification.userId.firstName }}</span>
+                                        </div>
+                                        <span>{{ notification.message }}</span>
+                                    </div>
+                                    <div class="md-card-list-item-content-wrapper">
+                                        <div class="md-card-list-item-content">
+                                            {{ notification.message }}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

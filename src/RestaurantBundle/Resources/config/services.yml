@@ -1,0 +1,38 @@
+services:
+#    restaurant.example:
+#        class: RestaurantBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    get_service:
+        class: RestaurantBundle\Services\ServiceService
+        arguments: [@router,@doctrine.orm.entity_manager]
+        scope: request
+
+    app.twig.database_globals_extension:
+        class: RestaurantBundle\Twig\Extension\DatabaseGlobalsExtension
+        arguments: [@doctrine.orm.entity_manager,@security.token_storage]
+        tags:
+            - { name: twig.extension }
+
+    app.twig.json_decode_extension:
+        class: RestaurantBundle\Twig\Extension\JsonDecodeExtension
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+
+    app.twig.slugify_extension:
+        class: RestaurantBundle\Twig\Extension\SlugifyExtension
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+
+    app.twig.totimestamp_extension:
+            class: RestaurantBundle\Twig\Extension\ToTimestampExtension
+            arguments: [@service_container]
+            tags:
+                - { name: twig.extension }
+
+    app.twig.datef_extension:
+            class: RestaurantBundle\Twig\Extension\DatefExtension
+            arguments: [@service_container]
+            tags:
+                - { name: twig.extension }

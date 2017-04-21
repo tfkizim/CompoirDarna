@@ -1,0 +1,569 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	{% block barre %}{{ parent() }}{% endblock %}
+	{% block menu %}{{ parent() }}{% endblock %}
+	<div id="page_content">
+        <div id="page_content_inner">
+            <form action="{{ path('restaurant_config_save') }}" class="uk-form-stacked" id="page_settings" method="post" enctype="multipart/form-data">
+                <h2 class="heading_b uk-margin-bottom">Configuration</h2>
+                <div class="md-card">
+                    <div class="md-card-content">
+
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-large-1-1">
+                                <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                                    <div class="uk-width-medium-1-5 uk-width-small-5-5">
+                                        <input type="hidden" name="indextab" value="{% if app.session.get('indextab') %}{{ app.session.get('indextab') }}{% else %}0{% endif %}" id="indextab" >
+                                        <ol class="uk-tab uk-tab-left ym-tabs" data-uk-tab="{connect:'#tabs_6',animation:'slide-horizontal'}">
+                                            <li class="uk-active"><a href="#">Information</a></li>
+                                            <!--<li><a href="#">Horaire</a></li>-->
+                                            <li><a href="#">Services</a></li>
+                                            <li><a href="#">Étages</a></li>
+                                            <li><a href="#">Type Table</a></li>
+                                            <li><a href="#">Occasion</a></li>
+                                            <li><a href="#">Offert</a></li>
+                                            <li><a href="#">Statut</a></li>
+                                            <li><a href="#">Whatsapp</a></li>
+                                            <!--<li><a href="#">Couleurs</a></li>-->
+                                            <li><a href="#">Site</a></li>
+                                        </ol>
+                                    </div>
+                                    <div class="uk-width-medium-4-5 uk-width-small-5-5">
+                                        <ul id="tabs_6" class="uk-switcher uk-padding-small-top">
+                                            <li>
+                                                <div class="uk-form-row">
+                                                    <label for="SITENAME">Site Name</label>
+                                                    <input class="md-input" type="text" id="SITENAME" name="SITENAME" value="{{ SITENAME }}"/>
+                                                </div>
+                                                <div class="uk-form-row">
+                                                    <label for="SITEDESCRIPTION">Page description</label>
+                                                    <textarea class="md-input" name="SITEDESCRIPTION" id="SITEDESCRIPTION" cols="30" rows="4">{{ SITEDESCRIPTION }}</textarea>
+                                                </div>
+                                                <div class="uk-form-row">
+                                                    <label for="SITEEMAIL">Admin email</label>
+                                                    <input class="md-input" type="text" id="SITEEMAIL" name="SITEEMAIL" value="{{ SITEEMAIL }}"/>
+                                                </div>
+                                                <div class="uk-form-row">
+                                                    <div class="uk-grid">
+                                                        <div class="uk-width-medium-1-2">
+                                                            <div class="uk-form-file md-btn md-btn-primary">
+                                                                Sélectionner un logo
+                                                                <input id="form-file" name="logo" type="file">
+                                                            </div>
+                                                            <div class="uk-clearfix"></div>
+                                                            <div class="preview-logo">
+                                                                <img src="{{ asset(SITELOGO) }}" alt="Comptoir" width="120" height="45" class="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="uk-width-medium-1-2">
+                                                            <div class="uk-form-row">
+                                                                <label for="SITELOGOWIDTH">Largeur</label>
+                                                                <input class="md-input" type="text" id="SITELOGOWIDTH" name="SITELOGOWIDTH" value="{{SITELOGOWIDTH}}"/>
+                                                            </div>
+                                                            <div class="uk-form-row">
+                                                                <label for="SITELOGOHEIGTH">Hauteur</label>
+                                                                <input class="md-input" type="text" id="SITELOGOHEIGTH" name="SITELOGOHEIGTH" value="{{SITELOGOHEIGTH}}"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <!--<li>
+                                                OPENING HOURS
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Heure d'ouverture</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Heure de clôture</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Intervalle entre les services</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for day,option in SITEOPENINGHOURS %}
+                                                                    <tr>
+                                                                        <td class="md-bg-grey-100">{{ day }}</td>
+                                                                        <td><input type="text" name="day[{{ day }}][OPENHOUR]" value="{{ option.OPENHOUR }}" class="kendotimepicker" /></td>
+                                                                        <td><input type="text" name="day[{{ day }}][CLOSEHOUR]" value="{{ option.CLOSEHOUR }}" class="kendotimepicker" /></td>
+                                                                        <td>
+                                                                            <select name="day[{{ day }}][INTERVAL]" class="uk-form-width-medium selectkendo">
+                                                                                {% for texte,valeur in INTERVALHOURS %}
+                                                                                <option value="{{ valeur }}" {% if option.INTERVAL == valeur %}selected{% endif %}>{{ texte }}</option>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>-->
+                                            <li>
+                                                <h4>Ajouter Nouveau service</h4>
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="service_name">Service</label>
+                                                        <input type="text" class="md-input" id="service_name">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="product_search_price"></label>
+                                                        <input type="text" name="test" value="" class="kendotimepicker" id="service_openhour" placeholder="Horaire d'ouverture"/>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="product_search_price"></label>
+                                                        <input type="text" name="test" value="" class="kendotimepicker" id="service_closehour" placeholder="Horaire de cloture" />
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <select name="" id="service_interval" class="uk-form-width-medium selectkendo">
+                                                            {% for texte,valeur in INTERVALHOURS %}
+                                                                <option value="{{ valeur }}">{{ texte }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5 uk-text-center">
+                                                        <a href="#" class="md-btn md-btn-primary uk-margin-small-top" id="service_add">Ajouter</a>
+                                                    </div>
+                                                </div>
+                                                <!-- Services HOURS -->
+                                                {% for service in SERVICES %}
+                                                    <hr><br>
+                                                    <div class="service" data-id="{{service.id}}">
+                                                    <h4>{{service.name}} (<a href="#" class="service_delete" data-id="{{service.id}}">supprimer</a>)</h4>
+                                                    <div class="uk-grid">
+                                                        <div class="uk-width-medium-1-1">
+                                                            <div class="uk-overflow-container">
+                                                                <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th class="md-bg-grey-100 uk-text-center">Heure d'ouverture</th>
+                                                                            <th class="md-bg-grey-100 uk-text-center">Heure de clôture</th>
+                                                                            <th class="md-bg-grey-100 uk-text-center">Intervalle entre les services</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {% for day,option in service.valeur %}
+                                                                        <tr>
+                                                                            <td class="md-bg-grey-100">{{ day }}</td>
+                                                                            <td><input type="text" name="service[{{ service.id }}][{{ day }}][OPENHOUR]" value="{{ option.OPENHOUR }}" class="kendotimepicker" /></td>
+                                                                            <td><input type="text" name="service[{{ service.id }}][{{ day }}][CLOSEHOUR]" value="{{ option.CLOSEHOUR }}" class="kendotimepicker" /></td>
+                                                                            <td>
+                                                                                <select name="service[{{ service.id }}][{{ day }}][INTERVAL]" class="uk-form-width-medium selectkendo">
+                                                                                    {% for texte,valeur in INTERVALHOURS %}
+                                                                                    <option value="{{ valeur }}" {% if option.INTERVAL == valeur %}selected{% endif %}>{{ texte }}</option>
+                                                                                    {% endfor %}
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </li>
+                                            <li>
+                                                <h4>Ajouter Nouveau Étage</h4>
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="service_name">Étage</label>
+                                                        <input type="text" class="md-input" id="floor_name">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="floor_nbrcoverts"></label>
+                                                        <input class="uk-form-width-medium number" type="number" value="" id="floor_nbrcoverts" min="0" step="1"placeholder="Nombre de couvertes" />
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="floor_servers"></label>
+                                                        <input class="uk-form-width-medium number" type="number" value="" id="floor_servers" min="0" step="1"placeholder="Nombre de serveurs" />
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5 uk-text-center">
+                                                        <a href="#" class="md-btn md-btn-primary uk-margin-small-top" id="floor_add">Ajouter</a>
+                                                    </div>
+                                                </div>
+                                                <hr><br>
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Étage</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Nombre de couverts</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Nombre de serveurs</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for floor in FLOORS %}
+                                                                    <tr class="floor" data-id="{{ floor.id }}">
+                                                                        <td>
+                                                                            <input type="text" class="md-input" name="floor[{{ floor.id }}][name]" value="{{ floor.name }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input class="uk-form-width-medium number" type="number" value="{{ floor.nbrCovert }}" name="floor[{{ floor.id }}][nbr_covert]" min="0" step="1" placeholder="Nombre de couvertes" />
+                                                                        </td>
+                                                                        <td><input class="uk-form-width-medium number" type="number" value="{{ floor.nbrServer }}" name="floor[{{ floor.id }}][nbr_server]" min="0" step="1"placeholder="Nombre de serveurs" /></td>
+                                                                        <td>
+                                                                            <a href="#" class="floor_delete" data-id="{{ floor.id }}"><i class="material-icons md-24">delete</i></a>
+                                                                            <i class="material-icons md-24">event_seat</i>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <h4>Ajouter Nouveau Type de table</h4>
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_name">Nom</label>
+                                                        <input type="text" class="md-input" id="typetabl_name">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_class">Class</label>
+                                                        <input type="text" class="md-input" id="typetabl_class">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_mincoverts"></label>
+                                                        <input class="uk-form-width-medium number" type="number" value="" id="typetabl_mincoverts" min="0" step="1" placeholder="Nb. Minimum de couvertures" />
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_maxcoverts"></label>
+                                                        <input class="uk-form-width-medium number" type="number" value="" id="typetabl_maxcoverts" min="0" step="1" placeholder="Nb. Minimum de couvertures" />
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5 uk-text-center">
+                                                        <a href="#" class="md-btn md-btn-primary uk-margin-small-top" id="typetabl_add">Ajouter</a>
+                                                    </div>
+                                                </div>
+                                                <hr><br>
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Nom</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Class</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Min Couvertures</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Max Couvertures</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for typetabl in TYPETABLS %}
+                                                                    <tr class="typetabl" data-id="{{ typetabl.id }}">
+                                                                        <td>
+                                                                            <input type="text" class="md-input" name="typetabl[{{ typetabl.id }}][name]" value="{{ typetabl.name }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="md-input" value="{{ typetabl.class }}" name="typetabl[{{ typetabl.id }}][class]" min="0" step="1" placeholder="Class" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="md-input" value="{{ typetabl.minCovert }}" name="typetabl[{{ typetabl.id }}][min_covert]" min="0" step="1" placeholder="Min Couvertures" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="md-input" value="{{ typetabl.maxCovert }}" name="typetabl[{{ typetabl.id }}][max_covert]" min="0" step="1" placeholder="Max Couvertures" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" class="typetabl_delete" data-id="{{ typetabl.id }}"><i class="material-icons md-24">delete</i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <h4>Ajouter Nouveau Occasion</h4>
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_name">Nom</label>
+                                                        <input type="text" class="md-input" id="occasion_name">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="occasion_icon">Icone</label>
+                                                        <input type="text" class="md-input" id="occasion_icon">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="occasion_color">Couleur</label>
+                                                        <input type="text" class="md-input" id="occasion_color">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5 uk-text-center">
+                                                        <a href="#" class="md-btn md-btn-primary uk-margin-small-top" id="occasion_add">Ajouter</a>
+                                                    </div>
+                                                </div>
+                                                <hr><br>
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Nom</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Icone</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Color</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for occasion in OCCASIONS %}
+                                                                    <tr class="occasion" data-id="{{ occasion.id }}">
+                                                                        <td>
+                                                                            <input type="text" class="md-input" name="occasion[{{ occasion.id }}][name]" value="{{ occasion.name }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <i class="{{ occasion.icon }} {{ occasion.color }}"></i>
+                                                                            <input type="text" class="md-input" name="occasion[{{ occasion.id }}][icon]" value="{{ occasion.icon }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="md-input" name="occasion[{{ occasion.id }}][color]" value="{{ occasion.color }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" class="occasion_delete" data-id="{{ occasion.id }}"><i class="material-icons md-24">delete</i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <h4>Ajouter Nouveau Offert</h4>
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_name">Nom</label>
+                                                        <input type="text" class="md-input" id="offer_name">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="typetabl_name">Icône</label>
+                                                        <input type="text" class="md-input" id="offer_icon">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5 uk-text-center">
+                                                        <a href="#" class="md-btn md-btn-primary uk-margin-small-top" id="offer_add">Ajouter</a>
+                                                    </div>
+                                                </div>
+                                                <hr><br>
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Nom</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Icône</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for offer in OFFERS %}
+                                                                    <tr class="offer" data-id="{{ offer.id }}">
+                                                                        <td>
+                                                                            <input type="text" class="md-input" name="offer[{{ offer.id }}][name]" value="{{ offer.name }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <i class="{{ offer.icon }} "></i>
+                                                                            <input type="text" class="md-input" name="offer[{{ offer.id }}][icon]" value="{{ offer.icon }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" class="offer_delete" data-id="{{ offer.id }}"><i class="material-icons md-24">delete</i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <h4>Ajouter Nouveau Statut</h4>
+                                                <div class="uk-grid" data-uk-grid-margin="">
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="state_name">Nom</label>
+                                                        <input type="text" class="md-input" id="state_name">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="state_class">Couleur</label>
+                                                        <input type="text" class="md-input" id="state_color">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="state_function">Fonctions</label>
+                                                        <select class="md-input" id="state_function">
+                                                            <option value="reserved">Reserved</option>
+                                                            <option value="arrived">Arrived</option>
+                                                            <option value="seated">Seated</option>
+                                                            <option value="late">Late</option>
+                                                            <option value="free">Free</option>
+                                                            <option value="cancelled">Cancelled</option>
+                                                            <option value="pending">Pending</option>
+                                                            <option value="noshow">No show</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5">
+                                                        <label for="state_class">Flashed</label>
+                                                        <input type="text" class="md-input" id="state_flashed">
+                                                    </div>
+                                                    <div class="uk-width-medium-1-5 uk-text-center">
+                                                        <a href="#" class="md-btn md-btn-primary uk-margin-small-top" id="state_add">Ajouter</a>
+                                                    </div>
+                                                </div>
+                                                <hr><br>
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover uk-table-nowrap uk-table-align-vertical">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Nom</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Couleur</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Fonction</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Flashed</th>
+                                                                        <th class="md-bg-grey-100 uk-text-center">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for state in STATES %}
+                                                                    <tr class="state" data-id="{{ state.id }}">
+                                                                        <td>
+                                                                            <input type="text" class="md-input" name="state[{{ state.id }}][name]" value="{{ state.name }}">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="md-input" value="{{ state.color }}" name="state[{{ state.id }}][color]" min="0" step="1" placeholder="Couleur" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="md-input" name="state[{{ state.id }}][function]">
+                                                                                <option value="reserved" {% if state.function == "reserved" %}selected{% endif %}>Reserved</option>
+                                                                                <option value="arrived" {% if state.function == "arrived" %}selected{% endif %}>Arrived</option>
+                                                                                <option value="seated" {% if state.function == "seated" %}selected{% endif %}>Seated</option>
+                                                                                <option value="late" {% if state.function == "late" %}selected{% endif %}>Late</option>
+                                                                                <option value="free" {% if state.function == "free" %}selected{% endif %}>Free</option>
+                                                                                <option value="cancelled" {% if state.function == "cancelled" %}selected{% endif %}>Cancelled</option>
+                                                                                <option value="pending" {% if state.function == "pending" %}selected{% endif %}>Pending</option>
+                                                                                <option value="noshow" {% if state.function == "noshow" %}selected{% endif %}>No show</option>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="md-input" value="{{ state.flashed }}" name="state[{{ state.id }}][flashed]" min="0" step="1" placeholder="Flashed" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" class="state_delete" data-id="{{ state.id }}"><i class="material-icons md-24">delete</i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <!--<li>
+                                                DEFAULT COLORS
+                                            </li>-->
+                                            <li>
+                                                <!-- SIDEBAR DEFAULT OPEN + FIRST PAGE(INDEX) + NUMB OF MINUTES WHEN THE CUSTOMER IS LATE (LATE)
+                                                    + NUMB OF MINUTES WHEN RELEASE THE TABLE (NO SHOW) + -->
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPNUMBER">Numéro de téléphone d'envoie sans '+' ou '00' (exemple : 212630665912)</label>
+                                                            <input class="md-input" type="text" id="WHATSAPPNUMBER" name="WHATSAPPNUMBER" value="{{ WHATSAPPNUMBER }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPPASSWORD">Mot de passe</label>
+                                                            <input class="md-input" type="text" id="WHATSAPPPASSWORD" name="WHATSAPPPASSWORD" value="{{ WHATSAPPPASSWORD }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPCONFIRM">Message de confirmation</label>
+                                                            <textarea class="md-input" id="WHATSAPPCONFIRM" rows="6" name="WHATSAPPCONFIRM">{{ WHATSAPPCONFIRM }}</textarea>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPPENDING">Message aprés attente</label>
+                                                            <textarea class="md-input" id="WHATSAPPPENDING" rows="6" name="WHATSAPPPENDING">{{ WHATSAPPPENDING }}</textarea>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPPENDING">Message d'annulation</label>
+                                                            <textarea class="md-input" id="WHATSAPPCANCEL" rows="6" name="WHATSAPPCANCEL">{{ WHATSAPPCANCEL }}</textarea>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPLATITUDE">Latitude</label>
+                                                            <input class="md-input" type="text" id="WHATSAPPLATITUDE" name="WHATSAPPLATITUDE" value="{{ WHATSAPPLATITUDE }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPLONGITUDE">Longitude</label>
+                                                            <input class="md-input" type="text" id="WHATSAPPLONGITUDE" name="WHATSAPPLONGITUDE" value="{{ WHATSAPPLONGITUDE }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="WHATSAPPCHATNUMBER">Numéro de téléphone de chat sans '+' ou '00' (exemple : 212630665912)</label>
+                                                            <input class="md-input" type="text" id="WHATSAPPCHATNUMBER" name="WHATSAPPCHATNUMBER" value="{{ WHATSAPPCHATNUMBER }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label>Instructions:</label>
+                                                            <p>
+                                                                Vous pouvez utiliser les structures suivantes pour afficher des informations dans le message :
+                                                            </p>
+                                                            <ul>
+                                                                <li><strong>Civilité du client : </strong> [#CUSTOMERCIVILITY#]</li>
+                                                                <li><strong>Prénom du client : </strong> [#CUSTOMERFIRSTNAME#]</li>
+                                                                <li><strong>Nom du client : </strong> [#CUSTOMERLASTNAME#]</li>
+                                                                <li><strong>Email du client : </strong> [#CUSTOMEREMAIL#]</li>
+                                                                <li><strong>Téléphone du client : </strong> [#CUSTOMERPHONE#]</li>
+                                                                <li><strong>Numéro de réservation : </strong> [#BOOKNUMBER#]</li>
+                                                                <li><strong>Table(s) réservée(s) : </strong> [#BOOKTABLES#]</li>
+                                                                <li><strong>Date réservation : </strong> [#BOOKDATE#]</li>
+                                                                <li><strong>Heure réservation : </strong> [#BOOKTIME#]</li>
+                                                                <li><strong>Pax : </strong> [#BOOKPAX#]</li>
+                                                                <li><strong>Étage : </strong> [#BOOKFLOOR#]</li>
+                                                                <li><strong>Nom restaurant : </strong> [#RESTAURANTNAME#]</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <!-- SIDEBAR DEFAULT OPEN + FIRST PAGE(INDEX) + NUMB OF MINUTES WHEN THE CUSTOMER IS LATE (LATE)
+                                                    + NUMB OF MINUTES WHEN RELEASE THE TABLE (NO SHOW) + -->
+                                                <div class="uk-grid">
+                                                    <div class="uk-width-medium-1-1">
+                                                        <div class="uk-form-row">
+                                                            <label for="ARRAYOPENINGHOURS">Tableau des heurs</label>
+                                                            <input class="md-input" type="text" id="ARRAYOPENINGHOURS" name="ARRAYOPENINGHOURS" value="{{ ARRAYOPENINGHOURS }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="ARRAYINTERVALS">Tableau des intervals</label>
+                                                            <input class="md-input" type="text" id="ARRAYINTERVALS" name="ARRAYINTERVALS" value="{{ ARRAYINTERVALS }}"/>
+                                                        </div>
+                                                        <div class="uk-form-row">
+                                                            <label for="company_json">Notre Restaurant</label>
+                                                            <input class="uk-width-1-1" id="company_json" name="DEFAULTCOMPANY" type="text" value="{{ DEFAULTCOMPANY }}" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <br>
+                                        <button class="md-btn md-btn-success" type="submit">Envoyer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

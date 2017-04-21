@@ -1,0 +1,24 @@
+occasion_add_xhr:
+    path: /add_xhr
+    defaults: { _controller: RestaurantBundle:Occasion:addXhr }
+    methods:  [POST]
+    options:
+        expose: true
+
+occasion_delete_xhr:
+    path: /remove_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Occasion:deleteXhr }
+    methods:  [DELETE]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+occasion_edit_xhr:
+    path: /edit_xhr/{id}
+    defaults: { _controller: RestaurantBundle:Occasion:editXhr }
+    methods:  [POST]
+    options:
+        expose: true
+    requirements:
+        id: \d+
