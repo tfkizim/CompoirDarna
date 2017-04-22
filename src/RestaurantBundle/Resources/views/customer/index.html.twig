@@ -98,6 +98,15 @@
                 </div>
                 {% endfor %}
         	</div>
+            <div>
+                <ul class="uk-pagination uk-margin-medium-top uk-margin-medium-bottom">
+                    <li class="uk-disabled"><span><i class="uk-icon-angle-double-left"></i></span></li>
+                    {% for i in 1..pagination %}
+                    <li class="uk-active"><span>1</span></li>
+                    {% endfor %}
+                    <li><a href="#"><i class="uk-icon-angle-double-right"></i></a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="md-fab-wrapper">

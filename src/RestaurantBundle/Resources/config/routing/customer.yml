@@ -2,6 +2,12 @@ customer_index:
     path: /
     defaults: { _controller: RestaurantBundle:Customer:index }
 
+customer_index_pagination:
+    path: /{page}
+    defaults: { _controller: RestaurantBundle:Customer:index }
+    requirements:
+        page: \d+
+
 customer_edit:
     path: /edit/{id}
     defaults: { _controller: RestaurantBundle:Customer:edit }

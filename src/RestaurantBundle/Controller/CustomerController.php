@@ -16,10 +16,14 @@ class CustomerController extends Controller
     /**
      * @Route("/customer")
      */
-    public function indexAction()
+    public function indexAction($page=1)
     {
-    	$customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getAllCustomers(10,0);
-        return $this->render('RestaurantBundle:customer:index.html.twig',array('customers'=>$customers));
+        $limit =50;
+        $page=$page-1;
+    	$customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getAllCustomers($limit,$page);
+        $nbrcustomers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getCountCustomers();
+        $pagination=round(($nbrcustomers/50)+0.49);
+        return $this->render('RestaurantBundle:customer:index.html.twig',array('customers'=>$customers,'pagination'=>$pagination,'page'=>$page));
     }
 
     /**

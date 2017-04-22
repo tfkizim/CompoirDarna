@@ -26,7 +26,15 @@ class CustomerRepository extends \Doctrine\ORM\EntityRepository
                 $qb->select('c')
                     ->from('RestaurantBundle:Customer', 'c');
                 $qb->where('c.id > 1');
-                $entites = $qb->getQuery()->setMaxResults($limit)->setFirstResult($page)->getResult();
+                $offset=$page*$limit;
+                $entites = $qb->getQuery()->setMaxResults($limit)->setFirstResult($offset)->getResult();
                 return $entites;
+        }
+
+        public function getCountCustomers(){
+            $qb = $this->_em->createQueryBuilder();
+            $qb->select('count(c.id)');
+            $qb->from('RestaurantBundle:Customer','c');
+            $count = $qb->getQuery()->getSingleScalarResult();
         }
 }
