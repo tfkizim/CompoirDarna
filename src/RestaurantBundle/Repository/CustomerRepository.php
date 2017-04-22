@@ -20,13 +20,13 @@ class CustomerRepository extends \Doctrine\ORM\EntityRepository
         return $entites;
         }
 
-        public function getAllCustomers()
+        public function getAllCustomers($limit,$page)
         {
                 $qb = $this->_em->createQueryBuilder();
                 $qb->select('c')
                     ->from('RestaurantBundle:Customer', 'c');
                 $qb->where('c.id > 1');
-                $entites = $qb->getQuery()->getResult();
+                $entites = $qb->getQuery()->setMaxResults($limit)->setFirstResult($page)->getResult();
                 return $entites;
         }
 }

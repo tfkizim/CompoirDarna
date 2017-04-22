@@ -18,7 +18,7 @@ class CustomerController extends Controller
      */
     public function indexAction()
     {
-    	$customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getAllCustomers();
+    	$customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getAllCustomers(10,0);
         return $this->render('RestaurantBundle:customer:index.html.twig',array('customers'=>$customers));
     }
 
