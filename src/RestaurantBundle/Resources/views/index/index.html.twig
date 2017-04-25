@@ -119,7 +119,7 @@
                             <tr data-id="{{ book.id }}" class="ym-book {% if book.stateId %}{{ book.stateId.function }}{% endif %}" {% if book.stateId %}data-state="{{ book.stateId.function }}"{% endif %} {% if book.stateId %}{% if book.stateId.function == "late" or book.stateId.function == "reserved" or (book.stateId.function == "noshow" and notimestamp == false) %}data-timestamp="{{ book.dateBook|totimestamp }}"{% endif %}{% endif %}>
                             <td>
                                 <span class="uk-hidden ym-searchable-hour ym-searchable-val">#{{ book.dateBook|date("H:i") }}#</span>
-                                <a href="#" class="book_update_hour" data-service="{{ book.serviceId.id }}" data-hour="{{ book.dateBook|date("H:i") }}"><strong>{{ book.dateBook|date("H:i") }}</strong></a>
+                                <a href="#" class="book_update_hour" {% if book.serviceId %}data-service="{{ book.serviceId.id }}"{% endif %} data-hour="{{ book.dateBook|date("H:i") }}"><strong>{{ book.dateBook|date("H:i") }}</strong></a>
                             </td>
                             <td>
                                 {% if book.customerId %}<span class="uk-hidden ym-searchable-val">#{{ book.customerId.sexe~' '~book.customerId.firstName~' '~book.customerId.lastName }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.customerId.sexe~' '~book.customerId.firstName~' '~book.customerId.lastName }}</a>{% endif %}

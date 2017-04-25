@@ -2,6 +2,14 @@ restaurant_redirect_login:
     path: /
     defaults: { _controller: RestaurantBundle:Restaurant:redirectToLogin }
 
+
+book_remote_add_xhr:
+    path: /remote_add_xhr
+    defaults: { _controller: RestaurantBundle:Book:remoteAddXhr }
+    methods:  [GET]
+    options:
+        expose: true
+
 restaurant_type_company:
     resource: "@RestaurantBundle/Controller/TypeCompanyController.php"
     type:     annotation

@@ -276,6 +276,56 @@ class BookController extends Controller
         }
     }
     /**
+     * @Route("/book/remote_add_xhr")
+     */
+    public function remoteAddXhrAction(Request $request){
+        setlocale(LC_TIME, 'fr_FR.UTF8', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+        $customer_lastname=$request->get("lastname");
+        $customer_email=$request->get("email");
+        $customer_mobile_number=$request->get("mobile_number");
+        $customer_indicatif_mobile_number=$request->get("indicatif_mobile_number");
+        $customer_langue=$request->get("langue");
+        $book_noteadmin=$request->get("noteadmin");
+        $book_date=$request->get("date");
+        $book_hour=$request->get("hour");
+        $book_pax=$request->get("pax");
+        if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_noteadmin) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
+            $customer = new Customer();
+            $customer->setSexe("Mr.");
+            $customer->setFirstName("");
+            $customer->setLastName($customer_lastname);
+            $customer->setEmail($customer_email);
+            $customer->setIndicatifMobileNumber($customer_indicatif_mobile_number);
+            $customer->setMobileNumber($customer_mobile_number);
+            $customer->setLangue($customer_langue);
+            $customer->setVip(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($customer);
+            $em->flush();
+            if(!empty($customer)){
+                $book = new Book();
+                $book->setBlocked(0);
+                $book->setPax($book_pax);
+                $book->setDateBook(new \DateTime($book_date." ".$book_hour));
+                $book->setCustomerId($customer);
+                $book->setOfferId(null);
+                $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                $book->setStateId($state);
+                $book->setFloorId(null);
+                $book->setUserId(null);
+                $book->setOccasionId(null);
+                $book->setCompanyId(null);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($book);
+                $em->flush();
+                $response = new JsonResponse();
+                return $response->setData(array('reponse'=>"ok"));
+            }
+        }
+        return $response->setData(array('reponse'=>"error"));
+    }
+
+    /**
      * @Route("/book/add_xhr")
      */
     public function addXhrAction(Request $request)
