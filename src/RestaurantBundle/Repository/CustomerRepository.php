@@ -36,5 +36,6 @@ class CustomerRepository extends \Doctrine\ORM\EntityRepository
             $qb->select('count(c.id)');
             $qb->from('RestaurantBundle:Customer','c');
             $count = $qb->getQuery()->getSingleScalarResult();
+            return $count;
         }
 }

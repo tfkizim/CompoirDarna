@@ -2308,6 +2308,13 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	///////////////////////////
+	/// Go to url on click ////
+	///////////////////////////
+	$(document).delegate(".gotourl","click",function(){
+		var href=$(this).attr("href");
+		location.href=href;
+	});
+	///////////////////////////
 	///Initialize drag books //
 	///////////////////////////
 	dragBook();
@@ -3595,7 +3602,7 @@ function startTime() {
 
 		checkPendingBooks();
 	}
-
+	console.clear();
 
 	var t = setTimeout(startTime, 5000);
 }

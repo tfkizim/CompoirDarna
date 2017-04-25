@@ -27,7 +27,7 @@ class CustomerController extends Controller
         for($i=1;$i<=$pagination;$i++){
             $pages[]=$i;
         }
-        return $this->render('RestaurantBundle:customer:index.html.twig',array('customers'=>$customers,'pagination'=>$pagination,'page'=>$page,'pages'=>$pages));
+        return $this->render('RestaurantBundle:customer:index.html.twig',array('customers'=>$customers,'pagination'=>$pagination,'page'=>($page+1),'pages'=>$pages));
     }
 
     /**
