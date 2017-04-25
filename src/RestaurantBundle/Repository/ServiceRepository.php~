@@ -17,6 +17,6 @@ class ServiceRepository extends \Doctrine\ORM\EntityRepository
     public function findBetweenInterval($interval)
     {
         $qb = $this->createQueryBuilder('u')->where(':interval BETWEEN u.de AND u.a')->setParameter('interval', $interval);
-        return $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getResult();
     }
 }

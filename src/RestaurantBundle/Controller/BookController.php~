@@ -315,12 +315,6 @@ class BookController extends Controller
                 $book->setUserId(null);
                 $book->setOccasionId(null);
                 $book->setCompanyId(null);
-                $date = new \Datetime("1970-01-01 " . $book_hour);
-                $hournow = $date->format("U");
-                $interval = $date->getTimestamp();
-                $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->findBetweenInterval($interval);
-                if (!$service) $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->findOneBy(array());
-                $book->setServiceId($service);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($book);
                 $em->flush();
