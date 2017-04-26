@@ -289,7 +289,7 @@ class BookController extends Controller
         $book_date=$request->get("date");
         $book_hour=$request->get("hour");
         $book_pax=$request->get("pax");
-        if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_noteadmin) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
+        if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if(!$customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
                 $customer = new Customer();
                 $customer->setSexe("Mr.");
@@ -333,6 +333,7 @@ class BookController extends Controller
                 return $response->setData(array('reponse'=>"ok"));
             }
         }
+        $response = new JsonResponse();
         return $response->setData(array('reponse'=>"error"));
     }
 
