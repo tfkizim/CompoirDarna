@@ -336,6 +336,96 @@ class BookController extends Controller
         $response = new JsonResponse();
         return $response->setData(array('reponse'=>"error"));
     }
+    /**
+     * @Route("/book/cron_add_xhr")
+     */
+    public function cronAddXhrAction(Request $request){
+        setlocale(LC_TIME, 'fr_FR.UTF8', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+        $customer_lastname=$request->get("lastname");
+        $customer_email=$request->get("email");
+        $customer_mobile_number=$request->get("mobile_number");
+        $customer_indicatif_mobile_number=$request->get("indicatif_mobile_number");
+        $customer_langue=$request->get("langue");
+        $book_noteadmin=$request->get("noteadmin");
+        $book_date=$request->get("date");
+        $book_hour=$request->get("hour");
+        $book_pax=$request->get("pax");
+        if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
+            if($customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
+                if($customer->getLastName()!=$customer_lastname){
+                    $customer->setLastName($customer_lastname);
+                }
+                if($customer->getIndicatifMobileNumber()!=$customer_indicatif_mobile_number){
+                    $customer->setIndicatifMobileNumber($customer_indicatif_mobile_number);
+                }
+                if($customer->getMobileNumber()!=$customer_mobile_number){
+                    $customer->setMobileNumber($customer_mobile_number);
+                }
+                if($customer->getLangue()!=$customer_langue){
+                    $customer->setLangue($customer_langue);
+                }
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($customer);
+                $em->flush();
+            }else{
+                $customer = new Customer();
+                $customer->setSexe("Mr.");
+                $customer->setFirstName("");
+                $customer->setLastName($customer_lastname);
+                $customer->setEmail($customer_email);
+                $customer->setIndicatifMobileNumber($customer_indicatif_mobile_number);
+                $customer->setMobileNumber($customer_mobile_number);
+                $customer->setLangue($customer_langue);
+                $customer->setVip(0);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($customer);
+                $em->flush();
+            }
+            if(!empty($customer)){
+                echo "1";
+                if($book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customerId"=>$customer,"dateBook"=>(new \DateTime($book_date." ".$book_hour))))){
+                    echo "2";
+                    if($book->getPax()!=$book_pax){
+                        $book->setPax($book_pax);
+                    }
+                    if($book->getNoteAdmin()!=strip_tags($book_noteadmin)){
+                        $book->setNoteAdmin(strip_tags($book_noteadmin));
+                    }
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($book);
+                    $em->flush();
+                }else{
+                    echo "3";
+                    $book = new Book();
+                    $book->setBlocked(0);
+                    $book->setPax($book_pax);
+                    $book->setDateBook(new \DateTime($book_date." ".$book_hour));
+                    $book->setCustomerId($customer);
+                    $book->setOfferId(null);
+                    $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    $book->setStateId($state);
+                    $book->setFloorId(null);
+                    $book->setUserId(null);
+                    $book->setOccasionId(null);
+                    $book->setCompanyId(null);
+                    $book->setNoteAdmin(strip_tags($book_noteadmin));
+                    $date = new \Datetime("1970-01-01 " . $book_hour);
+                    $hournow = $date->format("U");
+                    $interval = $date->getTimestamp();
+                    $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->findBetweenInterval($interval);
+                    if (!$service) $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->findOneBy(array());
+                    $book->setServiceId($service);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($book);
+                    $em->flush();
+                }
+                $response = new JsonResponse();
+                return $response->setData(array('reponse'=>"ok"));
+            }
+        }
+        $response = new JsonResponse();
+        return $response->setData(array('reponse'=>"error"));
+    }
 
     /**
      * @Route("/book/add_xhr")
@@ -2118,6 +2208,7 @@ class BookController extends Controller
         $book_noteadmin=$request->get("noteadmin");
         $book_date=$request->get("date");
         $book_hour=$request->get("hour");
+        $book_state=$request->get("state");
         $book_pax=$request->get("pax");
         if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if(!$customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
@@ -2135,7 +2226,7 @@ class BookController extends Controller
                 $em->flush();
             }
             if(!empty($customer)){
-                // if(!$book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customer_id"=>$customer,"date_book"=>(new \DateTime($book_date." ".$book_hour))))){
+                if(!$book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customer_id"=>$customer,"date_book"=>(new \DateTime($book_date." ".$book_hour))))){
                     $book = new Book();
                     $book->setBlocked(0);
                     $book->setPax($book_pax);
@@ -2158,7 +2249,15 @@ class BookController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($book);
                     $em->flush();
-                //}
+                }else{
+                    if($book_state==3){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
+                        $book->setStateId($state);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($book);
+                        $em->flush();
+                    }
+                }
                 $response = new JsonResponse();
                 return $response->setData(array('reponse'=>"ok"));
             }
@@ -3747,4 +3846,4 @@ class BookController extends Controller
         }*/
     }
 }
->>>>>>> 2b2a340995d38d750217a28d08ee279183f96a41
+>>>>>>> be5d00016db03d9bbe00754755b5d4e4f827ad7b
