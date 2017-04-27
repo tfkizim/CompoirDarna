@@ -288,6 +288,7 @@ class BookController extends Controller
         $book_noteadmin=$request->get("noteadmin");
         $book_date=$request->get("date");
         $book_hour=$request->get("hour");
+        $book_state=$request->get("state");
         $book_pax=$request->get("pax");
         if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if(!$customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
@@ -305,7 +306,7 @@ class BookController extends Controller
                 $em->flush();
             }
             if(!empty($customer)){
-                // if(!$book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customer_id"=>$customer,"date_book"=>(new \DateTime($book_date." ".$book_hour))))){
+                if(!$book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customer_id"=>$customer,"date_book"=>(new \DateTime($book_date." ".$book_hour))))){
                     $book = new Book();
                     $book->setBlocked(0);
                     $book->setPax($book_pax);
@@ -328,7 +329,15 @@ class BookController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($book);
                     $em->flush();
-                //}
+                }else{
+                    if($book_state==3){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
+                        $book->setStateId($state);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($book);
+                        $em->flush();
+                    }
+                }
                 $response = new JsonResponse();
                 return $response->setData(array('reponse'=>"ok"));
             }

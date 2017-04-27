@@ -1364,6 +1364,9 @@ table#dt_individual_search i {
 .fz18{
 	font-size: 17px!important;
 }
+#searchCustomer{
+	margin-top: 18px;
+}
 
 
 .ui-rotatable-handle {
