@@ -313,13 +313,17 @@ class BookController extends Controller
                     $book->setDateBook(new \DateTime($book_date." ".$book_hour));
                     $book->setCustomerId($customer);
                     $book->setOfferId(null);
-                    $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    if($book_state==3){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
+                    }else{
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    }
                     $book->setStateId($state);
                     $book->setFloorId(null);
                     $book->setUserId(null);
                     $book->setOccasionId(null);
                     $book->setCompanyId(null);
-                    $book->setNoteAdmin($book_noteadmin);
+                    $book->setNoteAdmin(html_entity_decode($book_noteadmin));
                     $date = new \Datetime("1970-01-01 " . $book_hour);
                     $hournow = $date->format("U");
                     $interval = $date->getTimestamp();
