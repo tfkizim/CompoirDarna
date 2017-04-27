@@ -288,7 +288,7 @@ class BookController extends Controller
         $book_noteadmin=$request->get("noteadmin");
         $book_date=$request->get("date");
         $book_hour=$request->get("hour");
-        $book_state=$request->get("state");
+        $book_state=$request->get("status");
         $book_pax=$request->get("pax");
         if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if(!$customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
@@ -313,13 +313,17 @@ class BookController extends Controller
                     $book->setDateBook(new \DateTime($book_date." ".$book_hour));
                     $book->setCustomerId($customer);
                     $book->setOfferId(null);
-                    $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    if($book_state==3){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
+                    }else{
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    }
                     $book->setStateId($state);
                     $book->setFloorId(null);
                     $book->setUserId(null);
                     $book->setOccasionId(null);
                     $book->setCompanyId(null);
-                    $book->setNoteAdmin($book_noteadmin);
+                    $book->setNoteAdmin(html_entity_decode($book_noteadmin));
                     $date = new \Datetime("1970-01-01 " . $book_hour);
                     $hournow = $date->format("U");
                     $interval = $date->getTimestamp();
@@ -359,6 +363,7 @@ class BookController extends Controller
         $book_date=$request->get("date");
         $book_hour=$request->get("hour");
         $book_pax=$request->get("pax");
+        $book_state=$request->get("status");
         if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if($customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
                 if($customer->getLastName()!=$customer_lastname){
@@ -400,6 +405,13 @@ class BookController extends Controller
                     if($book->getNoteAdmin()!=strip_tags($book_noteadmin)){
                         $book->setNoteAdmin(strip_tags($book_noteadmin));
                     }
+                    if($book_state==3){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
+                        $book->setStateId($state);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($book);
+                        $em->flush();
+                    }
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($book);
                     $em->flush();
@@ -411,7 +423,11 @@ class BookController extends Controller
                     $book->setDateBook(new \DateTime($book_date." ".$book_hour));
                     $book->setCustomerId($customer);
                     $book->setOfferId(null);
-                    $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    if($book_state==3){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
+                    }else{
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                    }
                     $book->setStateId($state);
                     $book->setFloorId(null);
                     $book->setUserId(null);
