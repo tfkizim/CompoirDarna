@@ -16,7 +16,8 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('u')  //add select and array for JSON
         ->where('u.createdAt LIKE :date')
             ->addOrderBy('u.createdAt','ASC')
-            ->setParameter('date', $date->format("Y-m-d")."%");
+            ->setParameter('date', $date->format("Y-m-d")."%")
+            ->setMaxResults(50);
 
         return $qb->getQuery()->getResult();
     }
@@ -26,7 +27,8 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('u')  //add select and array for JSON
         ->where('u.createdAt LIKE :date')
             ->addOrderBy('u.createdAt','ASC')
-            ->setParameter('date', $date->format("Y-m-d")."%");
+            ->setParameter('date', $date->format("Y-m-d")."%")
+            ->setMaxResults(50);
 
         return $qb->getQuery()->getResult();
     }
@@ -42,7 +44,8 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
             ->addOrderBy('u.createdAt','ASC')
             ->setParameter('date', $date->format("Y-m")."%")
             ->setParameter('datetoday', $datetoday->format("Y-m-d")."%")
-            ->setParameter('dateyesterday', $dateyesterday->format("Y-m-d")."%");
+            ->setParameter('dateyesterday', $dateyesterday->format("Y-m-d")."%")
+            ->setMaxResults(50);
 
         return $qb->getQuery()->getResult();
     }
