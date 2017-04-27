@@ -122,7 +122,7 @@
                                 <a href="#" class="book_update_hour" {% if book.serviceId %}data-service="{{ book.serviceId.id }}"{% endif %} data-hour="{{ book.dateBook|date("H:i") }}"><strong>{{ book.dateBook|date("H:i") }}</strong></a>
                             </td>
                             <td>
-                                {% if book.customerId %}<span class="uk-hidden ym-searchable-val">#{{ book.customerId.sexe~' '~book.customerId.firstName~' '~book.customerId.lastName }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.customerId.sexe~' '~book.customerId.firstName~' '~book.customerId.lastName }}</a>{% endif %}
+                                {% if book.customerId %}<span class="uk-hidden ym-searchable-val">#{{ book.customerId.firstName~' '~book.customerId.lastName }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.customerId.firstName~' '~book.customerId.lastName }}</a>{% endif %}
                             </td>
                             <td>
                                 {% set alltables="" %}

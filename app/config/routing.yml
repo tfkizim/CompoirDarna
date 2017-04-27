@@ -10,6 +10,13 @@ book_remote_add_xhr:
     options:
         expose: true
 
+book_cron_add_xhr:
+    path: /cron_add_xhr
+    defaults: { _controller: RestaurantBundle:Book:cronAddXhr }
+    methods:  [GET]
+    options:
+        expose: true
+
 restaurant_type_company:
     resource: "@RestaurantBundle/Controller/TypeCompanyController.php"
     type:     annotation

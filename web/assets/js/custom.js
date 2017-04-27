@@ -2478,7 +2478,7 @@ function addReservationTable(book){
 	//if(book.customerFirstName)
 	$("#dt_individual_search").DataTable().row.add([
 		'<span class="uk-hidden ym-searchable-val">#'+book.booktime+'#</span><a href="#" class="book_update_hour" data-service="'+book.serviceid+'" data-hour="'+book.booktime+'"><strong>'+book.booktime+'</strong></a>',
-		'<span class="uk-hidden ym-searchable-val">#'+book.customerfirstname+' '+book.customerlastname+'#</span><a href="#" class="edit-resa" data-id="'+book.bookid+'">'+book.customersexe+' '+book.customerfirstname+' '+book.customerlastname+'</a>',
+		'<span class="uk-hidden ym-searchable-val">#'+book.customerfirstname+' '+book.customerlastname+'#</span><a href="#" class="edit-resa" data-id="'+book.bookid+'">'+book.customerfirstname+' '+book.customerlastname+'</a>',
 		'<span class="uk-hidden ym-searchable-alltables ym-searchable-val">#'+book.alltables+'#</span><div class="book-edit-table"><input class="uk-form-width-medium k-textbox input-selected-tables '+blocked+'" type="text" data-old-val="'+book.alltables+'" data-id="'+book.bookid+'" value="'+book.alltables+'" /><a href="#" class="md-btn md-btn-small md-btn-success select-modal-plan" data-id="'+book.bookid+'"><i class="material-icons uk-text-contrast">add</i></a><input type="hidden" class="selected-tables-id " data-id="'+book.bookid+'" value=""></div>',
 		'<span class="uk-hidden ym-searchable-pax ym-searchable-val">#'+book.bookpax+'#</span><input class="uk-form-width-medium number input-pax" type="number" data-old-val="'+book.bookpax+'" value="'+book.bookpax+'" min="0" max="100" step="1" />',
 		'<span class="book-orderstate uk-hidden">'+book.orderstate+'</span><span class="uk-hidden ym-searchable-val">#'+book.statename+'#</span>'+stateHtml,
@@ -3604,7 +3604,7 @@ function startTime() {
 	}
 	console.clear();
 
-	var t = setTimeout(startTime, 5000);
+	var t = setTimeout(startTime, 15000);
 }
 
 //Function : Add zero in the first of minutes if they are less than 10
