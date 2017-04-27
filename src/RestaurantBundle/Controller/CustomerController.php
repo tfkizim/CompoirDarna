@@ -18,7 +18,7 @@ class CustomerController extends Controller
      */
     public function indexAction($page=1)
     {
-        $limit =50;
+        $limit =30;
         $page=$page-1;
     	$customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getAllCustomers($limit,$page);
         $nbrcustomers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getCountCustomers();
