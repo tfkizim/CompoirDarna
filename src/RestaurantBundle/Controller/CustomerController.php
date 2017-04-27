@@ -18,11 +18,11 @@ class CustomerController extends Controller
      */
     public function indexAction($page=1)
     {
-        $limit =50;
+        $limit =30;
         $page=$page-1;
     	$customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getAllCustomers($limit,$page);
         $nbrcustomers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getCountCustomers();
-        $pagination=round(($nbrcustomers/50)+0.49);
+        $pagination=round(($nbrcustomers/$limit)+0.49);
         $pages=array();
         for($i=1;$i<=$pagination;$i++){
             $pages[]=$i;
