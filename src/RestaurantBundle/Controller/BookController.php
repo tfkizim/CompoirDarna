@@ -306,7 +306,7 @@ class BookController extends Controller
                 $em->flush();
             }
             if(!empty($customer)){
-                if(!$book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customer_id"=>$customer,"date_book"=>(new \DateTime($book_date." ".$book_hour))))){
+                if(!$book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customerId"=>$customer,"dateBook"=>(new \DateTime($book_date." ".$book_hour))))){
                     $book = new Book();
                     $book->setBlocked(0);
                     $book->setPax($book_pax);
