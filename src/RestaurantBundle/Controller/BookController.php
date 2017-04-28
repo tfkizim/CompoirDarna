@@ -447,6 +447,12 @@ class BookController extends Controller
                     $em->persist($book);
                     $em->flush();
                 }
+                $lastsynchronisation = $this->getDoctrine()->getRepository("RestaurantBundle:Config")->findOneByName("LASTSYNCHRONISATION");
+                $timenow=new \Datetime();
+                $lastsynchronisation->setValue($timenow->format("Y-m-d H:i"));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($lastsynchronisation);
+                $em->flush();
                 $response = new JsonResponse();
                 return $response->setData(array('reponse'=>"ok"));
             }
