@@ -32,6 +32,20 @@
                     </form>
                 </div>
             </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-medium-8-10 lastsynchronisation-content">
+                                Dernière synchronisation : <strong class="lastsynchronisation">{{lastsynchronisation}}</strong>
+                            </div>
+                            <div class="uk-width-medium-2-10">
+                                <button type="button" class="md-btn md-btn-success" id="synchronise-books">Synchroniser</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            {% endif %}
             <h4 class="heading_a uk-margin-bottom">Liste des réservations du jour</h4>
             <div class="md-card uk-margin-medium-bottom">
                 <div class="md-card-content">

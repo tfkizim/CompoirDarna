@@ -6,6 +6,7 @@ use RestaurantBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use RestaurantBundle\Entity\Book;
+use RestaurantBundle\Entity\Config;
 use RestaurantBundle\Entity\Offer;
 use RestaurantBundle\Entity\Occasion;
 use RestaurantBundle\Entity\Service;
@@ -452,6 +453,42 @@ class BookController extends Controller
         }
         $response = new JsonResponse();
         return $response->setData(array('reponse'=>"error"));
+    }
+    /**
+     * @Route("/book/synchronisebooks")
+     */
+    public function synchroniseBooksAction(Request $request){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'http://www.comptoirmarrakech.com/admin2/dkflhjgkdhlkgldfkngkjdfgkjsd.php',
+            CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
+        ));
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        if(!empty($resp)){
+            $lastsynchronisation = $this->getDoctrine()->getRepository("RestaurantBundle:Config")->findOneByName("LASTSYNCHRONISATION");
+            if(!$lastsynchronisation){
+                $lastsynchronisation=new Config();
+                $lastsynchronisation->setName("LASTSYNCHRONISATION");
+                $lastsynchronisation->setValue("");
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($lastsynchronisation);
+                $em->flush();
+            }
+            if($lastsynchronisation){
+                $timenow=new \Datetime();
+                $lastsynchronisation->setValue($timenow->format("Y-m-d H:i"));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($lastsynchronisation);
+                $em->flush();
+                $response = new JsonResponse();
+                return $response->setData(array('reponse'=>"ok","lastsynchronisation"=>$timenow->format("d/m/Y H:i")));
+            }
+        }else{
+            $response = new JsonResponse();
+            return $response->setData(array('reponse'=>"error"));
+        }
     }
 
     /**

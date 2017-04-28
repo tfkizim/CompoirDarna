@@ -908,3 +908,7 @@ table#dt_individual_search i {
 #normaluser .see-detail{
 	display: none;
 }
+.lastsynchronisation-content{
+	font-size: 16px;
+	line-height: 33px;
+}

@@ -2421,6 +2421,20 @@ jQuery(document).ready(function($){
 		UIkit.tooltip(this,{pos:"bottom"}).show();
 		return false;
 	});
+	$(document).delegate("#synchronise-books","click",function(e){
+		showPreloader();
+		e.preventDefault();
+		$.ajax({
+			url:Routing.generate("book_synchronisebooks"),
+			success: function(data){
+				if(data.reponse=="ok"){
+					hidePreloader();
+					$(".lastsynchronisation").empty().text(data.lastsynchronisation);
+				}
+			}
+		});
+		return false;
+	});
 
 	///Clock of the site
 	startTime();

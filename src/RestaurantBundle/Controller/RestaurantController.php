@@ -28,7 +28,20 @@ class RestaurantController extends Controller
         $selecteddate=$date;
         $statesfilter=$this->getDoctrine()->getRepository("RestaurantBundle:State")->findBy(array('hideInFilter'=>0),array("orderInFilter"=>"ASC"));
         $services=$this->getDoctrine()->getRepository("RestaurantBundle:Service")->findAll();
-        return $this->render('RestaurantBundle:index:index.html.twig',compact('books','services','selectedservice','selecteddate','statesfilter','nbrpax'));
+        $lastsynchro = $this->getDoctrine()->getRepository("RestaurantBundle:Config")->findOneByName("LASTSYNCHRONISATION");
+        if(!$lastsynchro){
+            $lastsynchro=new Config();
+            $lastsynchro->setName("LASTSYNCHRONISATION");
+            $lastsynchro->setValue("");
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($lastsynchro);
+            $em->flush();
+        }
+        $lastsynchronisation="";
+        if($lastsynchro){
+            $lastsynchronisation=$lastsynchro->getValue();
+        }
+        return $this->render('RestaurantBundle:index:index.html.twig',compact('books','services','selectedservice','selecteddate','statesfilter','nbrpax','lastsynchronisation'));
     }
 
     /**

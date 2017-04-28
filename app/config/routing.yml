@@ -16,6 +16,12 @@ book_cron_add_xhr:
     methods:  [GET]
     options:
         expose: true
+book_synchronisebooks:
+    path: /synchronisebooks
+    defaults: { _controller: RestaurantBundle:Book:synchroniseBooks }
+    methods:  [GET]
+    options:
+        expose: true
 
 restaurant_type_company:
     resource: "@RestaurantBundle/Controller/TypeCompanyController.php"
