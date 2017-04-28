@@ -484,7 +484,7 @@ class BookController extends Controller
             }
             if($lastsynchronisation){
                 $timenow=new \Datetime();
-                $lastsynchronisation->setValue($timenow->format("Y-m-d H:i"));
+                $lastsynchronisation->setValue($timenow->format("d/m/Y H:i"));
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($lastsynchronisation);
                 $em->flush();

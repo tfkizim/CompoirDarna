@@ -2430,6 +2430,7 @@ jQuery(document).ready(function($){
 				if(data.reponse=="ok"){
 					hidePreloader();
 					$(".lastsynchronisation").empty().text(data.lastsynchronisation);
+					location.reload();
 				}
 			}
 		});
