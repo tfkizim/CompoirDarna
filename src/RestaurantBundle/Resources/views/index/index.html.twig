@@ -166,7 +166,7 @@
                                 {% endif %}&nbsp;
                                 <a href="#" class="edit-resa" data-id="{{ book.id }}" data-uk-tooltip="{pos:'bottom'}" title="Modifier"><i class="uk-icon-pencil"></i></a>&nbsp;
                                 <a data-uk-tooltip="{pos:'bottom'}" title="{{book.noteAdmin}}"><i class="uk-icon-info-circle {% if book.noteAdmin is not empty %}md-color-red-500{% endif %}"></i></a>&nbsp;
-                                <a href="{{ path("book_detail",{id:book.id}) }}"><i class="uk-icon-eye"></i></a>&nbsp;
+                                <a href="{{ path("book_detail",{id:book.id}) }}" class="see-detail"><i class="uk-icon-eye"></i></a>&nbsp;
                                 {% if book.floorId is not empty %}
                                 <span class="book-floor"><i class="md-color-red-700 fz18">{{ book.floorId.slug }}</i></span>
                                 {% endif %}

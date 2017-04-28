@@ -905,4 +905,6 @@ table#dt_individual_search i {
 #searchCustomer{
 	margin-top: 18px;
 }
-
+#normaluser .see-detail{
+	display: none;
+}

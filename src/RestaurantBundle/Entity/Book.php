@@ -72,6 +72,13 @@ class Book
     private $noteCustomer;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="typeadd", type="string", columnDefinition="enum('manuel', 'site', 'tel')", options={"default" = "manuel"})
+     */
+    private $typeadd;
+
+    /**
     * @ORM\ManyToOne(targetEntity="RestaurantBundle\Entity\Service", inversedBy="books")
     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
     */
@@ -567,5 +574,29 @@ class Book
     public function getBlocked()
     {
         return $this->blocked;
+    }
+
+    /**
+     * Set typeadd
+     *
+     * @param string $typeadd
+     *
+     * @return Book
+     */
+    public function setTypeadd($typeadd)
+    {
+        $this->typeadd = $typeadd;
+
+        return $this;
+    }
+
+    /**
+     * Get typeadd
+     *
+     * @return string
+     */
+    public function getTypeadd()
+    {
+        return $this->typeadd;
     }
 }

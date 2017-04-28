@@ -323,6 +323,7 @@ class BookController extends Controller
                     $book->setUserId(null);
                     $book->setOccasionId(null);
                     $book->setCompanyId(null);
+                    $book->setTypeadd("site");
                     $book->setNoteAdmin(html_entity_decode($book_noteadmin));
                     $date = new \Datetime("1970-01-01 " . $book_hour);
                     $hournow = $date->format("U");
@@ -337,6 +338,12 @@ class BookController extends Controller
                     if($book_state==3){
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
                         $book->setStateId($state);
+                        $book->setTypeadd("site");
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($book);
+                        $em->flush();
+                    }else{
+                        $book->setTypeadd("site");
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($book);
                         $em->flush();
@@ -396,9 +403,7 @@ class BookController extends Controller
                 $em->flush();
             }
             if(!empty($customer)){
-                echo "1";
                 if($book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customerId"=>$customer,"dateBook"=>(new \DateTime($book_date." ".$book_hour))))){
-                    echo "2";
                     if($book->getPax()!=$book_pax){
                         $book->setPax($book_pax);
                     }
@@ -408,15 +413,12 @@ class BookController extends Controller
                     if($book_state==3){
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
                         $book->setStateId($state);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($book);
-                        $em->flush();
                     }
+                    $book->setTypeadd("site");
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($book);
                     $em->flush();
                 }else{
-                    echo "3";
                     $book = new Book();
                     $book->setBlocked(0);
                     $book->setPax($book_pax);
@@ -434,6 +436,7 @@ class BookController extends Controller
                     $book->setOccasionId(null);
                     $book->setCompanyId(null);
                     $book->setNoteAdmin(strip_tags($book_noteadmin));
+                    $book->setTypeadd("site");
                     $date = new \Datetime("1970-01-01 " . $book_hour);
                     $hournow = $date->format("U");
                     $interval = $date->getTimestamp();
