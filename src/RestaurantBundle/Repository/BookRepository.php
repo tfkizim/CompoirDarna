@@ -83,10 +83,18 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
     public function Calendar($datestart,$dateend){
+        $day3before=new \DateTime();
+        $day3before->sub(new \DateInterval('P3D'));
+        $onemonthafter=new \DateTime();
+        $onemonthafter->add(new \DateInterval('P30D'));
         $qb = $this->createQueryBuilder('u')
             ->where('u.dateBook BETWEEN :datestart AND :dateend')
             ->setParameter('datestart', $datestart)
-            ->setParameter('dateend', $dateend);
+            ->setParameter('dateend', $dateend)
+            ->andWhere('u.dateBook >= :datestart2')
+            ->setParameter('datestart2', $day3before->format("Y-m-d")." 00:00:00")
+            ->andWhere('u.dateBook <= :datestart3')
+            ->setParameter('datestart3', $onemonthafter->format("Y-m-d")." 00:00:00");
         return $qb->getQuery()->getResult();
     }
 }
