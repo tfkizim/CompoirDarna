@@ -2,6 +2,12 @@ company_index:
     path: /
     defaults: { _controller: RestaurantBundle:Company:index }
 
+company_index_pagination:
+    path: /{page}
+    defaults: { _controller: RestaurantBundle:Company:index }
+    requirements:
+        page: \d+
+
 company_edit:
     path: /edit/{id}
     defaults: { _controller: RestaurantBundle:Company:edit }

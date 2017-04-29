@@ -17,11 +17,19 @@ class CompanyController extends Controller
     /**
      * @Route("/company")
      */
-    public function indexAction()
+    public function indexAction($page=1)
     {
+        $limit =30;
+        $page=$page-1;
     	$typecompanies=$this->getDoctrine()->getRepository("RestaurantBundle:TypeCompany")->findAll();
-    	$companies=$this->getDoctrine()->getRepository("RestaurantBundle:Company")->findAll();
-        return $this->render('RestaurantBundle:company:index.html.twig',array('companies'=>$companies,"typecompanies"=>$typecompanies));
+    	$companies=$this->getDoctrine()->getRepository("RestaurantBundle:Company")->getAllCompanies($limit,$page);
+        $nbrcompanies=$this->getDoctrine()->getRepository("RestaurantBundle:Company")->getCountCompanies();
+        $pagination=round(($nbrcompanies/$limit)+0.49);
+        $pages=array();
+        for($i=1;$i<=$pagination;$i++){
+            $pages[]=$i;
+        }
+        return $this->render('RestaurantBundle:company:index.html.twig',array('companies'=>$companies,"typecompanies"=>$typecompanies,'pagination'=>$pagination,'page'=>($page+1),'pages'=>$pages));
     }
     /**
      * @Route("/company/add")

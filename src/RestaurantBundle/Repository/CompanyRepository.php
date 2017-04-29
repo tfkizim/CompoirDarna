@@ -21,4 +21,22 @@ class CompanyRepository extends \Doctrine\ORM\EntityRepository
         $entites = $qb->getQuery()->getResult();
         return $entites;
     }
+    public function getAllCompanies($limit,$page)
+    {
+            $qb = $this->_em->createQueryBuilder();
+            $qb->select('c')
+                ->from('RestaurantBundle:Company', 'c');
+            $qb->where('c.id > 1');
+            $offset=$page*$limit;
+            $entites = $qb->getQuery()->setMaxResults($limit)->setFirstResult($offset)->getResult();
+            return $entites;
+    }
+
+    public function getCountCompanies(){
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('count(c.id)');
+        $qb->from('RestaurantBundle:Company','c');
+        $count = $qb->getQuery()->getSingleScalarResult();
+        return $count;
+    }
 }
