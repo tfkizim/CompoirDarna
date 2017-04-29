@@ -175,8 +175,10 @@
                                 {% if book.offerId %}
                                     <i class="{{ book.offerId.icon }} uk-icon-small" data-uk-tooltip="{pos:'bottom'}" title="{{ book.offerId.name }}"></i>
                                 {% endif %}
-                                {% if book.customerId.vip %}
-                                    <i class="md-color-yellow-700 fz18">VIP</i>
+                                {% if book.customerId %}
+                                    {% if book.customerId.vip %}
+                                        <i class="md-color-yellow-700 fz18">VIP</i>
+                                    {% endif %}
                                 {% endif %}&nbsp;
                                 <a href="#" class="edit-resa" data-id="{{ book.id }}" data-uk-tooltip="{pos:'bottom'}" title="Modifier"><i class="uk-icon-pencil"></i></a>&nbsp;
                                 <a data-uk-tooltip="{pos:'bottom'}" title="{{book.noteAdmin}}"><i class="uk-icon-info-circle {% if book.noteAdmin is not empty %}md-color-red-500{% endif %}"></i></a>&nbsp;

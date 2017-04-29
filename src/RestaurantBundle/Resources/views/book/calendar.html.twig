@@ -19,9 +19,13 @@
                 {% set color="#f44336" %}
             {% endif %}
         {% endif %}
+        {% set title="" %}
+        {% if book.customerId %}
+            {% set title=book.customerId.sexe~' '~book.customerId.lastName~' '~book.customerId.firstName %}
+        {% endif %}
         {% set chaine = chaine~'{
             "id":'~book.id~',
-            "title":"'~book.customerId.sexe~' '~book.customerId.lastName~' '~book.customerId.firstName~'",
+            "title":"'~title~'",
             "start":"'~(book.dateBook|date("Y-m-d H:i:s"))~'",
             "end":"'~(book.dateBook|date("Y-m-d H:i:s"))~'",
             "url":"'~url('book_detail',{id:book.id})~'",

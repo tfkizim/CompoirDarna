@@ -191,7 +191,7 @@ class CustomerController extends Controller
      */
     public function jsonAction()
     {
-        $customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findAll();
+        $customers=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->getCustomersNotEmpty();
         return $this->render('RestaurantBundle:customer:json.html.twig',array('customers'=>$customers));
     }
 }

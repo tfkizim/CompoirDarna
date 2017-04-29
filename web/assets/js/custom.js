@@ -1212,6 +1212,9 @@ jQuery(document).ready(function($){
 			var formbook = $("#form-book").serialize();
 			//var formpassage=$("#form-book-passage").serialize();
 			var customer = $("#form-customer").serialize();
+			$("#form-book")[0].reset();
+			$("#form-customer")[0].reset();
+			UIkit.modal("#modal_overflow").hide();
 			$.ajax({
 				type: "post",
 				url: Routing.generate("book_add_xhr"),
@@ -1377,10 +1380,10 @@ jQuery(document).ready(function($){
 							}
 						});
 						addWaitPending(data.bookid,data.BeginingWaitingTime);
-
-						$("#form-book")[0].reset();
+						/////////////////////////////// Change system ///////////////////////
+						/*$("#form-book")[0].reset();
 						$("#form-customer")[0].reset();
-						UIkit.modal("#modal_overflow").hide();
+						UIkit.modal("#modal_overflow").hide();*/
 					}
 					showPreloader();
 					if($(".ym-book[data-id='"+id+"']").length>0){
@@ -1420,6 +1423,9 @@ jQuery(document).ready(function($){
 			var formbook = $("#form-book").serialize();
 			//var formpassage=$("#form-book-passage").serialize();
 			var customer = $("#form-customer").serialize();
+			$("#form-book")[0].reset();
+			$("#form-customer")[0].reset();
+			UIkit.modal("#modal_overflow").hide();
 			$.ajax({
 				type: "post",
 				url: Routing.generate("book_add_xhr"),
@@ -1585,10 +1591,10 @@ jQuery(document).ready(function($){
 							}
 						});
 						addWaitPending(data.bookid,data.BeginingWaitingTime);
-
-						$("#form-book")[0].reset();
+						/////////////////////////////// Change system ///////////////////////
+						/*$("#form-book")[0].reset();
 						$("#form-customer")[0].reset();
-						UIkit.modal("#modal_overflow").hide();
+						UIkit.modal("#modal_overflow").hide();*/
 					}
 					showPreloader();
 					$.ajax({
@@ -1626,6 +1632,9 @@ jQuery(document).ready(function($){
 			var formbook = $("#form-book").serialize();
 			//var formpassage=$("#form-book-passage").serialize();
 			var customer = $("#form-customer").serialize();
+			$("#form-book")[0].reset();
+			$("#form-customer")[0].reset();
+			UIkit.modal("#modal_overflow").hide();
 			$.ajax({
 				type: "post",
 				url: Routing.generate("book_add_xhr"),
@@ -1791,10 +1800,10 @@ jQuery(document).ready(function($){
 							}
 						});
 						addWaitPending(data.bookid,data.BeginingWaitingTime);
-
-						$("#form-book")[0].reset();
+						/////////////////////////////// Change system ///////////////////////
+						/*$("#form-book")[0].reset();
 						$("#form-customer")[0].reset();
-						UIkit.modal("#modal_overflow").hide();
+						UIkit.modal("#modal_overflow").hide();*/
 					}
 					dragBook();
 					droppableTable();

@@ -912,3 +912,7 @@ table#dt_individual_search i {
 	font-size: 16px;
 	line-height: 33px;
 }
+.fc-day-grid-container{
+	height: auto!important;
+	overflow-y: hidden!important;
+}

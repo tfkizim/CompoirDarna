@@ -38,4 +38,12 @@ class CustomerRepository extends \Doctrine\ORM\EntityRepository
             $count = $qb->getQuery()->getSingleScalarResult();
             return $count;
         }
+        public function getCustomersNotEmpty(){
+            $qb= $this->_em->createQueryBuilder();
+            $qb->select('c')
+                ->from('RestaurantBundle:Customer', 'c')
+                ->where("c.email != ''");
+            $entites = $qb->getQuery()->getResult();
+            return $entites;
+        }
 }
