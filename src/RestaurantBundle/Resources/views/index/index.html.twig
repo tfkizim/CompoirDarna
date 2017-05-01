@@ -99,6 +99,7 @@
                     <table id="dt_individual_search" class="uk-table" cellspacing="0" width="100%">
                         <thead>
                         <tr>
+                            <th data-index="id">#</th>
                             <th data-index="hour">Heure</th>
                             <th data-index="nom">Nom</th>
                             <th data-index="table">Table</th>
@@ -111,6 +112,7 @@
 
                         <tfoot>
                         <tr>
+                            <th data-index="id">#</th>
                             <th data-index="hour">Heure</th>
                             <th data-index="nom">Nom</th>
                             <th data-index="table">Table</th>
@@ -131,6 +133,7 @@
                                 {% endif %}
                             {% endif %}
                             <tr data-id="{{ book.id }}" class="ym-book {% if book.stateId %}{{ book.stateId.function }}{% endif %}" {% if book.stateId %}data-state="{{ book.stateId.function }}"{% endif %} {% if book.stateId %}{% if book.stateId.function == "late" or book.stateId.function == "reserved" or (book.stateId.function == "noshow" and notimestamp == false) %}data-timestamp="{{ book.dateBook|totimestamp }}"{% endif %}{% endif %}>
+                            <td>{% if book.ref != "" and book.ref != "null" %}<span class="uk-hidden ym-searchable-alltables ym-searchable-val">#{{ book.ref }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.ref }}</a>{% else %}-{% endif %}</td>
                             <td>
                                 <span class="uk-hidden ym-searchable-hour ym-searchable-val">#{{ book.dateBook|date("H:i") }}#</span>
                                 <a href="#" class="book_update_hour" {% if book.serviceId %}data-service="{{ book.serviceId.id }}"{% endif %} data-hour="{{ book.dateBook|date("H:i") }}"><strong>{{ book.dateBook|date("H:i") }}</strong></a>
@@ -156,7 +159,7 @@
                                     <input type="hidden" class="selected-tables-id " data-id="{{ book.id }}" value="">
                                 </div>
                             </td>
-                            <td><span class="uk-hidden ym-searchable-pax ym-searchable-val">#{{book.pax}}pax#</span><input class="uk-form-width-medium number input-pax" type="number" data-old-val="{{book.pax}}" value="{{book.pax}}" min="0" max="100" step="1" /></td>
+                            <td><span class="uk-hidden ym-searchable-pax ym-searchable-val">#{{book.pax}}pax#</span><span class="book-pax">{{book.pax}} pax</span>{#<input class="uk-form-width-medium number input-pax" type="number" data-old-val="{{book.pax}}" value="{{book.pax}}" min="0" max="100" step="1" />#}</td>
                             <td {% if book.stateId %} class="md-bg-{{ book.stateId.color }} {% if book.stateId.flashed %}blink{% endif %}" {% endif %}>
                             {% if book.stateId %}<span class="book-orderstate uk-hidden">{{ book.stateId.orderInFilter }}</span>{% endif %}
                                 {% if book.stateId %}<span class="uk-hidden ym-searchable-val">#{{ book.stateId.name }}#</span>{% endif %}

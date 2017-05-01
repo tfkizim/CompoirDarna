@@ -290,6 +290,7 @@ class BookController extends Controller
         $book_hour=$request->get("hour");
         $book_state=$request->get("status");
         $book_pax=$request->get("pax");
+        $book_ref=$request->get("ref");
         if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if(!$customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
                 $customer = new Customer();
@@ -318,6 +319,9 @@ class BookController extends Controller
                     }else{
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
                     }
+                    if(!empty($book_ref)){
+                        $book->setRef($book_ref);
+                    }
                     $book->setStateId($state);
                     $book->setFloorId(null);
                     $book->setUserId(null);
@@ -339,10 +343,16 @@ class BookController extends Controller
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
                         $book->setStateId($state);
                         $book->setTypeadd("site");
+                        if(!empty($book_ref)){
+                            $book->setRef($book_ref);
+                        }
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($book);
                         $em->flush();
                     }else{
+                        if(!empty($book_ref)){
+                            $book->setRef($book_ref);
+                        }
                         $book->setTypeadd("site");
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($book);
@@ -370,6 +380,7 @@ class BookController extends Controller
         $book_date=$request->get("date");
         $book_hour=$request->get("hour");
         $book_pax=$request->get("pax");
+        $book_ref=$request->get("ref");
         $book_state=$request->get("status");
         if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
             if($customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
@@ -414,6 +425,9 @@ class BookController extends Controller
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
                         $book->setStateId($state);
                     }
+                    if(!empty($book_ref)){
+                        $book->setRef($book_ref);
+                    }
                     $book->setTypeadd("site");
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($book);
@@ -435,6 +449,9 @@ class BookController extends Controller
                     $book->setUserId(null);
                     $book->setOccasionId(null);
                     $book->setCompanyId(null);
+                    if(!empty($book_ref)){
+                        $book->setRef($book_ref);
+                    }
                     $book->setNoteAdmin(strip_tags($book_noteadmin));
                     $book->setTypeadd("site");
                     $date = new \Datetime("1970-01-01 " . $book_hour);
@@ -746,6 +763,10 @@ class BookController extends Controller
                 $em->flush();
             }
         }
+        $ref="";
+        if(!empty($book->getRef())){
+            $ref=$book->getRef();
+        }
 
         $timestamp=$book->getDateBook()->format('U');
         $booktime=$book->getDateBook()->format('H:i');
@@ -754,6 +775,7 @@ class BookController extends Controller
         return $response->setData(array(
             'reponse'=>"ok",
             'stateslugify'=>$stateslugify,
+            'ref'=>$ref,
             'serviceid'=>$service->getId(),
             'timestamp'=>$timestamp,
             'bookid'=>$book->getId(),

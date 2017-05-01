@@ -916,3 +916,13 @@ table#dt_individual_search i {
 	height: auto!important;
 	overflow-y: hidden!important;
 }
+#totop-container{
+	display: none;
+}
+.md-fab-wrapper.md-fab-in-card{
+	position: fixed;
+}
+.md-fab-left{
+	left: 24px!important;
+	right: auto!important;
+}

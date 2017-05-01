@@ -22,6 +22,13 @@ class Book
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=255, nullable=true)
+     */
+    private $ref;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_book", type="datetime")
@@ -598,5 +605,29 @@ class Book
     public function getTypeadd()
     {
         return $this->typeadd;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     *
+     * @return Book
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string
+     */
+    public function getRef()
+    {
+        return $this->ref;
     }
 }

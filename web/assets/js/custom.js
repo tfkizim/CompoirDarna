@@ -2316,6 +2316,23 @@ jQuery(document).ready(function($){
 		});
 		return false;
 	});
+	////////////////////
+	/// Scroll to top //
+	////////////////////
+	$(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('#totop-container').fadeIn();
+        } else {
+            $('#totop-container').fadeOut();
+        }
+    });
+	$(document).delegate("#totop","click",function(e){
+		e.preventDefault();
+		$("html, body").animate({
+            scrollTop: 0
+        }, 600);
+        return false;
+	});
 	///////////////////////////
 	/// Go to url on click ////
 	///////////////////////////
@@ -2478,6 +2495,7 @@ function addReservationTable(book){
 	var redeye="";
 	var blocked="";
 	var floorslug="";
+	var ref="-";
 	if(book.occasionname!=""){
 		occasion='<i class="'+book.occasionicon+' uk-icon-small '+book.occasioncolor+'" data-uk-tooltip="{pos:\'bottom\'}" title="'+book.occasionname+'"></i>';
 	}
@@ -2499,12 +2517,16 @@ function addReservationTable(book){
 	if(book.floorslug!=""){
 		floorslug='<span class="book-floor"><i class="md-color-red-700 fz18">'+book.floorslug+'</i></span>';
 	}
+	if(book.ref!=""){
+		ref='<span class="uk-hidden ym-searchable-val">#'+book.ref+'#</span><a href="#" class="edit-resa" data-id="'+book.bookid+'">'+book.ref+'</a>';
+	}
 	//if(book.customerFirstName)
 	$("#dt_individual_search").DataTable().row.add([
+		ref,
 		'<span class="uk-hidden ym-searchable-val">#'+book.booktime+'#</span><a href="#" class="book_update_hour" data-service="'+book.serviceid+'" data-hour="'+book.booktime+'"><strong>'+book.booktime+'</strong></a>',
 		'<span class="uk-hidden ym-searchable-val">#'+book.customerfirstname+' '+book.customerlastname+'#</span><a href="#" class="edit-resa" data-id="'+book.bookid+'">'+book.customerfirstname+' '+book.customerlastname+'</a>',
 		'<span class="uk-hidden ym-searchable-alltables ym-searchable-val">#'+book.alltables+'#</span><div class="book-edit-table"><input class="uk-form-width-medium k-textbox input-selected-tables '+blocked+'" type="text" data-old-val="'+book.alltables+'" data-id="'+book.bookid+'" value="'+book.alltables+'" /><a href="#" class="md-btn md-btn-small md-btn-success select-modal-plan" data-id="'+book.bookid+'"><i class="material-icons uk-text-contrast">add</i></a><input type="hidden" class="selected-tables-id " data-id="'+book.bookid+'" value=""></div>',
-		'<span class="uk-hidden ym-searchable-pax ym-searchable-val">#'+book.bookpax+'#</span><input class="uk-form-width-medium number input-pax" type="number" data-old-val="'+book.bookpax+'" value="'+book.bookpax+'" min="0" max="100" step="1" />',
+		'<span class="uk-hidden ym-searchable-pax ym-searchable-val">#'+book.bookpax+'#</span><span class="book-pax">'+book.bookpax+' pax</span>',/*<input class="uk-form-width-medium number input-pax" type="number" data-old-val="'+book.bookpax+'" value="'+book.bookpax+'" min="0" max="100" step="1" />*/
 		'<span class="book-orderstate uk-hidden">'+book.orderstate+'</span><span class="uk-hidden ym-searchable-val">#'+book.statename+'#</span>'+stateHtml,
 		'<span class="uk-hidden ym-searchable-val">#'+book.companyname+'#</span><a href="#" class="edit-resa" data-id="'+book.bookid+'">'+book.companyname+'</a>',
 		'<span class="uk-hidden ym-searchable-val">#'+book.bookid+'#</span>'+occasion+' '+offer+' '+customervip+'&nbsp; <a href="#" class="edit-resa" data-id="'+book.bookid+'" data-uk-tooltip="{pos:\'bottom\'}" title="Modifier"><i class="uk-icon-pencil"></i></a>&nbsp; <a data-uk-tooltip="{pos:\'bottom\'}" title="'+noteadmin+'"><i class="uk-icon-info-circle '+redeye+'"></i></a>&nbsp; <a href="'+ Routing.generate("book_detail",{id:book.bookid}) +'" class="see-detail"><i class="uk-icon-eye"></i></a>&nbsp; '+floorslug
