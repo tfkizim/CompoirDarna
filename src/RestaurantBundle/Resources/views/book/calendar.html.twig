@@ -21,7 +21,7 @@
         {% endif %}
         {% set title="" %}
         {% if book.customerId %}
-            {% set title=book.customerId.sexe~' '~book.customerId.lastName~' '~book.customerId.firstName %}
+            {% set title=book.customerId.lastName~' '~book.customerId.firstName %}
         {% endif %}
         {% set chaine = chaine~'{
             "id":'~book.id~',

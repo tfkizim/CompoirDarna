@@ -1237,6 +1237,9 @@ jQuery(document).ready(function($){
 							$("#dt_individual_search").DataTable().row($("#dt_individual_search tr[data-id='"+data.bookid+"']")).remove().draw();
 							addReservationTable(data);
 						}
+						if($("#calendar_selectable .edit-resa").length){
+							location.reload();
+						}
 						if ($(".book-line[data-id='" + data.bookid + "']").length <= 0) {
 							var chaine = '<li class="book-line md-bg-' + data.statecolor + ' ' + data.stateslugify + ' attr" data-class="md-bg-' + data.statecolor + '" data-state="' + data.stateslugify + '" data-timestamp="' + data.timestamp + '" data-id="' + data.bookid + '">' +
 								'<div class="md-list-content">' +
@@ -1448,6 +1451,9 @@ jQuery(document).ready(function($){
 							$("#dt_individual_search").DataTable().row($("#dt_individual_search tr[data-id='"+data.bookid+"']")).remove().draw();
 							addReservationTable(data);
 						}
+						if($("#calendar_selectable .edit-resa").length){
+							location.reload();
+						}
 						if ($(".book-line[data-id='" + data.bookid + "']").length <= 0) {
 							var chaine = '<li class="book-line md-bg-' + data.statecolor + ' ' + data.stateslugify + ' attr" data-class="md-bg-' + data.statecolor + '" data-state="' + data.stateslugify + '" data-timestamp="' + data.timestamp + '" data-id="' + data.bookid + '">' +
 								'<div class="md-list-content">' +
@@ -1656,6 +1662,9 @@ jQuery(document).ready(function($){
 						}else if(data.addOrupdate == "update" && $("#date-books").length>0 && data.dateBook == $("#date-books").val() && $("#dt_individual_search").length>0){
 							$("#dt_individual_search").DataTable().row($("#dt_individual_search tr[data-id='"+data.bookid+"']")).remove().draw();
 							addReservationTable(data);
+						}
+						if($("#calendar_selectable .edit-resa").length){
+							location.reload();
 						}
 						if ($(".book-line[data-id='" + data.bookid + "']").length <= 0) {
 							var chaine = '<li class="book-line md-bg-' + data.statecolor + ' ' + data.stateslugify + ' attr" data-class="md-bg-' + data.statecolor + '" data-state="' + data.stateslugify + '" data-timestamp="' + data.timestamp + '" data-id="' + data.bookid + '">' +

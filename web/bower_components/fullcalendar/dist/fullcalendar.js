@@ -5309,7 +5309,7 @@ DayGrid.mixin({
 				(htmlEscape(event.title || '') || '&nbsp;') + // we always want one line of height
 			'</span>';
 		
-		return '<a class="' + classes.join(' ') + '"' +
+		return '<a class="' + classes.join(' ') + ' edit-resa" data-id="'+event.id+'"' +
 				(event.url ?
 					' href="' + htmlEscape(event.url) + '"' :
 					''
