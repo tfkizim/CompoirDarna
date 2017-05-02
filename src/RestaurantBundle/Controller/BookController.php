@@ -430,6 +430,9 @@ class BookController extends Controller
                     if($book_state==3){
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
                         $book->setStateId($state);
+                    }elseif($book_state==1){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("pendingconfirmation");
+                        $book->setStateId($state);
                     }
                     if(!empty($book_ref)){
                         $book->setRef($book_ref);
