@@ -17,6 +17,8 @@
                 {% set color="#fff176" %}
             {% elseif book.stateId.function == "noshow" %}
                 {% set color="#f44336" %}
+            {% elseif book.stateId.function == "pendingconfirmation" %}
+                {% set color="#f57c00" %}
             {% endif %}
         {% endif %}
         {% set title="" %}

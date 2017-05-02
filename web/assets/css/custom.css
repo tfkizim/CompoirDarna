@@ -926,3 +926,15 @@ table#dt_individual_search i {
 	left: 24px!important;
 	right: auto!important;
 }
+#normaluser .book-status{
+	display: none;
+}
+.book-status .book-pending{
+	color: #ffb74d;
+}
+.book-status .book-confirmed{
+	color: #81c784;
+}
+.book-status .book-cancelled{
+	color: #e57373;
+}

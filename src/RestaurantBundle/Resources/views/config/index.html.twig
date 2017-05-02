@@ -412,6 +412,7 @@
                                                             <option value="cancelled">Cancelled</option>
                                                             <option value="pending">Pending</option>
                                                             <option value="noshow">No show</option>
+                                                            <option value="pendingconfirmation">En cours</option>
                                                         </select>
                                                     </div>
                                                     <div class="uk-width-medium-1-5">
@@ -455,6 +456,7 @@
                                                                                 <option value="cancelled" {% if state.function == "cancelled" %}selected{% endif %}>Cancelled</option>
                                                                                 <option value="pending" {% if state.function == "pending" %}selected{% endif %}>Pending</option>
                                                                                 <option value="noshow" {% if state.function == "noshow" %}selected{% endif %}>No show</option>
+                                                                                <option value="pendingconfirmation" {% if state.function == "pendingconfirmation" %}selected{% endif %}>En cours</option>
                                                                             </select>
                                                                         </td>
                                                                         <td>

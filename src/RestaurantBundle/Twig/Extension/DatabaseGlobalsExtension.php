@@ -5,17 +5,20 @@ namespace RestaurantBundle\Twig\Extension;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class DatabaseGlobalsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
 
    protected $em;
    protected $tokenStorage;
+   protected $context;
 
-   public function __construct(EntityManager $em,TokenStorage $tokenStorage)
+   public function __construct(EntityManager $em,TokenStorage $tokenStorage, SecurityContext $context)
    {
       $this->em = $em;
       $this->tokenStorage = $tokenStorage;
+      $this->context = $context;
    }
 
    public function getGlobals()
@@ -30,7 +33,12 @@ class DatabaseGlobalsExtension extends \Twig_Extension implements \Twig_Extensio
 
       $books=$this->em->getRepository("RestaurantBundle:Book")->SearchByDate($date);
       $floors=$this->em->getRepository("RestaurantBundle:Floor")->findAll();
-      $states=$this->em->getRepository("RestaurantBundle:State")->findBy(array(),array("orderInFilter"=>"ASC"));
+      if ($this->context->isGranted('ROLE_SUPER_ADMIN')) {
+         $states=$this->em->getRepository("RestaurantBundle:State")->findBy(array(),array("orderInFilter"=>"ASC"));
+      }else{
+         $states=$this->em->getRepository("RestaurantBundle:State")->findBy(array('hideAdmin'=>0),array("orderInFilter"=>"ASC"));
+      }
+
       $offers=$this->em->getRepository("RestaurantBundle:Offer")->findBy(array(),array("orderInFilter"=>"ASC"));
       $occasions=$this->em->getRepository("RestaurantBundle:Occasion")->findBy(array(),array("orderInFilter"=>"ASC"));
       $services=$this->em->getRepository("RestaurantBundle:Service")->findAll();

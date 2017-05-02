@@ -9,7 +9,7 @@ services:
 
     app.twig.database_globals_extension:
         class: RestaurantBundle\Twig\Extension\DatabaseGlobalsExtension
-        arguments: [@doctrine.orm.entity_manager,@security.token_storage]
+        arguments: [@doctrine.orm.entity_manager,@security.token_storage,@security.context]
         tags:
             - { name: twig.extension }
 

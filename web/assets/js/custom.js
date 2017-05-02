@@ -3966,6 +3966,7 @@ function selectState(e){
 				chaine+='</select>';
 				var oldstate=$this.parents("tr").attr("data-state");
 				$this.parents("tr").removeClass(oldstate).addClass(data.stateslugify).attr("data-state",data.stateslugify);
+				$this.parents("tr").find(".book-status i").removeClass('book-confirmed book-cancelled book-pending').addClass('book-'+data.bookstatus);
 				cell.data(chaine).draw();
 				selectstateInit();
 				hidePreloader();

@@ -18,15 +18,23 @@ class RestaurantController extends Controller
             $date=new \DateTime($date);
 
         $selectedservice=$this->getDoctrine()->getRepository("RestaurantBundle:Service")->findOneById($service);
-        $books=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->SearchByDateService($date,$service);
-        $nbrpax=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->CountDateService($date,$service);
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            $books=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->SearchByDateServiceSuperAdmin($date,$service);
+            $statesfilter=$this->getDoctrine()->getRepository("RestaurantBundle:State")->findBy(array('hideInFilter'=>0),array("orderInFilter"=>"ASC"));
+            $nbrpax=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->CountDateServiceSuperadmin($date,$service);
+        }else{
+            $books=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->SearchByDateServiceAdmin($date,$service);
+            $statesfilter=$this->getDoctrine()->getRepository("RestaurantBundle:State")->findBy(array('hideInFilter'=>0,'hideAdmin'=>0),array("orderInFilter"=>"ASC"));
+            $nbrpax=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->CountDateServiceAdmin($date,$service);
+        }
+        
         $nbrpax=$nbrpax['nbrpax'];
         $siteopening=array();
         if($siteopening=$this->getDoctrine()->getRepository("RestaurantBundle:Config")->findOneByName("SITEOPENINGHOURS")){
             $siteopening=json_decode($siteopening->getValue());
         }
         $selecteddate=$date;
-        $statesfilter=$this->getDoctrine()->getRepository("RestaurantBundle:State")->findBy(array('hideInFilter'=>0),array("orderInFilter"=>"ASC"));
+
         $services=$this->getDoctrine()->getRepository("RestaurantBundle:Service")->findAll();
         $lastsynchro = $this->getDoctrine()->getRepository("RestaurantBundle:Config")->findOneByName("LASTSYNCHRONISATION");
         if(!$lastsynchro){

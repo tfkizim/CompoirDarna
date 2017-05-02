@@ -26,6 +26,47 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb->getResult();
     }
+    public function SearchByDateServiceAdmin($date,$service){
+        $tomorrow=new \DateTime($date->format("Y-m-d")." 05:00:00");
+        $tomorrow->add(new \DateInterval('P1D'));
+        $servicewhere="";
+        if($service>0){
+            $servicewhere.=' and b.serviceId = :service';
+        }
+        $qb= $this->getEntityManager()->createQuery('
+            SELECT b
+            FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
+            WHERE b.stateId=s.id'.$servicewhere.' and b.stateId!=:stateid1 and b.dateBook BETWEEN :today and :tomorrow
+            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ')
+            ->setParameter('stateid1', "9")
+            ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
+            ->setParameter('tomorrow', $tomorrow->format("Y-m-d H:i:s"));
+        if($service>0){
+            $qb->setParameter('service', $service);
+        }
+        return $qb->getResult();
+    }
+    public function SearchByDateServiceSuperAdmin($date,$service){
+        $tomorrow=new \DateTime($date->format("Y-m-d")." 05:00:00");
+        $tomorrow->add(new \DateInterval('P1D'));
+        $servicewhere="";
+        if($service>0){
+            $servicewhere.=' and b.serviceId = :service';
+        }
+        $qb= $this->getEntityManager()->createQuery('
+            SELECT b
+            FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
+            WHERE b.stateId=s.id'.$servicewhere.' and b.dateBook BETWEEN :today and :tomorrow
+            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ')
+            ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
+            ->setParameter('tomorrow', $tomorrow->format("Y-m-d H:i:s"));
+        if($service>0){
+            $qb->setParameter('service', $service);
+        }
+        return $qb->getResult();
+    }
     public function SearchByDateService($date,$service){
         $tomorrow=new \DateTime($date->format("Y-m-d")." 05:00:00");
         $tomorrow->add(new \DateInterval('P1D'));
@@ -66,6 +107,46 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
         }
         return $qb->getOneOrNullResult();
     }
+    public function CountDateServiceAdmin($date,$service){
+        $tomorrow=new \DateTime($date->format("Y-m-d")." 05:00:00");
+        $tomorrow->add(new \DateInterval('P1D'));
+        $servicewhere="";
+        if($service>0){
+            $servicewhere.=' and b.serviceId = :service';
+        }
+        $qb= $this->getEntityManager()->createQuery('
+            SELECT sum(b.pax) as nbrpax
+            FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
+            WHERE b.stateId=s.id and b.stateId != 5 and b.stateId != 9'.$servicewhere.' and b.dateBook BETWEEN :today and :tomorrow
+            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ')
+            ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
+            ->setParameter('tomorrow', $tomorrow->format("Y-m-d H:i:s"));
+        if($service>0){
+            $qb->setParameter('service', $service);
+        }
+        return $qb->getOneOrNullResult();
+    }
+    public function CountDateServiceSuperadmin($date,$service){
+        $tomorrow=new \DateTime($date->format("Y-m-d")." 05:00:00");
+        $tomorrow->add(new \DateInterval('P1D'));
+        $servicewhere="";
+        if($service>0){
+            $servicewhere.=' and b.serviceId = :service';
+        }
+        $qb= $this->getEntityManager()->createQuery('
+            SELECT sum(b.pax) as nbrpax
+            FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
+            WHERE b.stateId=s.id and b.stateId != 5'.$servicewhere.' and b.dateBook BETWEEN :today and :tomorrow
+            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ')
+            ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
+            ->setParameter('tomorrow', $tomorrow->format("Y-m-d H:i:s"));
+        if($service>0){
+            $qb->setParameter('service', $service);
+        }
+        return $qb->getOneOrNullResult();
+    }
     public function SearchByDateDetail($date,$id)
     {
         $tomorrow=new \DateTime($date->format("Y-m-d")." 05:00:00");
@@ -83,8 +164,7 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
     public function Calendar($datestart,$dateend){
-        $day3before=new \DateTime();
-        $day3before->sub(new \DateInterval('P3D'));
+        $today=new \DateTime();
         $onemonthafter=new \DateTime();
         $onemonthafter->add(new \DateInterval('P30D'));
         $qb = $this->createQueryBuilder('u')
@@ -92,7 +172,7 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('datestart', $datestart)
             ->setParameter('dateend', $dateend)
             ->andWhere('u.dateBook >= :datestart2')
-            ->setParameter('datestart2', $day3before->format("Y-m-d")." 00:00:00")
+            ->setParameter('datestart2', $today->format("Y-m-d")." 00:00:00")
             ->andWhere('u.dateBook <= :datestart3')
             ->setParameter('datestart3', $onemonthafter->format("Y-m-d")." 00:00:00");
         return $qb->getQuery()->getResult();

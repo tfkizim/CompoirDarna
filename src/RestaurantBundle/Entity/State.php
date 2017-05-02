@@ -38,7 +38,7 @@ class State
     /**
      * @var string
      *
-     * @ORM\Column(name="function", type="string", columnDefinition="enum('reserved', 'seated', 'late', 'free', 'arrived', 'cancelled', 'pending', 'noshow')", options={"default" = "reserved"})
+     * @ORM\Column(name="function", type="string", columnDefinition="enum('reserved', 'seated', 'late', 'free', 'arrived', 'cancelled', 'pending', 'noshow', 'pendingconfirmation')", options={"default" = "reserved"})
      */
     private $function;
 
@@ -61,6 +61,12 @@ class State
      * @ORM\Column(name="hide_in_filter", type="boolean", nullable=true, options={"default" = 0})
      */
     private $hideInFilter;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="hide_admin", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $hideAdmin;
 
     /**
      * @ORM\OneToMany(targetEntity="RestaurantBundle\Entity\Book", mappedBy="stateId")
@@ -261,5 +267,29 @@ class State
     public function getHideInFilter()
     {
         return $this->hideInFilter;
+    }
+
+    /**
+     * Set hideAdmin
+     *
+     * @param boolean $hideAdmin
+     *
+     * @return State
+     */
+    public function setHideAdmin($hideAdmin)
+    {
+        $this->hideAdmin = $hideAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get hideAdmin
+     *
+     * @return boolean
+     */
+    public function getHideAdmin()
+    {
+        return $this->hideAdmin;
     }
 }

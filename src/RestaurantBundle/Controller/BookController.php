@@ -42,7 +42,6 @@ class BookController extends Controller
             $em->persist($book);
             $em->flush();
 
-
             $user = $this->get('security.context')->getToken()->getUser();
             $notif=new Notification();
             if($user) $notif->setUserId($user);
@@ -353,6 +352,13 @@ class BookController extends Controller
                         if(!empty($book_ref)){
                             $book->setRef($book_ref);
                         }
+                        if($book_state==1){
+                            $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("pendingconfirmation");
+                            $book->setStateId($state);
+                        }elseif($book_state==2){
+                            $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
+                            $book->setStateId($state);
+                        }
                         $book->setTypeadd("site");
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($book);
@@ -441,9 +447,102 @@ class BookController extends Controller
                     $book->setOfferId(null);
                     if($book_state==3){
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
-                    }else{
+                    }elseif($book_state==1){
+                        $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("pendingconfirmation");
+                    }elseif($book_state==2){
                         $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("reserved");
                     }
+                    $book->setStateId($state);
+                    $book->setFloorId(null);
+                    $book->setUserId(null);
+                    $book->setOccasionId(null);
+                    $book->setCompanyId(null);
+                    if(!empty($book_ref)){
+                        $book->setRef($book_ref);
+                    }
+                    $book->setNoteAdmin(strip_tags($book_noteadmin));
+                    $book->setTypeadd("site");
+                    $date = new \Datetime("1970-01-01 " . $book_hour);
+                    $hournow = $date->format("U");
+                    $interval = $date->getTimestamp();
+                    $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->findBetweenInterval($interval);
+                    if (!$service) $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->findOneBy(array());
+                    $book->setServiceId($service);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($book);
+                    $em->flush();
+                }
+                $lastsynchronisation = $this->getDoctrine()->getRepository("RestaurantBundle:Config")->findOneByName("LASTSYNCHRONISATION");
+                $timenow=new \Datetime();
+                $lastsynchronisation->setValue($timenow->format("Y-m-d H:i"));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($lastsynchronisation);
+                $em->flush();
+                $response = new JsonResponse();
+                return $response->setData(array('reponse'=>"ok"));
+            }
+        }
+        $response = new JsonResponse();
+        return $response->setData(array('reponse'=>"error"));
+    }
+    /**
+     * @Route("/book/cron_cancelled_xhr")
+     */
+    public function cronCancelledXhrAction(Request $request){
+        setlocale(LC_TIME, 'fr_FR.UTF8', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+        $customer_lastname=$request->get("lastname");
+        $customer_email=$request->get("email");
+        $customer_mobile_number=$request->get("mobile_number");
+        $customer_indicatif_mobile_number=$request->get("indicatif_mobile_number");
+        $customer_langue=$request->get("langue");
+        $book_noteadmin=$request->get("noteadmin");
+        $book_date=$request->get("date");
+        $book_hour=$request->get("hour");
+        $book_pax=$request->get("pax");
+        $book_ref=$request->get("ref");
+        $book_state=$request->get("status");
+        if(!empty($customer_lastname) && !empty($customer_email) && !empty($customer_mobile_number) && !empty($customer_langue) && !empty($book_date) && !empty($book_hour) && !empty($book_pax)){
+            if($customer=$this->getDoctrine()->getRepository("RestaurantBundle:Customer")->findOneByEmail($customer_email)){
+                if($customer->getLastName()!=$customer_lastname){
+                    $customer->setLastName($customer_lastname);
+                }
+                if($customer->getIndicatifMobileNumber()!=$customer_indicatif_mobile_number){
+                    $customer->setIndicatifMobileNumber($customer_indicatif_mobile_number);
+                }
+                if($customer->getMobileNumber()!=$customer_mobile_number){
+                    $customer->setMobileNumber($customer_mobile_number);
+                }
+                if($customer->getLangue()!=$customer_langue){
+                    $customer->setLangue($customer_langue);
+                }
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($customer);
+                $em->flush();
+            }else{
+                $customer = new Customer();
+                $customer->setSexe("Mr.");
+                $customer->setFirstName("");
+                $customer->setLastName($customer_lastname);
+                $customer->setEmail($customer_email);
+                $customer->setIndicatifMobileNumber($customer_indicatif_mobile_number);
+                $customer->setMobileNumber($customer_mobile_number);
+                $customer->setLangue($customer_langue);
+                $customer->setVip(0);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($customer);
+                $em->flush();
+            }
+            if(!empty($customer)){
+                if($book=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->findOneBy(array("customerId"=>$customer,"dateBook"=>(new \DateTime($book_date." ".$book_hour))))){
+                    
+                }else{
+                    $book = new Book();
+                    $book->setBlocked(0);
+                    $book->setPax($book_pax);
+                    $book->setDateBook(new \DateTime($book_date." ".$book_hour));
+                    $book->setCustomerId($customer);
+                    $book->setOfferId(null);
+                    $state = $this->getDoctrine()->getRepository("RestaurantBundle:State")->findOneByFunction("cancelled");
                     $book->setStateId($state);
                     $book->setFloorId(null);
                     $book->setUserId(null);
@@ -585,7 +684,6 @@ class BookController extends Controller
             $book->setBlocked(1);
         else
             $book->setBlocked(0);
-
         if (isset($Book["hour"]) && preg_match("/^([0-9]+)\|([0-9]{1,2}\:[0-9]{1,2})$/", $Book["hour"], $output)) {
             $Book["date"] = $Book["date"] . " " . $output[2];
             $service = $this->getDoctrine()->getRepository("RestaurantBundle:Service")->find($output[1]);
@@ -739,7 +837,13 @@ class BookController extends Controller
         if($addOrupdate=="add"){
             $notif=new Notification();
             if($user) $notif->setUserId($user);
-            if($book) $notif->setBookId($book);
+            if($book){
+                $notif->setBookId($book);
+                $book->setRef($book->getId().$this->str_rand(4));
+                $em=$this->getDoctrine()->getManager();
+                $em->persist($book);
+                $em->flush();
+            } 
             $message=$user->getLastName()." ".$user->getFirstName()." vient d'insérer une réservation pour le ".$book->getDateBook()->format("d, F Y \à H\:i").".";
             if(!empty($message)) $notif->setMessage($message);
             $notif->setTypeNotif("success");
@@ -2007,5 +2111,8 @@ class BookController extends Controller
                 /*}
             }
         }*/
+    }
+    private function str_rand($length = 10) {
+        return substr(str_shuffle(str_repeat($x='abcdefghijklmnopqrstuvwxyz', ceil($length/strlen($x)) )),1,$length);
     }
 }

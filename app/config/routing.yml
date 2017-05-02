@@ -16,6 +16,14 @@ book_cron_add_xhr:
     methods:  [GET]
     options:
         expose: true
+
+book_cron_cancelled_xhr:
+    path: /cron_cancelled_xhr
+    defaults: { _controller: RestaurantBundle:Book:cronCancelledXhr }
+    methods:  [GET]
+    options:
+        expose: true
+
 book_synchronisebooks:
     path: /synchronisebooks
     defaults: { _controller: RestaurantBundle:Book:synchroniseBooks }
