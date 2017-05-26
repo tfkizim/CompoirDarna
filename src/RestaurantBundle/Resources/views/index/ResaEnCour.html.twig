@@ -1,0 +1,192 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	{% block barre %}{{ parent() }}{% endblock %}
+	{% block menu %}{{ parent() }}{% endblock %}
+	<div id="page_content">
+        <div id="page-with-datatable"></div>
+        <div id="page_content_inner">
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+
+                </div>
+            </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                        <div class="uk-grid">
+                            <div class="uk-width-medium-8-10 lastsynchronisation-content">
+                                Dernière synchronisation : <strong class="lastsynchronisation">{{lastsynchronisation}}</strong>
+                            </div>
+                            <div class="uk-width-medium-2-10">
+                                <button type="button" class="md-btn md-btn-success" id="synchronise-books">Synchroniser</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            {% endif %}
+            <h4 class="heading_a uk-margin-bottom">Liste des réservations du jour</h4>
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid">
+                        <div class="uk-width-medium-10-10 uk-text-center">
+                            <div class="uk-button-group">
+                                <a href="" class="md-btn uk-button md-btn-primary ym-filter" data-function="all">Tous</a>
+                                {% for state in statesfilter %}
+                                    <a href="" class="md-btn uk-button md-btn-primary ym-filter" data-target="etat" data-function="{{ state.name }}">{{ state.name }}</a>
+                                {% endfor %}
+
+
+                                <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                    <button class="md-btn uk-button md-btn-primary"><i class="material-icons">&#xE313;</i></button>
+                                    <div class="uk-dropdown uk-dropdown-width-{{ services|length }}">
+                                        <div class="uk-grid uk-dropdown-grid">
+                                            {% for service in services %}
+                                                {% set servicevaleur=service.valeur|json_decode() %}
+                                                {% set openhour=servicevaleur.Lundi.OPENHOUR %}
+                                                {% set closehour=servicevaleur.Lundi.CLOSEHOUR %}
+                                                {% set interval=servicevaleur.Lundi.INTERVAL %}
+                                                {% set openhourtimestamp=(("1970-01-01 "~openhour)|date("U")) %}
+                                                {% set closehourtimestamp=(("1970-01-01 "~closehour)|date("U")) %}
+                                                {% set widthdefault="uk-width-2-6" %}
+                                                {% if services|length == 1 %}
+                                                    {% set widthdefault="uk-width-1-1" %}
+                                                {% elseif  services|length == 2  %}
+                                                    {% set widthdefault="uk-width-1-2" %}
+                                                {% elseif  services|length == 3  %}
+                                                    {% set widthdefault="uk-width-1-3" %}
+                                                {% elseif  services|length == 4  %}
+                                                    {% set widthdefault="uk-width-1-4" %}
+                                                {% elseif  services|length == 5  %}
+                                                    {% set widthdefault="uk-width-1-5" %}
+                                                {% elseif  services|length >= 6  %}
+                                                    {% set widthdefault="uk-width-1-6" %}
+                                                {% endif %}
+                                                <div class="{{ widthdefault }}">
+                                                    <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                                        {% for hour in range(low=openhourtimestamp, high=closehourtimestamp, step=interval) %}
+                                                            <li><a href="#" class="ym-filter" data-target="hour" data-function="{{ hour|date("H\:i") }}">{{ hour|date("H\:i") }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="" class="md-btn uk-button md-btn-primary ym-filter" id="send" data-url="{{ url('send_restaurant') }}">Envoyer Email</a>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="uk-text-danger uk-text-large">Nombre de couverts pour ce jour : {% if nbrpax %}{{ nbrpax }}{% else %}0{% endif %}</span><br>
+                    <table id="dt_individual_search" class="uk-table" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th data-index="id">#</th>
+                            <th data-index="dateSys">Date</th>
+                            <th data-index="hour">Heure</th>
+                            <th data-index="nom">Nom</th>
+                            <th data-index="table">Table</th>
+                            <th data-index="pax">Pax</th>
+                            <th data-index="etat"></th>
+                            <th data-index="hotel">Établissement</th>
+                            <th data-index="icone">Icone</th>
+                        </tr>
+                        </thead>
+
+                        <tfoot>
+                        <tr>
+                            <th data-index="id">#</th>
+                            <th data-index="dateSys">Date</th>
+                            <th data-index="hour">Heure</th>
+                            <th data-index="nom">Nom</th>
+                            <th data-index="table">Table</th>
+                            <th data-index="pax">Pax</th>
+                            <th data-index="etat">Etat</th>
+                            <th data-index="hotel">Établissement</th>
+                            <th data-index="icone">Icone</th>
+                        </tr>
+                        </tfoot>
+
+                        <tbody>
+                        {% for book in books %}
+                            {% set notimestamp=false %}
+                            {% if book.stateId.function == "noshow" %}
+                                {% set difference=(datenow|date("U"))-(book.dateBook|date("U")) %}
+                                {% if difference>2700 %}
+                                    {% set notimestamp=true %}
+                                {% endif %}
+                            {% endif %}
+                            <tr data-id="{{ book.id }}" class="ym-book {% if book.stateId %}{{ book.stateId.function }}{% endif %}" {% if book.stateId %}data-state="{{ book.stateId.function }}"{% endif %} {% if book.stateId %}{% if book.stateId.function == "late" or book.stateId.function == "reserved" or (book.stateId.function == "noshow" and notimestamp == false) %}data-timestamp="{{ book.dateBook|totimestamp }}"{% endif %}{% endif %}>
+                            <td>{% if book.ref != "" and book.ref != "null" %}<span class="uk-hidden ym-searchable-alltables ym-searchable-val">#{{ book.ref }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.ref }}</a>{% else %}-{% endif %}</td>
+                            <td>
+                                <span class="ym-searchable-hour ym-searchable-val"><a href="#">{{ book.dateSys|date("m/d H:i:s") }}</a></span>
+                            </td>
+                            <td>
+                                <span class="uk-hidden ym-searchable-hour ym-searchable-val">#{{ book.dateBook|date("H:i") }}#</span>
+                                <a href="#" class="book_update_hour" {% if book.serviceId %}data-service="{{ book.serviceId.id }}"{% endif %} data-hour="{{ book.dateBook|date("H:i") }}"><strong>{{ book.dateBook|date("H:i") }}</strong></a>
+                            </td>
+                            <td>
+                                {% if book.customerId %}<span class="uk-hidden ym-searchable-val">#{{ book.customerId.firstName~' '~book.customerId.lastName }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.customerId.firstName~' '~book.customerId.lastName }}</a>{% endif %}
+                            </td>
+                            <td>
+                                {% set alltables="" %}
+                                {% if book.booktabls %}
+                                    {% for bookedtabls in book.booktabls %}
+                                        {% if alltables is empty %}
+                                            {% set alltables=bookedtabls.tablId.name %}
+                                        {% else %}
+                                            {% set alltables=alltables~"+"~bookedtabls.tablId.name %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                <span class="uk-hidden ym-searchable-alltables ym-searchable-val">#{{ alltables }}#</span>
+                                <div class="book-edit-table">
+                                    <input class="uk-form-width-medium k-textbox input-selected-tables {% if book.blocked == 1%}blocked{% endif %}" type="text" data-old-val="{{ alltables }}" data-id="{{ book.id }}" value="{{ alltables }}" />
+                                    <a href="#" class="md-btn md-btn-small md-btn-success select-modal-plan" data-id="{{ book.id }}"><i class="material-icons uk-text-contrast">add</i></a>
+                                    <input type="hidden" class="selected-tables-id " data-id="{{ book.id }}" value="">
+                                </div>
+                            </td>
+                            <td><span class="uk-hidden ym-searchable-pax ym-searchable-val">#{{book.pax}}pax#</span><span class="book-pax">{{book.pax}} pax</span>{#<input class="uk-form-width-medium number input-pax" type="number" data-old-val="{{book.pax}}" value="{{book.pax}}" min="0" max="100" step="1" />#}</td>
+                            <td {% if book.stateId %} class="md-bg-{{ book.stateId.color }} {% if book.stateId.flashed %}blink{% endif %}" {% endif %}>
+                            {% if book.stateId %}<span class="book-orderstate uk-hidden">{{ book.stateId.orderInFilter }}</span>{% endif %}
+                                {% if book.stateId %}<span class="uk-hidden ym-searchable-val">#{{ book.stateId.name }}#</span>{% endif %}
+                                <select class="uk-form-width-medium selectstate">
+                                    {% for state in states %}
+                                        <option value="{{ state.id }}" {% if book.stateId and state.id==book.stateId.id %}selected{% endif %}><a href="#">{{ state.name }}</a></option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>{% if book.companyId %}<span class="uk-hidden ym-searchable-val">#{{ book.companyId.name }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.companyId.name }}</a>{% else %}<a href="#" class="edit-resa" data-id="{{ book.id }}">-</a>{% endif %}</td>
+                            <td>
+                                <span class="uk-hidden ym-searchable-val">#id:{{ book.id }}#</span>
+                                {% if book.occasionId %}
+                                    <i class="{{ book.occasionId.icon }} uk-icon-small {{ book.occasionId.color }}" data-uk-tooltip="{pos:'bottom'}" title="{{ book.occasionId.name }}"></i>
+                                {% endif %}
+                                {% if book.offerId %}
+                                    <i class="{{ book.offerId.icon }} uk-icon-small" data-uk-tooltip="{pos:'bottom'}" title="{{ book.offerId.name }}"></i>
+                                {% endif %}
+                                {% if book.customerId %}
+                                    {% if book.customerId.vip %}
+                                        <i class="md-color-yellow-700 fz18">VIP</i>
+                                    {% endif %}
+                                {% endif %}&nbsp;
+                                <a href="#" class="edit-resa" data-id="{{ book.id }}" data-uk-tooltip="{pos:'bottom'}" title="Modifier"><i class="uk-icon-pencil"></i></a>&nbsp;
+                                <a data-uk-tooltip="{pos:'bottom'}" title="{{book.noteAdmin}}"><i class="uk-icon-info-circle {% if book.noteAdmin is not empty %}md-color-red-500{% endif %}"></i></a>&nbsp;
+                                <a href="{{ path("book_detail",{id:book.id}) }}" class="see-detail"><i class="uk-icon-eye"></i></a>&nbsp;
+                                {% if book.floorId is not empty %}
+                                <span class="book-floor"><i class="md-color-red-700 fz18">{{ book.floorId.slug }}</i></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block modals %}
+        {{ parent() }}
+    {% endblock %}
+
+{% endblock %}

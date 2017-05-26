@@ -20,12 +20,13 @@
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~5.0",
-        "sensio/framework-extra-bundle": "^3.0.2",
+        "sensio/framework-extra-bundle": "^3.0",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "friendsofsymfony/jsrouting-bundle": "~1.5",
         "symfony/assetic-bundle": "~2.7",
-        "bnbc/upload-bundle": "dev-master"
+        "bnbc/upload-bundle": "dev-master",
+        "chrisbarr/amazon-sns-php-api": "^1.6"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

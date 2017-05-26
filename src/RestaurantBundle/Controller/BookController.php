@@ -874,7 +874,21 @@ class BookController extends Controller
 
         $timestamp=$book->getDateBook()->format('U');
         $booktime=$book->getDateBook()->format('H:i');
-
+        if($request->get("sendEmail"))
+        {
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Votre resa')
+                ->setFrom('resa@comptoirdarna.com')
+                ->setTo($book->getCustomerId()->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'RestaurantBundle:emails:envoyer.html.twig',
+                        compact('book')
+                    ),
+                    'text/html'
+                );
+            $this->get('mailer')->send($message);
+        }
         $response = new JsonResponse();
         return $response->setData(array(
             'reponse'=>"ok",
@@ -1163,7 +1177,7 @@ class BookController extends Controller
         $dateend=$request->get("end");
         if($datestart && $dateend && preg_match("/^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/",$datestart) && preg_match("/^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$/",$datestart) && strtotime($dateend)>=strtotime($datestart)){
             $books=$this->getDoctrine()->getRepository("RestaurantBundle:Book")->Calendar($datestart,$dateend);
-            return $this->render('RestaurantBundle:book:calendar.html.twig',array('books'=>$books));
+            return $this->render('RestaurantBundle:book:calendar.html.twig',array('books'=>$books,"count"=>count($books)));
         }
 
     }

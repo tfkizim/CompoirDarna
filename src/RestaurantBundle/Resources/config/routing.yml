@@ -2,6 +2,18 @@ restaurant_restaurant:
     path: /
     defaults: { _controller: RestaurantBundle:Restaurant:index }
 
+send_restaurant:
+    path: /send
+    defaults: { _controller: RestaurantBundle:Restaurant:send }
+
+remercier_restaurant:
+    path: /remercier
+    defaults: { _controller: RestaurantBundle:Restaurant:remercier }
+
+resaencour_restaurant:
+    path: /ResaEnCour
+    defaults: { _controller: RestaurantBundle:Restaurant:resaEnCour }
+
 restaurant_date:
     path: /{date}/
     defaults: { _controller: RestaurantBundle:Restaurant:index }
@@ -110,3 +122,8 @@ restaurant_book:
 restaurant_notification:
     resource: "@RestaurantBundle/Resources/config/routing/notification.yml"
     prefix:   /notifications
+
+
+
+
+

@@ -19,7 +19,7 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
             SELECT b
             FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
             WHERE b.stateId=s.id and b.stateId != 5 and b.dateBook BETWEEN :today and :tomorrow
-            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ORDER BY b.dateSys,s.orderInFilter asc,b.dateBook asc
             ')
             ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
             ->setParameter('tomorrow', $tomorrow->format("Y-m-d H:i:s"));
@@ -37,7 +37,7 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
             SELECT b
             FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
             WHERE b.stateId=s.id'.$servicewhere.' and b.stateId!=:stateid1 and b.dateBook BETWEEN :today and :tomorrow
-            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ORDER BY b.dateSys,s.orderInFilter asc,b.dateBook asc
             ')
             ->setParameter('stateid1', "9")
             ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
@@ -58,7 +58,7 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
             SELECT b
             FROM RestaurantBundle\Entity\Book b,RestaurantBundle\Entity\State s
             WHERE b.stateId=s.id'.$servicewhere.' and b.dateBook BETWEEN :today and :tomorrow
-            ORDER BY s.orderInFilter asc,b.dateBook asc
+            ORDER BY b.dateSys,s.orderInFilter asc,b.dateBook asc
             ')
             ->setParameter('today', $date->format("Y-m-d")." 05:00:00")
             ->setParameter('tomorrow', $tomorrow->format("Y-m-d H:i:s"));

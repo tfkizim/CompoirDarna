@@ -242,7 +242,16 @@ jQuery(document).ready(function($){
 		$dt_individual_search.find('thead th').each( function() {
 			var title = $dt_individual_search.find('thead th').eq( $(this).index() ).text();
 			var index = $dt_individual_search.find('thead th').eq( $(this).index() ).attr("data-index");
-			$(this).html('<input type="text" class="md-input ym-searchable" data-searchable="'+index+'" placeholder="' + title + '" />');
+			if(index=="etat") {
+				var out =' <select class="md-input ym-searchable" data-searchable="'+index+'"> <option value="">Aucune</option> <option value="Réservé">Réservé</option>'+
+                    '<option value="Arrivé">Arrivé</option> <option value="Assis">Assis</option> <option value="En retard">En retard</option>'+
+                '<option value="Annulé">Annulé</option> <option value="En attente">En attente</option> <option value="No show">No show</option>'+
+                '<option value="Libre">Libre</option> <option value="En cours">En cours</option> </select>';
+				$(this).html(out);
+            }else{
+                $(this).html('<input type="text" class="md-input ym-searchable" data-searchable="'+index+'" placeholder="' + title + '" />');
+			}
+
 		} );
 
 		// reinitialize md inputs
@@ -257,8 +266,13 @@ jQuery(document).ready(function($){
 		// Apply the search
 		individual_search_table.columns().every(function() {
 			var that = this;
-			$('input', this.header()).on('keyup change focus', function() {
+			if($(this).attr('data-searchable')=="etat")
+			{
+				alert("etat");
+			}
+			$('input,select', this.header()).on('keyup change focus', function() {
 				var valeur="";
+				console.log($(this).val());
 				if(this.value!="") valeur='\#.*'+this.value+'.*\#';
 				that
 					.search( valeur, true )
@@ -1424,15 +1438,17 @@ jQuery(document).ready(function($){
 		$formCustomer.validate();
 		if($formBook.isValid() && $formCustomer.isValid()){
 			var formbook = $("#form-book").serialize();
+            //formbook.push({name: 'sendEmail', value: 1});
 			//var formpassage=$("#form-book-passage").serialize();
 			var customer = $("#form-customer").serialize();
+
 			$("#form-book")[0].reset();
 			$("#form-customer")[0].reset();
 			UIkit.modal("#modal_overflow").hide();
 			$.ajax({
 				type: "post",
 				url: Routing.generate("book_add_xhr"),
-				data: formbook + "&" + customer,
+				data: formbook + "&" + customer+"&"+$.param({ 'sendEmail': 1 }),
 				success: function (data) {
 					hidePreloader();
 					if (data.reponse == "ok") {
@@ -2505,6 +2521,8 @@ function addReservationTable(book){
 	var blocked="";
 	var floorslug="";
 	var ref="-";
+	var dateSys =new Date();
+	var date =dateSys.getMonth()+'/'+dateSys.getDay()+' '+dateSys.getHours()+':'+dateSys.getMinutes()+':'+dateSys.getSeconds();
 	if(book.occasionname!=""){
 		occasion='<i class="'+book.occasionicon+' uk-icon-small '+book.occasioncolor+'" data-uk-tooltip="{pos:\'bottom\'}" title="'+book.occasionname+'"></i>';
 	}
@@ -2532,6 +2550,7 @@ function addReservationTable(book){
 	//if(book.customerFirstName)
 	$("#dt_individual_search").DataTable().row.add([
 		ref,
+		'<td> <span class="ym-searchable-hour ym-searchable-val"><a href="#">'+date+'</a></span> </td>',
 		'<span class="uk-hidden ym-searchable-val">#'+book.booktime+'#</span><a href="#" class="book_update_hour" data-service="'+book.serviceid+'" data-hour="'+book.booktime+'"><strong>'+book.booktime+'</strong></a>',
 		'<span class="uk-hidden ym-searchable-val">#'+book.customerfirstname+' '+book.customerlastname+'#</span><a href="#" class="edit-resa" data-id="'+book.bookid+'">'+book.customerfirstname+' '+book.customerlastname+'</a>',
 		'<span class="uk-hidden ym-searchable-alltables ym-searchable-val">#'+book.alltables+'#</span><div class="book-edit-table"><input class="uk-form-width-medium k-textbox input-selected-tables '+blocked+'" type="text" data-old-val="'+book.alltables+'" data-id="'+book.bookid+'" value="'+book.alltables+'" /><a href="#" class="md-btn md-btn-small md-btn-success select-modal-plan" data-id="'+book.bookid+'"><i class="material-icons uk-text-contrast">add</i></a><input type="hidden" class="selected-tables-id " data-id="'+book.bookid+'" value=""></div>',
@@ -3657,7 +3676,7 @@ function startTime() {
 
 		checkPendingBooks();
 	}
-	console.clear();
+	//console.clear();
 
 	var t = setTimeout(startTime, 15000);
 }

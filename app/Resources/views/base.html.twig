@@ -24,6 +24,20 @@
             'assets/css/jquery.ui.rotatable.css'
             %}
             <link rel="stylesheet" type="text/css" href="{{ asset_url }}">
+        <style>
+            .fc-day-number{
+                cursor:pointer;
+            }
+            .fc-day-number:hover{
+                color: #2196f3;
+                font-weight:bold;
+            }
+            .count{
+                float: right;
+                color: #2196f3;
+                font-weight: bold;
+            }
+        </style>
         {% endstylesheets %}
     {% endblock %}
     <!--[if lte IE 9]>
@@ -214,6 +228,12 @@
                             <a href="{{ path('restaurant_calendar') }}">
                                 <span class="menu_icon"><i class="material-icons">&#xE8F1;</i></span>
                                 <span class="menu_title">Calendrier</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('resaencour_restaurant') }}">
+                                <span class="menu_icon"><i class="material-icons">&#xE8F1;</i></span>
+                                <span class="menu_title">Resa en cours</span>
                             </a>
                         </li>
                         <li title="User Profile">
@@ -716,6 +736,53 @@
                 var s = document.getElementsByTagName('script')[0];
                 s.parentNode.insertBefore(wf, s);
             })();
+            //// add resa an send email
+            $("body").on("click","#send",function(e){
+                alert("send");
+                $.get($(this).data("url"),function (data) {
+                    console.log(data);
+                },"json")
+            });
+
+
+            /// Resa bar date
+            $("body").on("click",".fc-day-number",function(e){
+                var date =$(this).data("date");
+                var data=date.split("-")[2]+"-"+date.split("-")[1]+"-"+date.split("-")[0];
+
+                var url =Routing.generate("restaurant_date",{
+                    date:data
+                });
+                location.href=url;
+            });
+            ///// Remwercier
+            $("body").on("click","#remercier",function(e){
+                $.get("http://localhost/ComptApp/web/app_dev.php/admin/remercier",function(data){});
+            });
+            ///Calendar
+            $(document).ready(function(e){
+                //$("body").on("click","h3.uk-margin-bottom",function (e) {;
+                var start=$("body").find(".fc-content-skeleton").eq(0).find("table thead tr td").eq(0).data("date");
+                var date_end =$("body").find(".fc-content-skeleton").eq(5).find("table thead tr td").eq(6).data("date");
+                date_end=new Date(date_end);
+                date_end.setDate(date_end.getDate()+1);
+                var end=date_end.toISOString().substr(0,10);
+                    $.get(Routing.generate("book_calendar",{start:start,end:end,_:'1495793369292'}),function(data){
+                        $("body").find(".fc-content-skeleton").each(function (el) {
+                            $(this).find("table thead tr td").each(function(el1){
+                                var date =$(this).data("date");
+                                var count=0;
+                                for(var i =0;i<data.length;i++){
+                                    if(data[i].start.substr(0,10)==date && data[i].color=="#81c784") {
+                                        count++;
+                                    }
+                                }
+                                $(this).append("<span class='count'>"+count+"</span>");
+                            });
+                        })
+                    },"json");
+               // });
+            });
         </script>
     </body>
 </html>

@@ -12,7 +12,7 @@
                             <div class="uk-width-medium-4-10">
                                 <input class="kendodatepicker" id="date-books" value="{{ selecteddate|date("d-m-Y") }}" />
                             </div>
-                            <div class="uk-width-medium-4-10">
+                            <div class="uk-width-medium-3-10">
                                 <div class="uk-display-inline">
                                     <input type="radio" class="service-books" data-switchery {% if selectedservice is null or selectedservice.id is empty %}checked{% endif %} id="serviceall" name="service-books" value="0" />
                                     <label for="serviceall" class="inline-label">Tous</label>
@@ -24,8 +24,9 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                            <div class="uk-width-medium-2-10">
+                            <div class="uk-width-medium-3-10">
                                 <button type="button" class="md-btn md-btn-success" id="search-books">Rechercher</button>
+                                <button type="button" class="md-btn md-btn-success" id="remercier">Remecier</button>
                             </div>
                         </div>
                         
@@ -56,6 +57,8 @@
                                 {% for state in statesfilter %}
                                     <a href="" class="md-btn uk-button md-btn-primary ym-filter" data-target="etat" data-function="{{ state.name }}">{{ state.name }}</a>
                                 {% endfor %}
+
+
                                 <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                                     <button class="md-btn uk-button md-btn-primary"><i class="material-icons">&#xE313;</i></button>
                                     <div class="uk-dropdown uk-dropdown-width-{{ services|length }}">
@@ -92,6 +95,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <a href="" class="md-btn uk-button md-btn-primary ym-filter" id="send" data-url="{{ url('send_restaurant') }}">Envoyer Email</a>
                             </div>
                         </div>
                     </div>
@@ -100,11 +104,12 @@
                         <thead>
                         <tr>
                             <th data-index="id">#</th>
+                            <th data-index="dateSys">Date</th>
                             <th data-index="hour">Heure</th>
                             <th data-index="nom">Nom</th>
                             <th data-index="table">Table</th>
                             <th data-index="pax">Pax</th>
-                            <th data-index="etat">Etat</th>
+                            <th data-index="etat"></th>
                             <th data-index="hotel">Établissement</th>
                             <th data-index="icone">Icone</th>
                         </tr>
@@ -113,6 +118,7 @@
                         <tfoot>
                         <tr>
                             <th data-index="id">#</th>
+                            <th data-index="dateSys">Date</th>
                             <th data-index="hour">Heure</th>
                             <th data-index="nom">Nom</th>
                             <th data-index="table">Table</th>
@@ -134,6 +140,9 @@
                             {% endif %}
                             <tr data-id="{{ book.id }}" class="ym-book {% if book.stateId %}{{ book.stateId.function }}{% endif %}" {% if book.stateId %}data-state="{{ book.stateId.function }}"{% endif %} {% if book.stateId %}{% if book.stateId.function == "late" or book.stateId.function == "reserved" or (book.stateId.function == "noshow" and notimestamp == false) %}data-timestamp="{{ book.dateBook|totimestamp }}"{% endif %}{% endif %}>
                             <td>{% if book.ref != "" and book.ref != "null" %}<span class="uk-hidden ym-searchable-alltables ym-searchable-val">#{{ book.ref }}#</span><a href="#" class="edit-resa" data-id="{{ book.id }}">{{ book.ref }}</a>{% else %}-{% endif %}</td>
+                            <td>
+                                <span class="ym-searchable-hour ym-searchable-val"><a href="#">{{ book.dateSys|date("m/d H:i:s") }}</a></span>
+                            </td>
                             <td>
                                 <span class="uk-hidden ym-searchable-hour ym-searchable-val">#{{ book.dateBook|date("H:i") }}#</span>
                                 <a href="#" class="book_update_hour" {% if book.serviceId %}data-service="{{ book.serviceId.id }}"{% endif %} data-hour="{{ book.dateBook|date("H:i") }}"><strong>{{ book.dateBook|date("H:i") }}</strong></a>
@@ -198,7 +207,9 @@
             </div>
         </div>
     </div>
+
     {% block modals %}
         {{ parent() }}
     {% endblock %}
+
 {% endblock %}
